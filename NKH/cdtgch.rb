@@ -65,7 +65,7 @@ gch_rule = "../#{PCH}.gch: ../#{PCH} ../.cproject ../.project"
 unless makefile_lines.find {|l| l =~ /^#{gch_rule}/}
   # Need to look up the command in the subdir.mk file.
   subdir_mk = File.new(File.join(File.dirname(PCH),'subdir.mk')).read
-  subdir_mk =~ /^(\tg\+\+.*)$/ or raise "cannot find g++ command in subdir.mk"
+  subdir_mk =~ /^(\tg\+\+-4.8.*)$/ or raise "cannot find g++ command in subdir.mk"
   cmd = $1
 
   # Make the command do dependencies for the gch file.

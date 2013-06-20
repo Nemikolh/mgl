@@ -13,33 +13,40 @@
 namespace nkh {
 namespace core {
 namespace gl {
-namespace priv {
 
 /**
- * \class AbstractGLMem
- * \brief This class
+ * \class Glid.
+ * \brief All class managing OpenGL object must inherit from this class.
  */
-class AbstractGLMem
+class gl_id
 {
 public:
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    AbstractGLMem();
+    /**
+     * \brief Default constructor.
+     */
+    gl_id();
 
     /**
-     *
-     * \param n​
-     * \param objects
+     * \brief Destructor.
      */
-    //virtual void glGenMem( GLsizei n​, GLuint *objects ) = 0;
+    virtual ~gl_id() = 0;
 
 protected:
-    virtual ~AbstractGLMem();
+
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
+    /**
+     * \brief This function can be used to retrieved the id.
+     */
+    virtual GLuint id() = 0;
 };
 
-} /* namespace priv */
 } /* namespace gl */
 } /* namespace core */
 } /* namespace nkh */

@@ -24,11 +24,34 @@ namespace gl {
  *  - FrameBuffer
  * All those classes derived from AbstractGLMem
  */
+template<class T>
 class glmem_ptr
 {
 public:
-	glmem_ptr();
-	virtual ~glmem_ptr();
+
+    // ================================================================ //
+    // =========================== CTOR/DTOR ========================== //
+    // ================================================================ //
+
+    /**
+     * \brief Default Constructor.
+     */
+	glmem_ptr()
+    {
+
+    }
+
+	/**
+	 * \brief Copy Constructor.
+	 */
+	glmem_ptr(glmem_ptr& rhs):
+	    m_id(rhs.m_id)
+	{
+	}
+
+private:
+	/** The shared id. */
+	GLuint m_id;
 };
 
 } /* namespace gl */

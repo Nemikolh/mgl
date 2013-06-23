@@ -29,7 +29,7 @@ namespace gl {
  * All those classes derived from AbstractGLMem
  */
 template<class T>
-class glmem_ptr : public T
+class gl_ptr : public T
 {
 public:
 
@@ -48,7 +48,7 @@ public:
     /**
      * \brief Default Constructor.
      */
-	glmem_ptr():
+	explicit gl_ptr():
 	    m_id{0}
     {
 	    // Does nothing special
@@ -57,7 +57,7 @@ public:
 	/**
 	 * \brief Copy Constructor.
 	 */
-	glmem_ptr(glmem_ptr& rhs):
+	gl_ptr(gl_ptr& rhs):
 	    m_id{rhs.m_id}
 	{
 	    // TODO : should avert the glmem_manager than the reference count has been incremented.
@@ -66,12 +66,12 @@ public:
 	/**
 	 * \brief Destructor.
 	 */
-	~glmem_ptr()
+	~gl_ptr()
 	{
 	    // TODO : decrease the reference counter.
 	}
 
-	glmem_ptr& operator= (const glmem_ptr& rhs)
+	gl_ptr& operator= (const gl_ptr& rhs)
 	{
 	    T::operator=(rhs);
 	    // TODO : idem as previous. Plus implement the case of polymorphism.
@@ -123,4 +123,5 @@ private:
 } /* namespace gl */
 } /* namespace core */
 } /* namespace nkh */
+
 #endif /* GLMEMPTR_H_ */

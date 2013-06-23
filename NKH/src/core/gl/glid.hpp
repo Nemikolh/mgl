@@ -1,12 +1,12 @@
 /*
- * AbstractGLMem.h
+ * glid.h
  *
  *  Created on: 17 avr. 2013
  *      Author: nemikolh
  */
 
-#ifndef ABSTRACTGLMEM_H_
-#define ABSTRACTGLMEM_H_
+#ifndef GLID_H_
+#define GLID_H_
 
 #include "../../external/external_gl.hpp"
 
@@ -15,7 +15,7 @@ namespace core {
 namespace gl {
 
 /**
- * \class Glid.
+ * \class gl_id.
  * \brief All class managing OpenGL object must inherit from this class.
  */
 class gl_id
@@ -35,6 +35,15 @@ public:
      */
     virtual ~gl_id() = 0;
 
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
+    /**
+     * \brief Bind this OpenGL object.
+     */
+    void bind();
+
 protected:
 
     // ================================================================ //
@@ -50,4 +59,4 @@ protected:
 } /* namespace gl */
 } /* namespace core */
 } /* namespace nkh */
-#endif /* ABSTRACTGLMEM_H_ */
+#endif /* GLID_H_ */

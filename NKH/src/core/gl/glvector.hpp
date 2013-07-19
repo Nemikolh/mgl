@@ -20,10 +20,11 @@ namespace gl {
 template <class V, class It>
 class gl_vector_iterator;
 
-template<typename T, typename Buff = gl_buffer<T>, typename Alloc = std::allocator<T> >
-class gl_vector
+template<typename T, typename Buff = gl_buffer<T>, typename Alloc = gl_allocator<T, Buff> >
+class gl_vector : protected std::vector<T, Alloc>
 {
 public:
+
     typedef std::vector<T, Alloc>                       base_vector_type;
     typedef typename base_vector_type::iterator         base_iterator_type;
     typedef typename base_vector_type::reverse_iterator
@@ -32,6 +33,7 @@ public:
     // ================================================================ //
     // ============================= TYPES ============================ //
     // ================================================================ //
+
 
     typedef typename base_vector_type::reference        reference;
     typedef typename base_vector_type::const_reference  const_reference;
@@ -79,8 +81,16 @@ public:
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    base_vector_type& base () {return m_vector;}
-    const base_vector_type& base () const {return m_vector;}
+    base_vector_type& base ()
+    {
+        // TODO load the vector from gpu memory.
+        return m_vector;
+    }
+    const base_vector_type& base () const
+    {
+        // TODO load the vector from gpu memory.
+        return m_vector;
+    }
 
     /**
      * \brief Bind the underlying buffer to the current context.
@@ -97,7 +107,8 @@ public:
     /**
      * \brief Load this buffer to the GPU memory.
      * This function try to load the buffer into the gpu memory.
-     * If succeed, then client memory is free and the
+     * If succeed, then client memory is free and the gl_vector can
+     * be
      * \param p_usage is the usage hint for OpenGL.
      * \return True if succeed.
      */
@@ -163,15 +174,96 @@ private:
         m_buffer = 0;
     }
 
-    // ================================================================ //
-    // ============================= FIELDS =========================== //
-    // ================================================================ //
-
-    /** The underlying vector filled with value while the content hasn't been uploaded to the gl device. */
-    std::vector<T, Alloc>   m_vector;
-    /** The underlying OpenGL buffer filled with the value of m_v. */
-    GLuint                  m_buffer;
 };
+
+
+/*
+ * Overloaded operators.
+ */
+
+    /**
+     * operator==
+     */
+    template <class T, class B, class A>
+    inline bool operator==(const gl_vector<T, B, A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x.base () == y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator==(const gl_vector<T, B, A>& x,
+                           const std::vector<T,A>& y)
+    {return x.base () == y;}
+
+    template <class T, class B, class A>
+    inline bool operator==(const std::vector<T,A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x == y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator< (const gl_vector<T, B, A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x.base () < y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator<(const gl_vector<T, B, A>& x,
+                          const std::vector<T,A>& y)
+    {return x.base () < y;}
+
+    template <class T, class B, class A>
+    inline bool operator<(const std::vector<T,A>& x,
+                          const gl_vector<T, B, A>& y)
+    {return x < y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator!=(const gl_vector<T, B, A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x.base () != y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator!=(const gl_vector<T, B, A>& x,
+                           const std::vector<T,A>& y)
+    {return x.base () != y;}
+
+    template <class T, class B, class A>
+    inline bool operator!=(const std::vector<T,A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x != y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator> (const gl_vector<T, B, A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x.base () > y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator>=(const gl_vector<T, B, A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x.base () >= y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator>=(const gl_vector<T, B, A>& x,
+                           const std::vector<T,A>& y)
+    {return x.base () >= y;}
+
+    template <class T, class B, class A>
+    inline bool operator>=(const std::vector<T,A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x >= y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator<=(const gl_vector<T, B, A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x.base () <= y.base ();}
+
+    template <class T, class B, class A>
+    inline bool operator<=(const gl_vector<T, B, A>& x,
+                           const std::vector<T,A>& y)
+    {return x.base () <= y;}
+
+    template <class T, class B, class A>
+    inline bool operator<=(const std::vector<T,A>& x,
+                           const gl_vector<T, B, A>& y)
+    {return x <= y.base ();}
+
 
 /**
  * \class gl_vector_iterator is an iterator for gl_vector.
@@ -475,12 +567,12 @@ private:
 } /* namespace core */
 } /* namespace nkh */
 
-namespace std
-{
-  template <class T, class B, class A>
-  inline void swap(nkh::core::gl::gl_vector<T, B, A>& x,
-                   nkh::core::gl::gl_vector<T, B, A>& y) {x.swap (y);}
-}
+//namespace std
+//{
+//  template <class T, class B, class A>
+//  inline void swap(nkh::core::gl::gl_vector<T, B, A>& x,
+//                   nkh::core::gl::gl_vector<T, B, A>& y) {x.swap (y);}
+//}
 
 #include "glvector.inl"
 

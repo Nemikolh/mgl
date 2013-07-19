@@ -18,7 +18,7 @@ namespace gl {
  * Dirty Macro to perform check only on debug mode.
  * This code comes from the SFML GLCheck.hpp file.
  */
-#ifndef NDEBUG
+#ifndef NKH_NDEBUG
 
     // In debug mode, perform a test on every OpenGL call
     #define glCheck(call) ((call), nkh::core::gl::priv::glCheckError(__FILE__, __LINE__))
@@ -102,6 +102,16 @@ class gl_stack_underflow : public gl_exception
 public:
     gl_stack_underflow() {}
     const char* what() const override { return "gl_stack_underflow"; }
+};
+
+/**
+ * \brief Exception thrown when the current bound gl_context isn't valid.
+ */
+class gl_context_exception : public gl_exception
+{
+public:
+    gl_context_exception() {}
+    const char* what() const override { return "gl_context_exception"; }
 };
 
 // ================================================================ //

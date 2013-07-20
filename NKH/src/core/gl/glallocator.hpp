@@ -33,7 +33,7 @@ public:
     // ================================================================ //
 
     /**
-     * Allocator traits definition.
+     * Allocator requirements.
      */
     typedef gl_ptr<T, Buff>                         pointer;
     typedef const gl_ptr<T, Buff>                   const_pointer;
@@ -45,17 +45,44 @@ public:
     typedef size_t                          size_type;
     typedef typename pointer::ptrdiff_t     difference_type;
 
-    template<typename U>
+    template<typename U, typename B2 = Buff>
     struct rebind
     {
-        typedef gl_allocator<U> other;
+        typedef gl_allocator<U, B2> other;
     };
+
+    // ================================================================ //
+    // =========================== CTOR/DTOR ========================== //
+    // ================================================================ //
+
+    /**
+     * \brief Default constructor.
+     */
+    gl_allocator() = default;
+
+    /**
+     * \brief Default copy constructor.
+     */
+    gl_allocator(const gl_allocator& ) = default;
+
+    /**
+     * \brief Default move constructor.
+     */
+    gl_allocator(const gl_allocator&&) = default;
+
+    /**
+     * \brief Copy constructor
+     * \param p_rhs is the allocator we copy from.
+     */
+    template<typename T2, typename B2>
+    gl_allocator(const gl_allocator<T2, B2>& p_rhs)
+    {}
 
     // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    pointer allocate(size_type p_n, const void * = 0)
+    pointer allocate(size_type p_n, const_pointer p_cptr = nullptr)
     {
         pointer _ret = nullptr;
 #ifndef NKH_NDEBUG
@@ -65,16 +92,20 @@ public:
         if (p_n > this->max_size())
             throw std::bad_alloc();
 
-        _ret.create();
+        // TODO : is it correct ? Doesn't it need an unmapping ? -> see it when doing the gl_vector.
+        if(p_cptr)
+            _ret(p_cptr);
+        else
+            _ret.create();
+
         _ret.bind();
-        glCheck(glBufferData(Buff::target, p_n * sizeof(T), Buff::usage));
-        _ret.unbind();
+        gl_object_buffer::gl_buffer_data(Buff::target, p_n * sizeof(T), nullptr, Buff::usage);
         return _ret;
     }
 
     void deallocate(pointer p_ptr, size_type p_n)
     {
-        glCheck(glDeleteBuffers(1, &p_ptr.m_id));
+        gl_object_buffer::gl_delete(1, &(p_ptr.m_id));
     }
 
     size_type max_size() const
@@ -82,7 +113,6 @@ public:
         return size_t(-1) / sizeof(T);
     }
 
-    cf http://en.cppreference.com/w/cpp/concept/Allocator pour la suite.
 };
 
 /*
@@ -92,10 +122,19 @@ public:
     /**
      * operator==
      */
-    template<typename T, typename U>
-    inline bool operator==(gl_allocator<T> a, gl_allocator<U> b)
+    template<typename T, typename B1, typename U, typename B2>
+    inline bool operator==(gl_allocator<T, B1> a, gl_allocator<U, B2> b)
     {
         return true;
+    }
+
+    /**
+     * operator !=
+     */
+    template<typename T, typename B1, typename U, typename B2>
+    inline bool operator!=(gl_allocator<T, B1> a, gl_allocator<U, B2> b)
+    {
+        return false;
     }
 
 } /* namespace gl */

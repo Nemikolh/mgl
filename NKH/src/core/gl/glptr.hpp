@@ -62,6 +62,7 @@ public:
 	gl_ptr(std::nullptr_t = nullptr)
 	    : m_id{0}
 	    , m_ptr{nullptr}
+	    , m_offset{0}
         #ifndef NKH_NDEBUG
 	    , m_isMap{false}
         #endif
@@ -75,6 +76,7 @@ public:
     gl_ptr(const gl_ptr& rhs)
         : m_id{rhs.m_id}
         , m_ptr{rhs.m_ptr}
+        , m_offset{rhs.m_offset}
         #ifndef NKH_NDEBUG
         , m_isMap{rhs.m_isMap}
         #endif
@@ -85,11 +87,12 @@ public:
 	 * \brief Copy Constructor.
 	 * \param rhs is a gl_ptr where U is convertible into T.
 	 */
-    template<typename U, typename = typename
+    template<typename U, typename B, typename = typename
             std::enable_if<std::is_convertible<U*, T*>::value>::type>
-	gl_ptr(const gl_ptr<U>& rhs)
+	gl_ptr(const gl_ptr<U, B>& rhs)
 	    : m_id{rhs.m_id}
-	    , m_ptr{rhs.m_ptr}  // static_cast or reinterpret_cast -> C-style cast (ugly)
+	    , m_ptr{rhs.m_ptr}  // why not static_cast? -> to avoid accepting downcasting. Actually is_convertible wouldn't accept it.
+	    , m_offset{rhs.m_offset}
         #ifndef NKH_NDEBUG
         , m_isMap{rhs.m_isMap}
         #endif
@@ -103,7 +106,7 @@ public:
 	 *  static_cast< gl_ptr<T> >(gl_ptr<void>)
 	 * \param vptr is a void pointer.
 	 */
-	gl_ptr(const gl_ptr<void>& rhs) // eclipse CDT n'est pas à l'aise avec C++11
+	gl_ptr(const gl_ptr<void>& vptr) // eclipse CDT n'est pas à l'aise avec C++11
 	    : gl_ptr()
 	{
 	}
@@ -115,6 +118,7 @@ public:
 	gl_ptr(gl_ptr && rhs)
         : m_id{std::move(rhs.m_id)}
         , m_ptr{std::move(rhs.m_ptr)}
+        , m_offset{std::move(rhs.m_offset)}
         #ifndef NKH_NDEBUG
         , m_isMap{std::move(rhs.m_isMap)}
         #endif
@@ -125,11 +129,12 @@ public:
      * \brief Move constructor.
      * \param rhs the moved value.
      */
-    template<typename U, typename = typename
+    template<typename U, typename B, typename = typename
             std::enable_if<std::is_convertible<U*, T*>::value>::type>
-    gl_ptr(gl_ptr<U>&& rhs)
+    gl_ptr(gl_ptr<U, B>&& rhs)
         : m_id{std::move(rhs.m_id)}
         , m_ptr{std::move(rhs.m_ptr)}
+        , m_offset{std::move(rhs.m_offset)}
         #ifndef NKH_NDEBUG
         , m_isMap{std::move(rhs.m_isMap)}
         #endif
@@ -147,6 +152,7 @@ public:
 	{
 	    m_id = rhs.m_id;
 	    m_ptr = rhs.m_ptr;
+	    m_offset = rhs.m_offset;
 #ifndef NKH_NDEBUG
 	    m_isMap = rhs.m_isMap;
 #endif
@@ -157,6 +163,7 @@ public:
 	{
 	    m_id = 0;
 	    m_ptr = nullptr;
+	    m_offset = 0;
 #ifndef NKH_NDEBUG
         m_isMap = false;
 #endif
@@ -169,23 +176,31 @@ public:
 	 */
 	pointer     operator->() const
 	{
-	    return m_ptr;
+#ifndef NKH_NDEBUG
+        if(!m_isMap)
+            throw gl_exception("Pointer access not mapped");
+#endif
+	    return (m_ptr+m_offset);
 	}
 
 	reference   operator*() const
 	{
-	    return *m_ptr;
+#ifndef NKH_NDEBUG
+        if(!m_isMap)
+            throw gl_exception("Pointer access not mapped");
+#endif
+	    return *(m_ptr+m_offset);
 	}
 
 	gl_ptr&     operator++()
     {
-	    ++m_ptr;
+	    ++m_offset;
 	    return *this;
     }
 
 	gl_ptr      operator++(int)
     {
-	    return gl_ptr(m_ptr++, *this);
+	    return gl_ptr(m_offset++, *this);
     }
 
     /**
@@ -193,13 +208,13 @@ public:
      */
 	gl_ptr&     operator--()
     {
-	    --m_ptr;
+	    --m_offset;
 	    return *this;
     }
 
 	gl_ptr      operator--(int)
     {
-	    return gl_ptr(m_ptr--, *this);
+	    return gl_ptr(m_offset--, *this);
     }
 
     /**
@@ -207,27 +222,31 @@ public:
      */
     reference   operator[](const difference_type& __n) const
     {
-        return m_ptr[__n];
+#ifndef NKH_NDEBUG
+        if(!m_isMap)
+            throw gl_exception("Pointer access not mapped");
+#endif
+        return m_ptr[m_offset + __n];
     }
 
     gl_ptr&     operator+=(const difference_type& p_n)
     {
-        m_ptr += p_n; return *this;
+        m_offset += p_n; return *this;
     }
 
     gl_ptr      operator+(const difference_type& p_n) const
     {
-        return gl_ptr(m_ptr + p_n, *this);
+        return gl_ptr(m_offset + p_n, *this);
     }
 
     gl_ptr&     operator-=(const difference_type& p_n)
     {
-        m_ptr -= p_n; return *this;
+        m_offset -= p_n; return *this;
     }
 
     gl_ptr      operator-(const difference_type& p_n) const
     {
-        return gl_ptr(m_ptr - p_n, *this);
+        return gl_ptr(m_offset - p_n, *this);
     }
 
     /**
@@ -258,9 +277,10 @@ public:
 
 private:
 
-    gl_ptr(pointer p_ptr, const gl_ptr & p_other)
+    gl_ptr(difference_type p_offset, const gl_ptr & p_other)
         : m_id{p_other.m_id}
-        , m_ptr{p_ptr}
+        , m_ptr{p_other.m_ptr}
+        , m_offset{p_offset}
 #ifndef NKH_NDEBUG
         , m_isMap{p_other.m_isMap}
 #endif
@@ -309,7 +329,7 @@ private:
 	    m_isMap = false;
 #endif
 //	    glCheck(glUnmapBuffer(Buff::target));
-	    glCheck(gl_object_buffer::gl_unmap(Buff::target));
+	    gl_object_buffer::gl_unmap(Buff::target);
 	    m_ptr = nullptr;
 	}
 
@@ -347,25 +367,96 @@ private:
     // ============================ FRIENDS =========================== //
     // ================================================================ //
 
-	friend gl_allocator<T>;
-	template<typename U> friend class gl_ptr;
+	friend gl_allocator<T, Buff>;
+	template<typename U, typename B> friend class gl_ptr<U, B>;
+
+	template<typename U, typename B> friend gl_ptr<U, B> operator+(const gl_ptr<U, B>&, difference_type p_n);
+	template<typename U, typename B> friend gl_ptr<U, B> operator+(difference_type p_n, const gl_ptr<U, B>&);
+	template<typename U, typename B> friend gl_ptr<U, B> operator-(const gl_ptr<U, B>&, difference_type p_n);
+
+	template<typename U, typename B> friend difference_type operator-(const gl_ptr<U, B>&, const gl_ptr<U, B>&);
+
+	template<typename U, typename B> friend bool operator<(const gl_ptr<U, B>&, const gl_ptr<U, B>&);
+	template<typename U, typename B> friend bool operator>(const gl_ptr<U, B>&, const gl_ptr<U, B>&);
+
+	template<typename U, typename B> friend bool operator>=(const gl_ptr<U, B>&, const gl_ptr<U, B>&);
+	template<typename U, typename B> friend bool operator<=(const gl_ptr<U, B>&, const gl_ptr<U, B>&);
 
 	// ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
 	/** The shared id. */
-	GLuint  m_id;
+	GLuint          m_id;
 	/** The pointer to the data. */
-	pointer m_ptr;
+	pointer         m_ptr;
+	/** The offset to apply to the pointer once bound. */
+	difference_type m_offset;
 #ifndef NKH_NDEBUG
 	/** True if the pointer is valid. */
-	bool    m_isMap;
+	bool            m_isMap;
 #endif
 	/** The gl context associated with this pointer. */
-	context m_context;
+	context         m_context;
 };
 
+/**
+ * RandomAccessIterator operators requirements :
+ */
+    template<typename T, typename B>
+    gl_ptr<T, B> operator+(const gl_ptr<T, B>& p_i, typename gl_ptr<T, B>::difference_type p_n)
+    {
+        return gl_ptr<T, B>(p_i.m_offset + p_n, p_i);
+    }
+
+    template<typename T, typename B>
+    gl_ptr<T, B> operator+(typename gl_ptr<T, B>::difference_type p_n, const gl_ptr<T, B>& p_i)
+    {
+        return p_i + p_n;
+    }
+
+    template<typename T, typename B>
+    gl_ptr<T, B> operator-(const gl_ptr<T, B>& p_i, typename gl_ptr<T, B>::difference_type p_n)
+    {
+        return gl_ptr<T, B>(p_i.m_offset - p_n, p_i);
+    }
+
+    template<typename T, typename B>
+    typename gl_ptr<T, B>::difference_type
+                operator-(const gl_ptr<T, B>& p_a, const gl_ptr<T, B> p_b)
+    {
+#       ifndef NKH_NDEBUG
+            assert(p_a.m_id == p_b.m_id);
+#       endif
+        return p_a.m_offset - p_b.m_offset;
+    }
+
+    template<typename T, typename B>
+    bool operator<(const gl_ptr<T, B>& p_a, const gl_ptr<T, B>& p_b)
+    {
+#       ifndef NKH_NDEBUG
+            assert(p_a.m_id == p_b.m_id);
+#       endif
+        return p_a.m_offset < p_b.m_offset;
+    }
+
+    template<typename T, typename B>
+    bool operator>(const gl_ptr<T, B> & p_a, const gl_ptr<T, B>& p_b)
+    {
+        return p_b < p_a;
+    }
+
+    template<typename T, typename B>
+    bool operator>=(const gl_ptr<T, B> & p_a, const gl_ptr<T, B>& p_b)
+    {
+        return !(p_a < p_b);
+    }
+
+    template<typename T, typename B>
+    bool operator<=(const gl_ptr<T, B> & p_a, const gl_ptr<T, B>& p_b)
+    {
+        return !(p_a > p_b);
+    }
 
 } /* namespace gl */
 } /* namespace core */

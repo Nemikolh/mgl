@@ -69,20 +69,93 @@ template<class T>
 struct gl_buffer : public priv::priv_gl_buffer<T>
 {};
 
+// -----------------------------------------------------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------------------------------------------------//
+
 /**
- * \class tuple_component_type is a MetaFunction to specify the type of your homogen tuple type.
+ * \class gl_enum_type defines enum types accordingly to C++ types.
+ */
+template<typename T>
+struct gl_enum_type;
+
+/**
+ * \class tuple_component_type is a MetaFunction to specify the gl value type of your tuple.
  *
  */
 template<typename T>
 struct tuple_component_type
 {
+    static constexpr GLenum value = gl_enum_type<typename T::value_type>::value;
+};
+
+/**
+ * Partial specialization for C++ primitives types.
+ */
+template<>
+struct gl_enum_type<std::int8_t>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_BYTE;
+};
+
+template<>
+struct gl_enum_type<std::uint8_t>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_UNSIGNED_BYTE;
+};
+
+template<>
+struct gl_enum_type<std::int16_t>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_SHORT;
+};
+
+template<>
+struct gl_enum_type<std::uint16_t>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_UNSIGNED_SHORT;
+};
+
+template<>
+struct gl_enum_type<std::int32_t>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_INT;
+};
+
+template<>
+struct gl_enum_type<std::uint32_t>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_UNSIGNED_INT;
+};
+
+template<>
+struct gl_enum_type<float>
+{
+    typedef GLenum          value_type;
     static constexpr GLenum value = GL_FLOAT;
 };
+
+template<>
+struct gl_enum_type<double>
+{
+    typedef GLenum          value_type;
+    static constexpr GLenum value = GL_DOUBLE;
+};
+
+
+// -----------------------------------------------------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------------------------------------------------//
+
 
 /*
  * Opengl object definitions.
  */
-
+template<typename Buff>
 struct gl_object_buffer
 {
     static inline void gl_gen(GLsizei p_n​, GLuint * p_buffers)
@@ -95,19 +168,34 @@ struct gl_object_buffer
         glBindBuffer(p_id);
     }
 
-    static inline void* gl_map_range(GLenum p_target​, GLintptr p_offset​, GLsizeiptr p_length​, GLbitfield p_access​)
+    static inline void* gl_map_range(GLintptr p_offset​, GLsizeiptr p_length​, GLbitfield p_access​)
     {
-        return glMapBufferRange(p_target, p_offset, p_length, p_access);
+        return glMapBufferRange(Buff::target, p_offset, p_length, p_access);
     }
 
     static inline GLboolean gl_unmap(GLenum target​)
     {
-        return glUnmapBuffer(p_target);
+        return glUnmapBuffer(Buff::target);
+    }
+
+    static inline void gl_buffer_data(GLsizeiptr p_size​, const GLvoid * p_data​)
+    {
+        glBufferData(Buff::target, p_size, p_data, Buff::usage);
     }
 
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
         glCheck(glDeleteBuffers(p_n​, p_buffers​));
+    }
+
+    static inline void save_state()
+    {
+
+    }
+
+    static inline void restore_state()
+    {
+
     }
 };
 
@@ -147,10 +235,9 @@ struct gl_object_shader
      * \brief Generate an id for ShaderType.
      * \return Returns the generated id.
      */
-    template<GLenum ShaderType>
-    static inline GLuint gl_gen()
+    static inline GLuint gl_gen(GLenum p_shader_type)
     {
-        return glCreateShader(ShaderType);
+        return glCreateShader(p_shader_type);
     }
 
 //    /*
@@ -216,6 +303,158 @@ struct gl_object_vertexarrays
 };
 
 
+// -----------------------------------------------------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------------------------------------------------//
+
+/**
+ * \class has_typedef_gl_object_type test for the presence or absence of the nested typedef
+ * gl_object_type.
+ * This is a conformant integral metafunction that can be used with the boost::mpl library.
+ */
+template<typename T>
+class has_typedef_gl_object_type
+{
+    template<typename U>
+    static std::true_type  deduce(U*, typename U::gl_object_type* = 0);
+    static std::false_type deduce(...);
+
+public:
+
+    typedef decltype(deduce(static_cast<T*>(0))) type;
+    static constexpr bool value = type::value;
+};
+
+/**
+ * \class has_save_restore_state test for the presence of the static functions save_state() and restore_state().
+ * This is a conformant integral metafunction that can be used with the boost::mpl library.
+ */
+template<typename T>
+class has_save_restore_state
+{
+    template<typename F, F f> class Helper{};
+
+    template<typename U>
+    static std::true_type  deduce(U*, Helper<void (*)(), &U::save_state>* = 0, Helper<void (*)(), &U::restore_state>* = 0);
+    static std::false_type deduce(...);
+
+public:
+
+    typedef decltype(deduce(static_cast<T*>(0))) type;
+    static constexpr bool value = type::value;
+};
+
+/* namespace priv. */
+namespace priv {
+
+template<typename GLState, bool = has_save_restore_state<GLState>::value >
+struct gl_state_traits
+{
+    // ================================================================ //
+    // ======================== STATIC METHODS ======================== //
+    // ================================================================ //
+
+    /**
+     * \brief Save the current state if a gl_object_type typedef
+     * is provided.
+     */
+    template<typename U = GLState>
+    static inline constexpr
+    std::enable_if<has_typedef_gl_object_type<U>::value, void>::type
+    save_state()
+    {
+        U::gl_object_type::save_state();
+    }
+
+    /**
+     * \brief Does nothing.
+     */
+    template<typename U = GLState>
+    static inline constexpr
+    std::enable_if<!has_typedef_gl_object_type<U>::value, void>::type
+    save_state()
+    {}
+
+    /**
+     * \brief Restore the current state if a gl_object_type typedef
+     * is provided.
+     */
+    template<typename U = GLState>
+    static inline constexpr
+    std::enable_if<has_typedef_gl_object_type<U>::value, void>::type
+    restore_state()
+    {
+        U::gl_object_type::restore_state();
+    }
+
+    /**
+     * \brief Does nothing.
+     */
+    template<typename U = GLState>
+    static inline constexpr
+    std::enable_if<!has_typedef_gl_object_type<U>::value, void>::type
+    restore_state()
+    {}
+};
+
+template<typename GLState>
+struct gl_state_traits<GLState, true>
+{
+    // ================================================================ //
+    // ======================== STATIC METHODS ======================== //
+    // ================================================================ //
+
+    /**
+     * \brief Save the state using the static functions provided.
+     */
+    static inline constexpr void save_state()
+    {
+        GLState::save_state();
+    }
+
+    /**
+     * \brief Restore the state using the static functions provided.
+     */
+    static inline constexpr void restore_state()
+    {
+        GLState::restore_state();
+    }
+
+};
+
+} /* namespace priv. */
+
+/**
+ * \class gl_state_traits is an helper for storing gl_state.
+ * This class is mainly used for the gl_scope class.
+ * If you want to preserve an OpenGL state you have the following options :
+ *
+ *      1.  You can provide a partial template specialization of gl_state_traits (it'll save a bit of compile time template instantiation )
+ *
+ *      2. You can provide nested static functions that performs all the job, named
+ *        \code save_state(); \endcode and \code restore_state(); \endcode
+ *
+ *      3. You can provide the nested typedef ::gl_object_type which can be one of the following
+ *          * gl_object_buffer
+ *          * gl_object_framebuffer
+ *          * gl_object_program
+ *          * gl_object_shader
+ *          * gl_object_texture
+ *          * gl_object_transformfeedback
+ *          * gl_object_vertexarrays
+ *
+ *      4. And finally you can do nothing at all if you don't want any state preservation.
+ *
+ * You can also provide all those options and they'll be picked up in this order.
+ */
+template<typename GLState>
+struct gl_state_traits : public priv::gl_state_traits<GLState>
+{};
+
+
+// -----------------------------------------------------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------------------------------------------------//
+
+/* namespace priv */
 namespace priv {
 
 template<typename T>

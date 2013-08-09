@@ -8,6 +8,7 @@
 #ifndef GLSCOPE_HPP_
 #define GLSCOPE_HPP_
 
+#include "meta/gltraits.hpp"
 
 namespace nkh {
 namespace core {
@@ -24,41 +25,33 @@ public:
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    gl_scope(T & t);
-
-    ~gl_scope()
+    /**
+     * \brief Default constructor.
+     * \param The passed parameter is locked.
+     */
+    gl_scope(T & t)
+        : m_saver{t}
     {
-    }
-};
-
-template<typename T, typename Buff, typename Alloc>
-class gl_scope< gl_vector<T, Buff, Alloc> >
-{
-public:
-    // ================================================================ //
-    // =========================== CTOR/DTOR ========================== //
-    // ================================================================ //
-
-    gl_scope(gl_vector<T, Buff, Alloc> & p_vector)
-        : m_saver{p_vector.begin()}
-    {
-        m_saver.base().bind();
-        m_saver.base().map_range(0, p_vector.capacity());
+        gl_state_traits<T>::save_state();
+        m_saver.bind();
     }
 
+    /**
+     * \brief Destructor.
+     */
     ~gl_scope()
     {
-        m_saver.base().bind();
-        m_saver.base().unmap();
+        m_saver.unbind();
+        gl_state_traits<T>::restore_state();
     }
 
 private:
-
     // ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    typename gl_vector<T, Buff, Alloc>::iterator m_saver;
+    /** The state bound and unbound during the lifetime of this object. */
+    T & m_saver;
 };
 
 } /* namepsace gl. */

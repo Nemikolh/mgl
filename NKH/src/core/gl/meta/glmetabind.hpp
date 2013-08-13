@@ -87,6 +87,9 @@ namespace priv {
 
         static inline void map(const ShaderContext & sh, std::size_t byte_offset)
         {
+            static_assert(tuple_size<current_t>::value < 5,"The tuple size must be either 1, 2, 3 or 4. GL_BGRA is not currently supported.");
+            // ------------------------- DECLARE ------------------------ //
+
             sh.bind_attribute(
                 name_t::call(),                         // attribute name
                 tuple_size<current_t>::value,           // number of component

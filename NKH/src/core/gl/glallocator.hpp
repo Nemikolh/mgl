@@ -99,13 +99,17 @@ public:
             _ret.create();
 
         _ret.bind();
-        gl_object_buffer::gl_buffer_data(Buff::target, p_n * sizeof(T), nullptr, Buff::usage);
+        gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
+        _ret.map_range(0, p_n);
         return _ret;
     }
 
     void deallocate(pointer p_ptr, size_type p_n)
     {
-        gl_object_buffer::gl_delete(1, &(p_ptr.m_id));
+        // TODO should we unbind it before delete ?
+        p_ptr.bind();
+        p_ptr.unmap();
+        gl_object_buffer<Buff>::gl_delete(1, &(p_ptr.m_id));
     }
 
     size_type max_size() const

@@ -17,163 +17,396 @@ namespace nkh {
 namespace core {
 namespace gl {
 
-template <class V, class It>
+template <class It, class V>
 class gl_vector_iterator;
 
 template<typename T, typename Buff = gl_buffer<T>, typename Alloc = gl_allocator<T, Buff> >
-class gl_vector : protected std::vector<T, Alloc>
+class gl_vector //: public std::vector<T, Alloc>
 {
 public:
 
     typedef std::vector<T, Alloc>                       base_vector_type;
-    typedef typename base_vector_type::iterator         base_iterator_type;
-    typedef typename base_vector_type::reverse_iterator
-                                                        base_reverse_iterator_type;
 
     // ================================================================ //
     // ============================= TYPES ============================ //
     // ================================================================ //
 
+    typedef typename base_vector_type::pointer              pointer;
+    typedef typename base_vector_type::const_pointer        const_pointer;
+    typedef typename base_vector_type::reference            reference;
+    typedef typename base_vector_type::const_reference      const_reference;
 
-    typedef typename base_vector_type::reference        reference;
-    typedef typename base_vector_type::const_reference  const_reference;
-    typedef gl_vector_iterator<gl_vector, base_iterator_type>
-                                                      iterator;
-    typedef typename base_vector_type::const_iterator   const_iterator;
-    typedef typename base_vector_type::size_type        size_type;
-    typedef typename base_vector_type::difference_type  difference_type;
-    typedef T                                           value_type;
-    typedef Alloc                                       allocator_type;
-    typedef typename base_vector_type::pointer          pointer;
-    typedef typename base_vector_type::const_pointer    const_pointer;
+    typedef typename base_vector_type::iterator             iterator;
+    typedef typename base_vector_type::const_iterator       const_iterator;
+    //typedef gl_vector_iterator<pointer, gl_vector>          iterator;
+    //typedef gl_vector_iterator<const_pointer, gl_vector>    const_iterator;
+    typedef typename pointer::size_type                     size_type;
+    typedef typename pointer::difference_type               difference_type;
+    typedef T                                               value_type;
+    typedef Alloc                                           allocator_type;
+
+    // TODO check the correct behaviour of the reverse_iterator with the custom iterator.
+    typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
+    typedef std::reverse_iterator<iterator>        reverse_iterator;
+
+    /** Typedef for the automatic state saving. */
+    typedef gl_object_buffer gl_object_type;
 
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    explicit gl_vector(const Alloc& p_a = Alloc()):
-            m_vector(p_a),
-            m_buffer{0}
-    {}
+    gl_vector()
+        : m_vector()
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
 
-    explicit gl_vector(size_type p_n):
-            m_vector(p_n),
-            m_buffer{0}
-    {}
+    explicit gl_vector(const allocator_type& p_a = allocator_type())
+        : m_vector(p_a)
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
+
+    explicit gl_vector(size_type p_n)
+        : m_vector(p_n)
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
+
+    gl_vector(size_type p_n, const value_type& p_value, const allocator_type& p_a = allocator_type())
+        : m_vector(p_n, p_value, p_a)
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
 
     template<class InputIt>
-    gl_vector(InputIt p_first, InputIt p_last, const Alloc& p_a = Alloc() ):
-        m_vector(p_first, p_last, p_a),
-        m_buffer{0}
+    gl_vector(InputIt p_first, InputIt p_last, const Alloc& p_a = Alloc() )
+        : m_vector(p_first, p_last, p_a)
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
+
+    gl_vector(const gl_vector& p_rhs)
+        : m_vector(p_rhs)
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
+
+
+    gl_vector(gl_vector && p_rhs)
+        : m_vector(std::move(p_rhs))
+        , m_is_mapped(std::move(p_rhs))
     {}
 
-    gl_vector(const gl_vector& rhs):
-        m_vector(rhs.m_vector),
-        m_buffer{rhs.m_buffer}
-    {}
+    gl_vector(std::initializer_list<value_type> p_l,
+       const allocator_type& p_a = allocator_type())
+        : m_vector(p_l, p_a)
+        , m_is_mapped{false}
+    {
+        get_ptr_impl().unmap();
+    }
 
     ~gl_vector()
     {
-        delete_buffer();
+        // We map because the destructor of the vector will call
+        // the destructors on the elements and deallocate with the allocator
+        // which do the unbind plus the deletion of the buffer.
+        get_ptr_impl().map_range(0, m_vector.capacity());
     }
 
     // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    base_vector_type& base ()
+
+    gl_vector&
+    operator=(const gl_vector& p_rhs)
     {
-        // TODO load the vector from gpu memory.
-        return m_vector;
-    }
-    const base_vector_type& base () const
-    {
-        // TODO load the vector from gpu memory.
-        return m_vector;
+        p_rhs.map();
+        m_vector = p_rhs.m_vector;
+        m_is_mapped = p_rhs.m_is_mapped;
+        p_rhs.unmap();
+        return *this;
     }
 
-    /**
-     * \brief Bind the underlying buffer to the current context.
-     * This function use the templated target type.
-     * \return True if the bind has succeed.
-     */
-    bool bind()
+    gl_vector&
+    operator=(gl_vector&& p_rhs)
     {
-        if(is_loaded() && glBindBuffer)
-            glCheck(glBindBuffer(Buff::target, m_buffer));
-        return is_loaded();
+        m_vector = std::move(p_rhs);
+        m_is_mapped = p_rhs.m_is_mapped;
+        return *this;
     }
 
-    /**
-     * \brief Load this buffer to the GPU memory.
-     * This function try to load the buffer into the gpu memory.
-     * If succeed, then client memory is free and the gl_vector can
-     * be
-     * \param p_usage is the usage hint for OpenGL.
-     * \return True if succeed.
-     */
-    bool load_to_device(GLenum p_usage = GL_STATIC_DRAW)
+    gl_vector&
+    operator=(std::initializer_list<value_type> p_l)
     {
-        if(is_loaded() == false)
-        {
-            // We create the buffer.
-            create_buffer();
-
-            if(bind())
-            {
-                try {
-                    glBufferData(Buff::target, m_vector.size() * sizeof(T), m_vector.data(), p_usage);
-                    priv::glTryError();
-                    m_vector.clear();
-                    return true;
-                }
-                catch(gl_out_of_memory& p_error)
-                {
-                    // TODO log the out of memory error.
-                    return false;
-                }
-                catch(gl_exception& p_error)
-                {
-                    // TODO log the error.
-                    return false;
-                }
-            }
-            else
-            {
-                delete_buffer();
-                return false;
-            }
-        }
-        // The memory is already loaded.
-        return true;
+        map();
+        m_vector = p_l;
+        unmap();
+        return *this;
     }
+
+    void inline assign(size_type p_n, const value_type& p_val)
+    {
+        map();
+        m_vector.assign(p_n, p_val);
+        unmap();
+    }
+
+    template<typename Iterator>
+    void inline assign(Iterator p_first, Iterator p_last)
+    {
+        map();
+        m_vector.assign(p_first, p_last);
+        unmap();
+    }
+
+    void inline assign(std::initializer_list<value_type> p_list)
+    {
+        map();
+        m_vector.assign(p_list);
+        unmap();
+    }
+
+    allocator_type get_allocator() const
+    {
+        return m_vector.get_allocator();
+    }
+
+    iterator
+    begin()         {   return m_vector.begin();    }
+
+    const_iterator
+    begin() const   {   return m_vector.begin();    }
+
+    iterator
+    end()           {   return m_vector.end();      }
+
+    const_iterator
+    end() const     {   return m_vector.end();      }
+
+    const_iterator
+    cbegin() const  {   return m_vector.cbegin();   }
+
+    const_iterator
+    cend() const    {   return m_vector.cend();     }
+
+    size_type
+    size() const    {   return m_vector.size();     }
+
+    size_type
+    max_size() const {  return m_vector.max_size(); }
+
+    void
+    resize(size_type p_n)
+    {
+        map();
+        m_vector.resize(p_n);
+        unmap();
+    }
+
+    void
+    resize(size_type p_n, const value_type& p_val)
+    {
+        map();
+        m_vector.resize(p_n, p_val);
+        unmap();
+    }
+
+    void
+    shrink_to_fit()
+    {
+        map();
+        m_vector.shrink_to_fit();
+        unmap();
+    }
+
+    size_type
+    capacity() const        { return m_vector.capacity();   }
+
+    bool
+    empty() const           { return m_vector.empty();      }
+
+    void
+    reserve(size_type p_n)
+    {
+        map();
+        m_vector.reserve(p_n);
+        unmap();
+    }
+
+    base_vector_type
+    base() const            { return m_vector;          }
+
+    reference
+    operator[](size_type p_n) { return m_vector[p_n];   }
+
+    const_reference
+    operator[](size_type p_n) const { return m_vector[p_n]; }
+
+    reference
+    at(size_type p_n)       { return m_vector.at(p_n);  }
+
+    const_reference
+    at(size_type p_n) const { return m_vector.at(p_n);  }
+
+    reference
+    front()                 { return m_vector.front();  }
+
+    const_reference
+    front() const           { return m_vector.front();  }
+
+    reference
+    back()                  { return m_vector.back();   }
+
+    const_reference
+    back()  const           { return m_vector.back();   }
+
+    T*
+    data()                  { return m_vector.data();   }
+
+    const T*
+    data()  const           { return m_vector.data();   }
+
+    void
+    push_back(const value_type& p_val)
+    {
+        m_vector.push_back(p_val);
+    }
+
+    void
+    push_back(value_type&& p_val)
+    {
+        m_vector.push_back(std::move(p_val));
+    }
+
+    template<typename... Args>
+    void
+    emplace_back(Args&&... p_args)
+    {
+        m_vector.emplace_back(std::forward<Args>(p_args)...);
+    }
+
+    void
+    pop_back()              { m_vector.pop_back();      }
+
+    template<typename... Args>
+    iterator
+    emplace(iterator p_position, Args&&... p_args)
+    {
+        m_vector.emplace(p_position, std::forward<Args>(p_args)...);
+    }
+
+    iterator
+    insert(iterator p_position, const value_type& p_x)
+    {
+        return m_vector.insert(p_position, p_x);
+    }
+
+    iterator
+    insert(iterator p_position, value_type&& p_x)
+    {
+        return m_vector.insert(p_position, std::move(p_x));
+    }
+
+    void
+    insert(iterator p_position, std::initializer_list<value_type> p_list)
+    {
+        m_vector.insert(p_position, p_list);
+    }
+
+    void
+    insert(iterator p_position, size_type p_n, const value_type& p_x)
+    {
+        m_vector.insert(p_position, p_n, p_x);
+    }
+
+    template<typename InputIterator>
+    void
+    insert(iterator p_position, InputIterator p_first, InputIterator p_last)
+    {
+        m_vector.insert(p_position, p_first, p_last);
+    }
+
+    iterator
+    erase(iterator p_position)
+    {
+        return m_vector.erase(p_position);
+    }
+
+    iterator
+    erase(iterator p_first, iterator p_last)
+    {
+        return m_vector.erase(p_first, p_last);
+    }
+
+    void
+    swap(gl_vector& p_x)
+    {
+        using std::swap;
+        m_vector.swap(p_x.m_vector);
+        swap(m_is_mapped, p_x.m_is_mapped);
+    }
+
+    void
+    clear()     { m_vector.clear(); }
+
 
 private:
 
     // ================================================================ //
+    // ============================ FRIENDS =========================== //
+    // ================================================================ //
+
+    template<typename Iterator, typename Container> friend class gl_vector_iterator<Iterator, Container>;
+    template<typename H> friend class gl_scope<H>;
+    template<typename H, typename B, typename A> friend class gl_vector<H, B, A>;
+    //friend gl_vector;
+
+    // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
 
     /**
-     * \brief Returns true if the memory has been loaded on the gpu.
-     * \return true if the buffer id is a valid bufffer.
+     * \brief Bind the vector.
      */
-    bool is_loaded() const
+    void map()
     {
-        return m_buffer != 0;
+        if(!m_is_mapped)
+            get_ptr_impl().map_range(0, m_vector.capacity());
+        m_is_mapped = true;
     }
 
-    void create_buffer()
+    /**
+     * \brief Unbind the vector.
+     */
+    void unmap()
     {
-        glCheck(glGenBuffers(1, &m_buffer));
+        if(m_is_mapped)
+            get_ptr_impl().unmap();
+        m_is_mapped = false;
     }
 
-    void delete_buffer()
+    pointer get_ptr_impl()
     {
-        glCheck(glDeleteBuffers(1, &m_buffer));
-        m_buffer = 0;
+        return m_vector.begin().base();
     }
 
+    // ================================================================ //
+    // ============================= FIELDS =========================== //
+    // ================================================================ //
+
+    /** underlying vector. */
+    base_vector_type    m_vector;
+    /** the mapping state. */
+    bool                m_is_mapped;
 };
 
 
@@ -185,96 +418,121 @@ private:
      * operator==
      */
     template <class T, class B, class A>
-    inline bool operator==(const gl_vector<T, B, A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x.base () == y.base ();}
+    inline bool operator==(const gl_vector<T, B, A>& p_x,
+                           const gl_vector<T, B, A>& p_y)
+    {
+        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
+        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        return p_x.base () == p_y.base ();
+    }
+
+    // TODO rework those, as the std::vector can use an other allocator.
+//    template <class T, class B, class A>
+//    inline bool operator==(const gl_vector<T, B, A>& x,
+//                           const std::vector<T,A>& y)
+//    {return x.base () == y;}
+//
+//    template <class T, class B, class A>
+//    inline bool operator==(const std::vector<T,A>& x,
+//                           const gl_vector<T, B, A>& y)
+//    {return x == y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator==(const gl_vector<T, B, A>& x,
-                           const std::vector<T,A>& y)
-    {return x.base () == y;}
+    inline bool operator< (const gl_vector<T, B, A>& p_x,
+                           const gl_vector<T, B, A>& p_y)
+    {
+        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
+        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        return p_x.base () < p_y.base ();
+    }
+
+//    template <class T, class B, class A>
+//    inline bool operator<(const gl_vector<T, B, A>& x,
+//                          const std::vector<T,A>& y)
+//    {return x.base () < y;}
+//
+//    template <class T, class B, class A>
+//    inline bool operator<(const std::vector<T,A>& x,
+//                          const gl_vector<T, B, A>& y)
+//    {return x < y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator==(const std::vector<T,A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x == y.base ();}
+    inline bool operator!=(const gl_vector<T, B, A>& p_x,
+                           const gl_vector<T, B, A>& p_y)
+    {
+        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
+        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        return p_x.base () != p_y.base ();
+    }
+
+//    template <class T, class B, class A>
+//    inline bool operator!=(const gl_vector<T, B, A>& x,
+//                           const std::vector<T,A>& y)
+//    {return x.base () != y;}
+//
+//    template <class T, class B, class A>
+//    inline bool operator!=(const std::vector<T,A>& x,
+//                           const gl_vector<T, B, A>& y)
+//    {return x != y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator< (const gl_vector<T, B, A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x.base () < y.base ();}
+    inline bool operator> (const gl_vector<T, B, A>& p_x,
+                           const gl_vector<T, B, A>& p_y)
+    {
+        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
+        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        return p_x.base () > p_y.base ();
+    }
 
     template <class T, class B, class A>
-    inline bool operator<(const gl_vector<T, B, A>& x,
-                          const std::vector<T,A>& y)
-    {return x.base () < y;}
+    inline bool operator>=(const gl_vector<T, B, A>& p_x,
+                           const gl_vector<T, B, A>& p_y)
+    {
+        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
+        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        return p_x.base () >= p_y.base ();
+    }
+
+//    template <class T, class B, class A>
+//    inline bool operator>=(const gl_vector<T, B, A>& x,
+//                           const std::vector<T,A>& y)
+//    {return x.base () >= y;}
+//
+//    template <class T, class B, class A>
+//    inline bool operator>=(const std::vector<T,A>& x,
+//                           const gl_vector<T, B, A>& y)
+//    {return x >= y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator<(const std::vector<T,A>& x,
-                          const gl_vector<T, B, A>& y)
-    {return x < y.base ();}
+    inline bool operator<=(const gl_vector<T, B, A>& p_x,
+                           const gl_vector<T, B, A>& p_y)
+    {
+        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
+        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        return p_x.base () <= p_y.base ();
+    }
 
-    template <class T, class B, class A>
-    inline bool operator!=(const gl_vector<T, B, A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x.base () != y.base ();}
+//    template <class T, class B, class A>
+//    inline bool operator<=(const gl_vector<T, B, A>& x,
+//                           const std::vector<T,A>& y)
+//    {return x.base () <= y;}
+//
+//    template <class T, class B, class A>
+//    inline bool operator<=(const std::vector<T,A>& x,
+//                           const gl_vector<T, B, A>& y)
+//    {return x <= y.base ();}
 
-    template <class T, class B, class A>
-    inline bool operator!=(const gl_vector<T, B, A>& x,
-                           const std::vector<T,A>& y)
-    {return x.base () != y;}
-
-    template <class T, class B, class A>
-    inline bool operator!=(const std::vector<T,A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x != y.base ();}
-
-    template <class T, class B, class A>
-    inline bool operator> (const gl_vector<T, B, A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x.base () > y.base ();}
-
-    template <class T, class B, class A>
-    inline bool operator>=(const gl_vector<T, B, A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x.base () >= y.base ();}
-
-    template <class T, class B, class A>
-    inline bool operator>=(const gl_vector<T, B, A>& x,
-                           const std::vector<T,A>& y)
-    {return x.base () >= y;}
-
-    template <class T, class B, class A>
-    inline bool operator>=(const std::vector<T,A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x >= y.base ();}
-
-    template <class T, class B, class A>
-    inline bool operator<=(const gl_vector<T, B, A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x.base () <= y.base ();}
-
-    template <class T, class B, class A>
-    inline bool operator<=(const gl_vector<T, B, A>& x,
-                           const std::vector<T,A>& y)
-    {return x.base () <= y;}
-
-    template <class T, class B, class A>
-    inline bool operator<=(const std::vector<T,A>& x,
-                           const gl_vector<T, B, A>& y)
-    {return x <= y.base ();}
 
 
 /**
  * \class gl_vector_iterator is an iterator for gl_vector.
  */
-template<class V, class It>
+template<class It, class Container>
 class gl_vector_iterator
 {
 public :
-    typedef V                                    vector_type;
-    typedef It                                   base_iterator_type;
-    typedef typename vector_type::const_iterator const_iterator_type;
+    typedef Container                               container_type;
+    typedef typename container_type::const_iterator const_iterator_type;
 
     // ================================================================ //
     // ============================ TYPEDEF =========================== //
@@ -288,9 +546,9 @@ public :
     typedef typename gl_iterator_traits::reference          reference;
     typedef typename gl_iterator_traits::iterator_category  iterator_category;
 
-    typedef typename vector_type::size_type         size_type;
-    typedef typename vector_type::const_reference   const_reference;
-    typedef typename vector_type::const_pointer     const_pointer;
+    typedef typename container_type::size_type         size_type;
+    typedef typename container_type::const_reference   const_reference;
+    typedef typename container_type::const_pointer     const_pointer;
 
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
@@ -299,134 +557,79 @@ public :
     /***
      * \brief Default constructor.
      */
-    gl_vector_iterator():
-        m_v{0},
-        m_i{}
-    {}
+    constexpr gl_vector_iterator()
+        : m_i{}
+//        , m_owner{nullptr}
+    {
+    }
 
-    gl_vector_iterator(vector_type* p_v, const base_iterator_type& p_i):
-        m_v(p_v),
-        m_i(p_i)
-    {}
+    gl_vector_iterator(const It& p_i, container_type & p_owner)
+        : m_i{p_i}
+//        , m_owner{&p_owner}
+    {
+        //m_i.map_range(0, p_n);
+        //m_owner->increment_iterator_counter();
+    }
+
+    // Allow iterator to const_iterator conversion
+    template<typename _Iter>
+    gl_vector_iterator(const gl_vector_iterator<_Iter,
+            typename std::enable_if<
+             (std::is_same<_Iter, typename container_type::pointer>::value),
+             container_type>::type>& p_i)
+        : m_i{p_i.base()}
+//        , m_owner{p_i.owner()}
+    {
+        //m_owner->increment_iterator_counter();
+    }
+
+    ~gl_vector_iterator()
+    {
+        //m_i.unmap();
+//        m_owner->decrement_iterator_counter();
+    }
 
     // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    operator const_iterator_type () const { return m_i; }
-
-    base_iterator_type base() const  { return m_i; }
-    vector_type* vector() const { return m_v; }
+    const It& base() const  { return m_i; }
+//    container_type* owner() const { return m_owner; }
 
     const_reference operator* () const { return *m_i; }
     const_pointer operator->() const { return m_i.operator->(); }
     const_reference operator[] (difference_type p_n) const { return m_i[p_n]; }
 
     gl_vector_iterator& operator++ () { ++m_i; return *this; }
-    gl_vector_iterator operator++(int) { return gl_vector_iterator(m_v, m_i++); }
+    gl_vector_iterator operator++(int) { return gl_vector_iterator(m_i++/*, m_owner*/); }
     gl_vector_iterator& operator-- () { --m_i; return *this; }
-    gl_vector_iterator operator-- (int) { return gl_vector_iterator(m_v, m_i--); }
+    gl_vector_iterator operator-- (int) { return gl_vector_iterator(m_i--/*, m_owner*/); }
 
-    gl_vector_iterator operator+ (difference_type p_n) const { return gl_vector_iterator(m_v, m_i + p_n); }
+    gl_vector_iterator operator+ (difference_type p_n) const { return gl_vector_iterator(m_i + p_n/*, m_owner*/); }
     gl_vector_iterator& operator+= (difference_type p_n) { m_i += p_n; return *this; }
-    gl_vector_iterator operator- (difference_type p_n) const { return gl_vector_iterator(m_v, m_i - p_n); }
     gl_vector_iterator& operator-= (difference_type p_n) { m_i -= p_n; return *this; }
-
-    base_iterator_type _base () const {return m_i;} // Same as base ().
+    gl_vector_iterator operator- (difference_type p_n) const { return gl_vector_iterator(m_i - p_n/*, m_owner*/); }
 
 private:
+
+    gl_vector_iterator(const It& p_i, container_type * p_owner)
+        : m_i{p_i}
+//        , m_owner{p_owner}
+    {
+//        m_owner->increment_iterator_counter();
+    }
 
     // ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    vector_type* m_v;
-    base_iterator_type m_i;
+    /** The underlying iterator. */
+    It m_i;
+    /** The owning vector */
+//    container_type* m_owner;
 };
 
-/**
- * \class Reverse iterator (Partial specialization)
- */
-template<class V, class J>
-class gl_vector_iterator<V, std::reverse_iterator<J> >
-{
-public:
-    // ================================================================ //
-    // ============================ TYPEDEF =========================== //
-    // ================================================================ //
-
-    typedef V                                               vector_type;
-    typedef std::reverse_iterator<J>                        base_iterator_type;
-    typedef typename vector_type::const_reverse_iterator    const_iterator_type;
-    typedef std::iterator_traits<base_iterator_type>        base_iterator_traits;
-
-    typedef typename vector_type::iterator                  iterator_type;
-    typedef typename base_iterator_traits::value_type       value_type;
-    typedef typename base_iterator_traits::difference_type  difference_type;
-    typedef typename base_iterator_traits::pointer          pointer;
-    typedef typename base_iterator_traits::reference        reference;
-    typedef typename base_iterator_traits::iterator_category
-                                                            iterator_category;
-
-    typedef typename vector_type::size_type                 size_type;
-    typedef typename vector_type::const_reference           const_reference;
-    typedef typename vector_type::const_pointer             const_pointer;
-
-    // ================================================================ //
-    // =========================== CTOR/DTOR ========================== //
-    // ================================================================ //
-
-    gl_vector_iterator ():
-        m_v (0),
-        m_i ()
-    {}
-
-    explicit gl_vector_iterator (const iterator_type& i):
-        m_v (i.vector ()),
-        m_i (i.base ())
-    {}
-
-    gl_vector_iterator (vector_type* v, const base_iterator_type& i):
-        m_v (v),
-        m_i (i)
-    {}
-
-    // ================================================================ //
-    // ============================ METHODS =========================== //
-    // ================================================================ //
-
-    operator const_iterator_type () const {return m_i;}
-    iterator_type base () const {return iterator_type (m_v, m_i.base ());}
-    base_iterator_type rbase () const {return m_i;}
-    vector_type* vector () const {return m_v;}
-
-    const_reference operator* () const {return *m_i;}
-    const_pointer   operator-> () const {return m_i.operator -> ();}
-    const_reference operator[] (difference_type p_n) const {return m_i[p_n];}
-
-    gl_vector_iterator& operator++ () {++m_i; return *this;}
-    gl_vector_iterator  operator++ (int) {return gl_vector_iterator (m_v, m_i++);}
-    gl_vector_iterator& operator-- () {--m_i; return *this;}
-    gl_vector_iterator  operator-- (int) {return gl_vector_iterator (m_v, m_i--);}
-
-    gl_vector_iterator operator+ (difference_type p_n) const
-    {return gl_vector_iterator (m_v, m_i + p_n);}
-    gl_vector_iterator& operator+= (difference_type p_n) {m_i += p_n; return *this;}
-    gl_vector_iterator operator- (difference_type p_n) const
-    {return gl_vector_iterator (m_v, m_i - p_n);}
-    gl_vector_iterator& operator-= (difference_type p_n) {m_i -= p_n; return *this;}
-
-    base_iterator_type _base () const {return m_i;} // Same as rbase
-
-private:
-
-    // ================================================================ //
-    // ============================= FIELDS =========================== //
-    // ================================================================ //
-
-    vector_type* m_v;
-    base_iterator_type m_i;
-};
+// TODO gl_vector_reverse_iterator
 
 /*
  * Overloaded operators.
@@ -435,144 +638,104 @@ private:
     /**
      * operator==
      */
-    template <class V, class I>
-    inline bool operator== (const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () == y._base ();}
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline bool operator== (const gl_vector_iterator<IteratorL, Container>& p_lhs, const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    { return p_lhs.base() == p_rhs.base(); }
 
-    template <class V, class I>
-    inline bool operator== (const gl_vector_iterator<V, I>& x,
-                            const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () == y;}
+    template <class Iterator, class Container>
+    inline bool operator== (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_lhs.base() == p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator== (const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-                            const gl_vector_iterator<V, I>& y)
-    {return x == y._base ();}
-
-    /**
-     * operator<
-     */
-    template <class V, class I>
-    inline bool operator< (const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () < y._base ();}
-
-    template <class V, class I>
-    inline bool operator< (const gl_vector_iterator<V, I>& x,
-                           const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () < y;}
-
-    template <class V, class I>
-    inline bool operator< (const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-                           const gl_vector_iterator<V, I>& y)
-    {return x < y._base ();}
 
     /**
      * operator!=
      */
-    template <class V, class I>
-    inline bool operator!= (const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () != y._base ();}
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline bool operator!= (const gl_vector_iterator<IteratorL, Container>& p_lhs, const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    { return p_lhs.base() != p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator!= (const gl_vector_iterator<V, I>& x,
-                            const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () != y;}
+    template <class Iterator, class Container>
+    inline bool operator!= (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_lhs.base() != p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator!= (const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-                            const gl_vector_iterator<V, I>& y)
-    {return x != y._base ();}
+
+    /**
+     * operator<
+     */
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline bool operator< (const gl_vector_iterator<IteratorL, Container>& p_lhs, const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    { return p_lhs.base() < p_rhs.base();}
+
+    template <class Iterator, class Container>
+    inline bool operator< (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_lhs.base() < p_rhs.base();}
+
 
     /**
      * operator>
      */
-    template <class V, class I>
-    inline bool operator> (const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () > y._base ();}
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline bool operator> (const gl_vector_iterator<IteratorL, Container>& p_lhs, const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    { return p_lhs.base() > p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator> (const gl_vector_iterator<V, I>& x,
-                           const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () > y;}
+    template <class Iterator, class Container>
+    inline bool operator> (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_lhs.base() > p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator> (const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-                           const gl_vector_iterator<V, I>& y)
-    {return x > y._base ();}
 
     /**
      * operator>=
      */
-    template <class V, class I>
-    inline bool operator>= (const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () >= y._base ();}
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline bool operator>= (const gl_vector_iterator<IteratorL, Container>& p_lhs, const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    { return p_lhs.base() >= p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator>= (const gl_vector_iterator<V, I>& x,
-                            const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () >= y;}
+    template <class Iterator, class Container>
+    inline bool operator>= (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_lhs.base() >= p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator>= (const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-                            const gl_vector_iterator<V, I>& y)
-    {return x >= y._base ();}
 
     /**
      * operator<=
      */
-    template <class V, class I>
-    inline bool operator<= (const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () <= y._base ();}
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline bool operator<= (const gl_vector_iterator<IteratorL, Container>& p_lhs, const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    { return p_lhs.base() <= p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator<= (const gl_vector_iterator<V, I>& x,
-                            const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () <= y;}
+    template <class Iterator, class Container>
+    inline bool operator<= (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_lhs.base() <= p_rhs.base();}
 
-    template <class V, class I>
-    inline bool operator<= (const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-                            const gl_vector_iterator<V, I>& y)
-    {return x <= y._base ();}
 
     /**
      * operator-
      */
-    template <class V, class I>
-    inline typename gl_vector_iterator<V, I>::difference_type
-    operator-(const gl_vector_iterator<V, I>& x, const gl_vector_iterator<V, I>& y)
-    {return x._base () - y._base ();}
+    template <class Iterator, class Container>
+    inline auto
+    operator- (const gl_vector_iterator<Iterator, Container>& p_lhs, const gl_vector_iterator<Iterator, Container>& p_rhs)
+    -> decltype(p_lhs.base() - p_rhs.base())
+    { return p_lhs.base() - p_rhs.base(); }
 
-    template <class V, class I>
-    inline typename gl_vector_iterator<V, I>::difference_type
-    operator-(const gl_vector_iterator<V, I>& x,
-              const typename gl_vector_iterator<V, I>::const_iterator_type& y)
-    {return x._base () - y;}
-
-    template <class V, class I>
-    inline typename gl_vector_iterator<V, I>::difference_type
-    operator-(const typename gl_vector_iterator<V, I>::const_iterator_type& x,
-              const gl_vector_iterator<V, I>& y)
-    {return x - y._base ();}
+    template<typename IteratorL, typename IteratorR, typename Container>
+    inline auto
+    operator-(const gl_vector_iterator<IteratorL, Container>& p_lhs,
+              const gl_vector_iterator<IteratorR, Container>& p_rhs)
+    -> decltype(p_lhs.base() - p_rhs.base())
+    { return p_lhs.base() - p_rhs.base(); }
 
     /**
      * operator+
      */
-    template <class V, class I>
-    inline gl_vector_iterator<V, I>
-    operator+(typename gl_vector_iterator<V, I>::difference_type n,
-              const gl_vector_iterator<V, I>& x)
-    {return gl_vector_iterator<V, I> (x.vector (), n + x._base ());}
+    template <class Iterator, class Container>
+    inline gl_vector_iterator<Iterator, Container>
+    operator+(typename gl_vector_iterator<Iterator, Container>::difference_type p_n,
+              const gl_vector_iterator<Iterator, Container>& p_rhs)
+    { return p_rhs + p_n; }
 
 } /* namespace gl */
 } /* namespace core */
 } /* namespace nkh */
 
-//namespace std
-//{
-//  template <class T, class B, class A>
-//  inline void swap(nkh::core::gl::gl_vector<T, B, A>& x,
-//                   nkh::core::gl::gl_vector<T, B, A>& y) {x.swap (y);}
-//}
 
 #include "glvector.inl"
 

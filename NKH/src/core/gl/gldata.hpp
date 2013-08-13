@@ -53,6 +53,38 @@
         }
 
 /**
+ * Macro to adapt existing attributes data.
+ * ----------------------------------------------------------------
+ * Usage :
+ * -------
+ *
+ *  Same as NKH_DEFINE_GL_ATTRIBUTES but does not have an instrusive
+ *  behavior. However whenever the original structure is modified,
+ *  you have also to report the modification within the macro
+ *  declaration.
+ *
+ *  Note :
+ *      you can't adapt partially a structure, as computed offset are
+ *  perform on the structure plus its sizeof isn't computed there. It
+ *  could however maybe be an improvement to the library.
+ */
+#define NKH_ADAPT_TO_GL_ATTRIBUTES(NAMESPACE_SEQ, NAME, ATTRIBUTES)     \
+        BOOST_FUSION_ADAPT_STRUCT(NAMESPACE_SEQ, NAME, ATTRIBUTES)      \
+        namespace nkh  {                                                \
+        namespace core {                                                \
+        namespace gl   {                                                \
+        namespace priv {                                                \
+            struct is_gl_attributes<                                    \
+            BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DECLARATION((0)NAMESPACE_SEQ) NAME>              \
+            {                                                           \
+                static constexpr bool value = true;                     \
+            };                                                          \
+        }                                                               \
+        }                                                               \
+        }                                                               \
+        }
+
+/**
  * Macro to define uniform data.
  * --------------------------------------------------------------
  * Usage :
@@ -62,13 +94,5 @@
  */
 #define NKH_DEFINE_GL_UNIFORM BOOST_FUSION_DEFINE_STRUCT
 
-
-#define _GLIBCXX_ALLOC_TR_NESTED_TYPE(_NTYPE, _ALT) \
-  private: \
-  template<typename _Tp> \
-    static typename _Tp::_NTYPE _S_##_NTYPE##_helper(_Tp*); \
-  static _ALT _S_##_NTYPE##_helper(...); \
-    typedef decltype(_S_##_NTYPE##_helper((_Alloc*)0)) __##_NTYPE; \
-  public:
 
 #endif /* GLDATA_HPP_ */

@@ -190,12 +190,12 @@ struct gl_object_buffer
 
     static inline void save_state()
     {
-
+        // TODO
     }
 
     static inline void restore_state()
     {
-
+        // TODO
     }
 };
 

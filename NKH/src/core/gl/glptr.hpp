@@ -170,6 +170,17 @@ public:
         return *this;
 	}
 
+	gl_ptr& operator= (gl_ptr&& p_rhs)
+	{
+	    m_id = std::move(p_rhs.m_id);
+	    m_ptr = std::move(p_rhs.m_ptr);
+	    m_offset = std::move(p_rhs.m_offset);
+#ifndef NKH_NDEBUG
+        m_isMap = std::move(p_rhs.m_isMap);
+#endif
+	    return *this;
+	}
+
 	/**
 	 * \brief Pointer interface.
 	 * \return the underlying pointer.
@@ -308,10 +319,9 @@ private:
 	    // We make the assumption than the buffer content isn't used in draw call, that's why we have the GL_MAP_UNSYNCHRONIZED_BIT flag
 	    // And finally, because of the static_assert, the cast can't fail.
 	    m_ptr = reinterpret_cast<T*>(
-	            gl_object_buffer::gl_map_range(Buff::target,
-	                                           p_offset * sizeof(T),
-	                                           p_length * sizeof(T),
-	                                           GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT));
+	            gl_object_buffer<Buff>::gl_map_range(p_offset * sizeof(T),
+	                                                 p_length * sizeof(T),
+	                                                 GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT));
 #ifndef NKH_NDEBUG
 	    check_integrity();
 #endif
@@ -329,7 +339,7 @@ private:
 	    m_isMap = false;
 #endif
 //	    glCheck(glUnmapBuffer(Buff::target));
-	    gl_object_buffer::gl_unmap(Buff::target);
+	    gl_object_buffer<Buff>::gl_unmap();
 	    m_ptr = nullptr;
 	}
 
@@ -338,7 +348,7 @@ private:
 	 */
 	void bind()
 	{
-	    gl_object_buffer::gl_bind(m_id);
+	    gl_object_buffer<Buff>::gl_bind(m_id);
 	}
 
 	/**
@@ -346,7 +356,7 @@ private:
 	 */
 	void create()
 	{
-	    gl_object_buffer::gl_gen(1, &m_id);
+	    gl_object_buffer<Buff>::gl_gen(1, &m_id);
 	}
 
 #ifndef NKH_NDEBUG

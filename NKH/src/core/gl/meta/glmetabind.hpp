@@ -19,7 +19,7 @@
 #include <boost/mpl/sizeof.hpp>
 
 #include "../glrequires.hpp"
-#include "../glshadercontext.hpp"
+#include "../glbinder.hpp"
 #include "gltraits.hpp"
 
 namespace nkh {
@@ -78,19 +78,19 @@ namespace priv {
     /**
      * Meta function iterating over attributes of the Sequence.
      */
-    template<typename Seq, typename ShaderContext, typename N>
+    template<typename Seq, typename AttributeBinder, typename N>
     struct bind_Iter
     {
         typedef typename boost::fusion::result_of::value_at<Seq, N>::type   current_t;
         typedef typename boost::mpl::next<N>::type                          next_t;
         typedef boost::fusion::extension::struct_member_name<Seq, N::value> name_t;
 
-        static inline void map(const ShaderContext & sh, std::size_t byte_offset)
+        static inline void map(const AttributeBinder & sh, std::size_t byte_offset)
         {
             static_assert(tuple_size<current_t>::value < 5,"The tuple size must be either 1, 2, 3 or 4. GL_BGRA is not currently supported.");
             // ------------------------- DECLARE ------------------------ //
 
-            sh.bind_attribute(
+            sh(
                 name_t::call(),                         // attribute name
                 tuple_size<current_t>::value,           // number of component
                 byte_offset,                            // offsetof(Seq, name_t)
@@ -98,15 +98,15 @@ namespace priv {
                 tuple_component_type<current_t>::value  // deduce
             );
 
-            bind_Iter<Seq, ShaderContext, next_t>::map(sh, byte_offset + sizeof(current_t));
+            bind_Iter<Seq, AttributeBinder, next_t>::map(sh, byte_offset + sizeof(current_t));
         }
     };
 
     /**
      * End of iteration.
      */
-    template<typename Seq, typename ShaderContext>
-    struct bind_Iter<Seq, ShaderContext, typename boost::fusion::result_of::size<Seq>::type>
+    template<typename Seq, typename AttributeBinder>
+    struct bind_Iter<Seq, AttributeBinder, typename boost::fusion::result_of::size<Seq>::type>
     {
         static inline void map(...) {}
     };
@@ -114,19 +114,19 @@ namespace priv {
     /**
      * Start of the iteration.
      */
-    template<typename Seq, typename ShaderContext>
-    struct bind_first : bind_Iter<Seq, ShaderContext, boost::mpl::int_<0> > {};
+    template<typename Seq, typename AttributeBinder>
+    struct bind_first : bind_Iter<Seq, AttributeBinder, boost::mpl::int_<0> > {};
 
     /**
      * External entry for the mapping.
      */
-    template<typename Seq, typename ShaderContext>
+    template<typename Seq, typename AttributeBinder>
     struct bind_attributes
     {
-        typedef bind_attributes<Seq, ShaderContext> type;
-        static inline void map(const ShaderContext & sh)
+        typedef bind_attributes<Seq, AttributeBinder> type;
+        static inline void map(const AttributeBinder & sh)
         {
-            bind_first<Seq, ShaderContext>::map(sh, 0);
+            bind_first<Seq, AttributeBinder>::map(sh, 0);
         }
     };
 
@@ -143,14 +143,14 @@ namespace priv {
  *  For the binding simply make the following call :
  *
  *      \code
- *          gl_bind_attributes< T >::map(shader_context)
+ *          gl_bind_attributes< T >::map(attribute_bind)
  *      \endcode
  *
- *  where T is your attribute structure, and shader_context is
- *  a type with a public member function defined as following :
+ *  where T is your attribute structure, and attribute_bind is
+ *  a functor or a lambda defined as follow :
  *
  *      \code
- *          void bind_attribute(
+ *          void operator()(
  *              char const*,                        // attribute name
  *              int,                                // number of component
  *              std::size_t,                        // offsetof(Seq, name_t)
@@ -161,23 +161,12 @@ namespace priv {
  *
  *
  * \param T is the structure defined with NKH_DEFINE_GLATTRIBUTES
- * \param M is the material defined to be used in the shader_context.
+ * \param AttributeBinder is the functor or lambda to use.
  */
-template<typename T, typename M>
-struct gl_bind_attributes : public priv::bind_attributes<T, gl_shader_context<M> >::type
+template<typename T, typename AttributeBinder>
+struct gl_bind_attributes : public priv::bind_attributes<T, AttributeBinder>::type
 {};
 
-/**
- * ------------------------------------------------------------------------
- * Basic Usage :
- * -------------
- *
- *      int main()
- *      {
- *          gl_shader_context<int> sh;
- *          gl_bind_attributes<nkh::core::data::mesh::vertex, int>::map(sh);
- *      }
- */
 
 } /* namespace gl */
 } /* namespace core */

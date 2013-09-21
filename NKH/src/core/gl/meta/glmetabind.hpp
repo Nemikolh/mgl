@@ -147,7 +147,7 @@ namespace priv {
  *      \endcode
  *
  *  where T is your attribute structure, and attribute_bind is
- *  a functor or a lambda defined as follow :
+ *  a functor defined as follow :
  *
  *      \code
  *          void operator()(
@@ -161,10 +161,9 @@ namespace priv {
  *
  *
  * \param T is the structure defined with NKH_DEFINE_GLATTRIBUTES
- * \param AttributeBinder is the functor or lambda to use.
  */
-template<typename T, typename AttributeBinder>
-struct gl_bind_attributes : public priv::bind_attributes<T, AttributeBinder>::type
+template<typename T>
+struct gl_bind_attributes : public priv::bind_attributes<T, gl_attribute_binder>::type
 {};
 
 

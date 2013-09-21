@@ -16,21 +16,51 @@ namespace core {
 namespace gl   {
 
 /**
+ * \brief Draw n instance of an object.
+ * In order to do so you need to pass at least one buffer with
+ *  \code
+ *      make_instanced(buffer)
+ *  \endcode
+ * to the vao. Then the maximum number of object that can be drawn
+ * will be less than the minimum size of the buffers marked as
+ * instanced.
+ * Note :
+ *  - Only if NKH_DEBUG is active you'll get a check on primcount,
+ *    otherwise you need to provide that parameter carefully.
+ * \param p_vao holds both the object data and the per instance data.
+ * \param p_material is the material used for each instance.
+ * \param p_primcount is the number of instance to draw.
+ */
+template<typename M>
+void gl_draw_instanced(const gl_vao& p_vao, const M& p_material, std::size_t p_primcount);
+
+/**
+ * \brief Draw the passed vao.
+ * \param p_object is the vao to draw.
+ * \param p_material is the material used.
+ */
+template<typename M>
+void gl_draw(const gl_vao& p_vao, const M& p_material);
+
+/**
  * \brief Draw the passed data.
  * \param p_data is the attributes data to use.
  * \param p_indices is the array of indices.
  * \param p_material is the shader context.
  */
 template<typename T, typename I, typename M>
-void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices, const gl_shader_context<M> & p_material);
+void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices, const M & p_material);
 
 /**
  * \brief Draw the content.
+ * This function does not bind p_data, assuming is has already been bound.
  * \param p_data is the attributes data to use.
  * \param p_indices is the array of indices.
  */
 template<typename T, typename I>
 void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices);
+
+
 
 } /* namespace gl. */
 } /* namespace core. */

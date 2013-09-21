@@ -151,6 +151,17 @@ struct gl_enum_type<double>
 // -----------------------------------------------------------------------------------------------------------------------------------//
 // -----------------------------------------------------------------------------------------------------------------------------------//
 
+/**
+ * \class gl_types offers typedef for common opengl types.
+ */
+struct gl_types
+{
+    typedef GLuint id;
+    typedef GLenum en;
+};
+
+// -----------------------------------------------------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------------------------------------------------//
 
 /*
  * Opengl object definitions.
@@ -291,14 +302,19 @@ struct gl_object_transformfeedback
 
 struct gl_object_vertexarrays
 {
-    static inline void gl_gen(GLsizei p_n​, GLuint * p_buffers)
+    static inline void gl_gen(GLsizei p_n​, GLuint * p_vao)
     {
-        glCheck(glGenVertexArrays(p_n, p_buffers));
+        glCheck(glGenVertexArrays(p_n, p_vao));
     }
 
-    static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
+    static inline void gl_delete(GLsizei p_n, const GLuint * p_vao)
     {
-        glCheck(glDeleteVertexArrays(p_n​, p_buffers​));
+        glCheck(glDeleteVertexArrays(p_n​, p_vao));
+    }
+
+    static inline void gl_bind(GLuint p_vao)
+    {
+        glCheck(glBindVertexArray(p_vao));
     }
 };
 

@@ -8,7 +8,7 @@
 #ifndef GLVECTOR_HPP_
 #define GLVECTOR_HPP_
 
-#include "gltraits.hpp"
+#include "meta/gltraits.hpp"
 #include "glrequires.hpp"
 #include <vector>
 #include <iterator>
@@ -125,6 +125,13 @@ public:
     // ============================ METHODS =========================== //
     // ================================================================ //
 
+    /**
+     * \brief Bind the underlying buffer.
+     */
+    void bind()
+    {
+        get_ptr_impl().bind();
+    }
 
     gl_vector&
     operator=(const gl_vector& p_rhs)
@@ -409,6 +416,63 @@ private:
     bool                m_is_mapped;
 };
 
+
+template<typename T>
+struct gl_instanced
+{
+    /**
+     * \brief Change the use of this buffer when given to a vao.
+     * \param p_buffer is the buffer that will be considered as an instanced data buffer.
+     * \return Returns the wrapper.
+     */
+    template<typename U>
+    friend gl_instanced<U> make_instanced(const gl_vector<U>& p_buffer);
+
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
+    /**
+     * \brief Bind the instanced buffer.
+     */
+    inline void bind()
+    {
+        m_buffer.bind();
+    }
+
+    /**
+     * \brief Returns the divisor number.
+     * Currently returns just 1. That implies having
+     * the buffer being modified every one instance.
+     * \return Returns the divisor number
+     */
+    inline char get_divisor()
+    {
+        return 1;
+    }
+
+private:
+    // ================================================================ //
+    // =========================== CTOR/DTOR ========================== //
+    // ================================================================ //
+
+    gl_instanced(const gl_vector<T>& p_buffer)
+        : m_buffer{p_buffer}
+    {}
+
+    // ================================================================ //
+    // ============================= FIELDS =========================== //
+    // ================================================================ //
+
+    /** The buffer that will behave like instanced data. */
+    const gl_vector<T>& m_buffer;
+};
+
+template<typename T>
+gl_instanced<T> make_instanced(const gl_vector<T>& p_buffer)
+{
+    return gl_instanced<T>(p_buffer);
+}
 
 /*
  * Overloaded operators.

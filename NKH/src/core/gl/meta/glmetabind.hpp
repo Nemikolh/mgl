@@ -21,59 +21,14 @@
 #include "../glrequires.hpp"
 #include "../glbinder.hpp"
 #include "gltraits.hpp"
+#include "../glmhelper.hpp"
+
 
 namespace nkh {
 namespace core {
 namespace gl {
 
 namespace priv {
-
-    /**
-     * \class tuple_size_glm compute the size of a glm type when it is seen as a tuple.
-     *
-     *  glm types are not at as defined in the standard "tuples". But as here,
-     * we do need the number of component of an attribute, this is a convenient way to do it.
-     *
-     * Implementation note :
-     * ---------------------
-     *
-     *  The code is using the inner presence of a nested value_type inside glm types.
-     *  Do not make assumption on it, as it can change in the same way the glm is getting
-     *  updated.
-     *
-     */
-    template<typename T>
-    class tuple_size_glm
-    {
-        template<typename U>
-        static typename U::value_type   deduce(U*);
-        static T                        deduce(...);
-    public:
-
-        typedef
-            typename boost::mpl::divides<
-                        boost::mpl::sizeof_<T>
-                    ,   boost::mpl::sizeof_<decltype(deduce((T*)0))>
-                >::type type;
-        static constexpr typename type::value_type
-                        value = type::value;
-    };
-
-    /**
-     * Meta function returning one if the type is arithmetic, otherwise
-     * try to count the size of the "tuple".
-     */
-    template<typename T>
-    struct tuple_size
-    {
-        typedef
-            typename boost::mpl::eval_if< std::is_arithmetic<T>
-                , boost::mpl::int_<1>
-                , tuple_size_glm<T>
-            >::type         type;
-        static constexpr typename type::value_type value = type::value;
-    };
-
 
     /**
      * Meta function iterating over attributes of the Sequence.
@@ -85,7 +40,7 @@ namespace priv {
         typedef typename boost::mpl::next<N>::type                          next_t;
         typedef boost::fusion::extension::struct_member_name<Seq, N::value> name_t;
 
-        static inline void map(const AttributeBinder & sh, std::size_t byte_offset)
+        constexpr static inline void map(const AttributeBinder & sh, std::size_t byte_offset)
         {
             static_assert(tuple_size<current_t>::value < 5,"The tuple size must be either 1, 2, 3 or 4. GL_BGRA is not currently supported.");
             // ------------------------- DECLARE ------------------------ //
@@ -108,7 +63,7 @@ namespace priv {
     template<typename Seq, typename AttributeBinder>
     struct bind_Iter<Seq, AttributeBinder, typename boost::fusion::result_of::size<Seq>::type>
     {
-        static inline void map(...) {}
+        constexpr static inline void map(...) {}
     };
 
     /**
@@ -124,7 +79,7 @@ namespace priv {
     struct bind_attributes
     {
         typedef bind_attributes<Seq, AttributeBinder> type;
-        static inline void map(const AttributeBinder & sh)
+        constexpr static inline void map(const AttributeBinder & sh)
         {
             bind_first<Seq, AttributeBinder>::map(sh, 0);
         }

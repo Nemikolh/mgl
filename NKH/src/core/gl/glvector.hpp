@@ -8,10 +8,12 @@
 #ifndef GLVECTOR_HPP_
 #define GLVECTOR_HPP_
 
-#include "meta/gltraits.hpp"
-#include "glrequires.hpp"
 #include <vector>
 #include <iterator>
+#include "meta/gltraits.hpp"
+#include "glrequires.hpp"
+#include "glallocator.hpp"
+#include "glscope.hpp"
 
 namespace nkh {
 namespace core {
@@ -20,8 +22,8 @@ namespace gl {
 template <class It, class V>
 class gl_vector_iterator;
 
-template<typename T, typename Buff = gl_buffer<T>, typename Alloc = gl_allocator<T, Buff> >
-class gl_vector //: public std::vector<T, Alloc>
+template<typename T, typename Buff, typename Alloc>
+class gl_vector
 {
 public:
 
@@ -49,8 +51,8 @@ public:
     typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
     typedef std::reverse_iterator<iterator>        reverse_iterator;
 
-    /** Typedef for the automatic state saving. */
-    typedef gl_object_buffer gl_object_type;
+    //** Typedef for the automatic state saving. */
+    //typedef gl_object_buffer gl_object_type;
 
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
@@ -372,9 +374,9 @@ private:
     // ============================ FRIENDS =========================== //
     // ================================================================ //
 
-    template<typename Iterator, typename Container> friend class gl_vector_iterator<Iterator, Container>;
-    template<typename H> friend class gl_scope<H>;
-    template<typename H, typename B, typename A> friend class gl_vector<H, B, A>;
+    template<typename, typename> friend class gl_vector_iterator;
+    template<typename> friend class gl_scope;
+    template<typename, typename, typename> friend class gl_vector;
     //friend gl_vector;
 
     // ================================================================ //

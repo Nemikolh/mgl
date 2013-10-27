@@ -9,46 +9,30 @@
 #define GLPTR_H_
 
 #include <type_traits>
-#include <GL/glew.h>
 #include <assert.h>
+#include "glfwd.hpp"
+#include "meta/gltraits.hpp"
 
 namespace nkh {
 namespace core {
 namespace gl {
 
-/**
- * \class gl_ptr is a pointer to memory located on the GPU through buffer.
- * This class behave in a slightly different way when NKH_NDEBUG isn't
- * defined. First its sizeof change as a bool is added to check correct
- * usage whenever we can. Thus the execution will be slower than without it.
- *
- * TODO : I think we should have a way to get this behavior even if
- * the Macro NKH_NDEBUG isn't defined, with for instance an other macro.
- */
-template<class T, typename Buff = gl_buffer<T> >
-class gl_ptr
+namespace priv {
+
+template<class T, typename Buff>
+class gl_ptr_impl
 {
 public:
-
-    // ================================================================ //
-    // ========================= STATIC ASSERT ======================== //
-    // ================================================================ //
-
-    static_assert(std::is_standard_layout<T>::value, "The type used here must be a standard layout data type.");
-    static_assert(!std::is_pointer<T>::value, "You can't use this class with pointers.");
 
     // ================================================================ //
     // ============================ TYPEDEF =========================== //
     // ================================================================ //
 
-    typedef size_t                          size_type;
     typedef T                               value_type;
     typedef ptrdiff_t                       difference_type;
-    typedef T &                             reference;
     typedef T *                             pointer;
     typedef std::random_access_iterator_tag iterator_category;
-
-    typedef gl_context *                    context;
+    typedef size_t                          size_type;
     typedef gl_ptr<void>                    void_pointer;
     typedef const gl_ptr<void>              const_void_pointer;
 
@@ -59,28 +43,28 @@ public:
     /**
      * \brief Default Constructor.
      */
-	gl_ptr(std::nullptr_t = nullptr)
+	gl_ptr_impl(std::nullptr_t = nullptr)
 	    : m_id{0}
 	    , m_ptr{nullptr}
 	    , m_offset{0}
         #ifndef NKH_NDEBUG
 	    , m_isMap{false}
         #endif
-	    , m_context{nullptr}
+//	    , m_context{nullptr}
     {}
 
     /**
      * \brief Copy constructor
      * \param rhs is an other gl_ptr.
      */
-    gl_ptr(const gl_ptr& rhs)
+    gl_ptr_impl(const gl_ptr_impl& rhs)
         : m_id{rhs.m_id}
         , m_ptr{rhs.m_ptr}
         , m_offset{rhs.m_offset}
         #ifndef NKH_NDEBUG
         , m_isMap{rhs.m_isMap}
         #endif
-        , m_context{rhs.m_context}
+//        , m_context{rhs.m_context}
     {}
 
 	/**
@@ -89,40 +73,28 @@ public:
 	 */
     template<typename U, typename B, typename = typename
             std::enable_if<std::is_convertible<U*, T*>::value>::type>
-	gl_ptr(const gl_ptr<U, B>& rhs)
+	gl_ptr_impl(const gl_ptr<U, B>& rhs)
 	    : m_id{rhs.m_id}
 	    , m_ptr{rhs.m_ptr}  // why not static_cast? -> to avoid accepting downcasting. Actually is_convertible wouldn't accept it.
 	    , m_offset{rhs.m_offset}
         #ifndef NKH_NDEBUG
         , m_isMap{rhs.m_isMap}
         #endif
-        , m_context{rhs.m_context}
+//        , m_context{rhs.m_context}
 	{}
-
-	/**
-	 * \brief Copy constructor to meet allocator requirements.
-	 * In order to have this class being used by the gl_allocator.
-	 * The following must be possible :
-	 *  static_cast< gl_ptr<T> >(gl_ptr<void>)
-	 * \param vptr is a void pointer.
-	 */
-	gl_ptr(const gl_ptr<void>& vptr) // eclipse CDT n'est pas à l'aise avec C++11
-	    : gl_ptr()
-	{
-	}
 
 	/**
 	 * \brief Move constructor.
 	 * \param rhs the moved value.
 	 */
-	gl_ptr(gl_ptr && rhs)
+	gl_ptr_impl(gl_ptr_impl && rhs)
         : m_id{std::move(rhs.m_id)}
         , m_ptr{std::move(rhs.m_ptr)}
         , m_offset{std::move(rhs.m_offset)}
         #ifndef NKH_NDEBUG
         , m_isMap{std::move(rhs.m_isMap)}
         #endif
-        , m_context{std::move(rhs.m_context)}
+//        , m_context{std::move(rhs.m_context)}
 	{}
 
 	/**
@@ -131,24 +103,24 @@ public:
      */
     template<typename U, typename B, typename = typename
             std::enable_if<std::is_convertible<U*, T*>::value>::type>
-    gl_ptr(gl_ptr<U, B>&& rhs)
+    gl_ptr_impl(gl_ptr_impl<U, B>&& rhs)
         : m_id{std::move(rhs.m_id)}
         , m_ptr{std::move(rhs.m_ptr)}
         , m_offset{std::move(rhs.m_offset)}
         #ifndef NKH_NDEBUG
         , m_isMap{std::move(rhs.m_isMap)}
         #endif
-        , m_context{std::move(rhs.m_context)}
+//        , m_context{std::move(rhs.m_context)}
     {}
 
 	/**
 	 * \brief Destructor.
 	 */
-	~gl_ptr()
+	~gl_ptr_impl()
 	{
 	}
 
-	gl_ptr& operator= (const gl_ptr& rhs)
+	gl_ptr_impl& operator= (const gl_ptr_impl& rhs)
 	{
 	    m_id = rhs.m_id;
 	    m_ptr = rhs.m_ptr;
@@ -159,7 +131,7 @@ public:
 	    return *this;
 	}
 
-	gl_ptr& operator= (std::nullptr_t)
+	gl_ptr_impl& operator= (std::nullptr_t)
 	{
 	    m_id = 0;
 	    m_ptr = nullptr;
@@ -170,7 +142,7 @@ public:
         return *this;
 	}
 
-	gl_ptr& operator= (gl_ptr&& p_rhs)
+	gl_ptr_impl& operator= (gl_ptr_impl&& p_rhs)
 	{
 	    m_id = std::move(p_rhs.m_id);
 	    m_ptr = std::move(p_rhs.m_ptr);
@@ -194,70 +166,50 @@ public:
 	    return (m_ptr+m_offset);
 	}
 
-	reference   operator*() const
-	{
-#ifndef NKH_NDEBUG
-        if(!m_isMap)
-            throw gl_exception("Pointer access not mapped");
-#endif
-	    return *(m_ptr+m_offset);
-	}
-
-	gl_ptr&     operator++()
+	gl_ptr_impl&     operator++()
     {
 	    ++m_offset;
 	    return *this;
     }
 
-	gl_ptr      operator++(int)
+	gl_ptr_impl      operator++(int)
     {
-	    return gl_ptr(m_offset++, *this);
+	    return gl_ptr_impl(m_offset++, *this);
     }
 
     /**
      *  Bidirectional iterator requirements
      */
-	gl_ptr&     operator--()
+	gl_ptr_impl&     operator--()
     {
 	    --m_offset;
 	    return *this;
     }
 
-	gl_ptr      operator--(int)
+	gl_ptr_impl      operator--(int)
     {
-	    return gl_ptr(m_offset--, *this);
+	    return gl_ptr_impl(m_offset--, *this);
     }
 
-    /**
-     *  Random access iterator requirements
-     */
-    reference   operator[](const difference_type& __n) const
-    {
-#ifndef NKH_NDEBUG
-        if(!m_isMap)
-            throw gl_exception("Pointer access not mapped");
-#endif
-        return m_ptr[m_offset + __n];
-    }
 
-    gl_ptr&     operator+=(const difference_type& p_n)
+    gl_ptr_impl&     operator+=(const difference_type& p_n)
     {
         m_offset += p_n; return *this;
     }
 
-    gl_ptr      operator+(const difference_type& p_n) const
+    gl_ptr_impl      operator+(const difference_type& p_n) const
     {
-        return gl_ptr(m_offset + p_n, *this);
+        return gl_ptr_impl(m_offset + p_n, *this);
     }
 
-    gl_ptr&     operator-=(const difference_type& p_n)
+    gl_ptr_impl&     operator-=(const difference_type& p_n)
     {
         m_offset -= p_n; return *this;
     }
 
-    gl_ptr      operator-(const difference_type& p_n) const
+    gl_ptr_impl      operator-(const difference_type& p_n) const
     {
-        return gl_ptr(m_offset - p_n, *this);
+        return gl_ptr_impl(m_offset - p_n, *this);
     }
 
     /**
@@ -277,25 +229,25 @@ public:
 #endif
     }
 
-    /**
-     * \brief Set the context for this pointer.
-     * \param p_context is the context.
-     */
-    void set_context(context p_context)
-    {
-        m_context = p_context;
-    }
+//    /**
+//     * \brief Set the context for this pointer.
+//     * \param p_context is the context.
+//     */
+//    void set_context(context p_context)
+//    {
+//        m_context = p_context;
+//    }
 
-private:
+protected:
 
-    gl_ptr(difference_type p_offset, const gl_ptr & p_other)
+    gl_ptr_impl(difference_type p_offset, const gl_ptr_impl & p_other)
         : m_id{p_other.m_id}
         , m_ptr{p_other.m_ptr}
         , m_offset{p_offset}
 #ifndef NKH_NDEBUG
         , m_isMap{p_other.m_isMap}
 #endif
-        , m_context{p_other.m_context}
+//        , m_context{p_other.m_context}
     {}
 
 	// ================================================================ //
@@ -367,7 +319,7 @@ private:
 	void check_integrity()
 	{
 	    // Rude for now, but will force the code to be ok.
-	    assert(m_isMap && m_context);
+	    assert(m_isMap);// && m_context
 	    // Now we check for error.
 	    priv::glTryError();
 	}
@@ -377,8 +329,9 @@ private:
     // ============================ FRIENDS =========================== //
     // ================================================================ //
 
-	friend gl_allocator<T, Buff>;
-	template<typename U, typename B> friend class gl_ptr<U, B>;
+	friend class gl_allocator<T, Buff>;
+	friend class gl_vector<T, Buff>;
+	template<typename, typename> friend class gl_ptr;
 
 	template<typename U, typename B> friend gl_ptr<U, B> operator+(const gl_ptr<U, B>&, difference_type p_n);
 	template<typename U, typename B> friend gl_ptr<U, B> operator+(difference_type p_n, const gl_ptr<U, B>&);
@@ -407,8 +360,109 @@ private:
 	bool            m_isMap;
 #endif
 	/** The gl context associated with this pointer. */
-	context         m_context;
+//	context         m_context;
 };
+
+} /* namespace priv. */
+
+
+template<typename Buff>
+struct gl_ptr<void, Buff> : public priv::gl_ptr_impl<void, Buff>
+{
+
+};
+
+/**
+ * \class gl_ptr is a pointer to memory located on the GPU through buffer.
+ * This class behave in a slightly different way when NKH_NDEBUG isn't
+ * defined. First its sizeof change as a bool is added to check correct
+ * usage whenever we can. Thus the execution will be slower than without it.
+ *
+ * TODO : I think we should have a way to get this behavior even if
+ * the Macro NKH_NDEBUG isn't defined, with for instance an other macro.
+ */
+template<typename T, typename Buff>
+struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
+{
+    // ================================================================ //
+    // ========================= STATIC ASSERT ======================== //
+    // ================================================================ //
+
+    static_assert(std::is_standard_layout<T>::value, "The type used here must be a standard layout data type.");
+    static_assert(!std::is_pointer<T>::value, "You can't use this class with pointers.");
+
+    // ================================================================ //
+    // ============================ TYPEDEFS ========================== //
+    // ================================================================ //
+
+    typedef priv::gl_ptr_impl<T, Buff>      base_type;
+    typedef T &                             reference;
+
+    typedef typename base_type::value_type      value_type;
+    typedef typename base_type::difference_type difference_type;
+    typedef typename base_type::pointer         pointer;
+    typedef typename base_type::iterator_category
+                                                iterator_category;
+    typedef typename base_type::size_type       size_type;
+    typedef typename base_type::void_pointer    void_pointer;
+    typedef typename base_type::const_void_pointer
+                                                const_void_pointer;
+
+    // ================================================================ //
+    // =========================== CTOR/DTOR ========================== //
+    // ================================================================ //
+
+    using base_type::base_type;
+
+    /**
+     * \brief Copy constructor to meet allocator requirements.
+     * In order to have this class being used by the gl_allocator.
+     * The following must be possible :
+     *  static_cast< gl_ptr<T> >(gl_ptr<void>)
+     * \param vptr is a void pointer.
+     */
+    gl_ptr(const gl_ptr<void>& vptr) // eclipse CDT n'est pas à l'aise avec C++11
+        : base_type()
+    {
+        this->m_id = vptr.m_id;
+        this->m_ptr = vptr.m_ptr;
+        this->m_offset = vptr.m_offset;
+    #ifndef NKH_NDEBUG
+        this->m_isMap = vptr.m_isMap;
+    #endif
+    }
+
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
+    /**
+     * @brief A non void pointer is dereferencable
+     * @return
+     */
+    reference   operator*() const
+    {
+#ifndef NKH_NDEBUG
+        if(!this->m_isMap)
+            throw gl_buffer_not_mapped();
+#endif
+        return *(this->m_ptr+this->m_offset);
+    }
+
+    /**
+     *  Random access iterator requirements
+     */
+    reference   operator[](const difference_type& __n) const
+    {
+#ifndef NKH_NDEBUG
+        if(!this->m_isMap)
+            throw gl_buffer_not_mapped();
+#endif
+        return this->m_ptr[this->m_offset + __n];
+    }
+};
+
+
 
 /**
  * RandomAccessIterator operators requirements :
@@ -471,5 +525,39 @@ private:
 } /* namespace gl */
 } /* namespace core */
 } /* namespace nkh */
+
+//namespace std {
+//
+///**
+// * \brief Specialization of the iterator_traits for gl_ptr.
+// */
+//template<typename T, typename B>
+//struct iterator_traits<nkh::core::gl::gl_ptr<T, B>>
+//{
+//    // ================================================================ //
+//    // ============================ TYPEDEFS ========================== //
+//    // ================================================================ //
+//
+//
+//};
+//
+///**
+// * \brief Specialization of the iterator_traits for gl_ptr.
+// */
+//template<typename T, typename B>
+//struct iterator_traits<const nkh::core::gl::gl_ptr<T, B>>
+//{
+//    // ================================================================ //
+//    // ============================ TYPEDEFS ========================== //
+//    // ================================================================ //
+//
+//    typedef T                               value_type;
+//    typedef ptrdiff_t                       difference_type;
+//    typedef const T &                       reference;
+//    typedef const T *                       pointer;
+//    typedef std::random_access_iterator_tag iterator_category;
+//};
+//
+//}  /* namespace std */
 
 #endif /* GLPTR_H_ */

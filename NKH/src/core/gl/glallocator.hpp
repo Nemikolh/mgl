@@ -10,6 +10,7 @@
 
 #include <type_traits>
 #include <memory>
+#include "glptr.hpp"
 
 namespace nkh {
 namespace core {
@@ -18,7 +19,7 @@ namespace gl {
 /**
  * \class gl_allocator is the allocator.
  */
-template<typename T, typename Buff = gl_buffer<T> >
+template<typename T, typename Buff>
 class gl_allocator
 {
 public:

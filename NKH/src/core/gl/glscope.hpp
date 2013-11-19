@@ -15,7 +15,7 @@ namespace core {
 namespace gl {
 
 /**
- * \brief gl_scope is a class that preserve a gl_state for a scope.
+ * \brief gl_scope is a class that preserve a gl_state for a scope, and automatically bind the object.
  */
 template<typename T>
 class gl_scope
@@ -29,11 +29,11 @@ public:
      * \brief Default constructor.
      * \param The passed parameter is locked.
      */
-    gl_scope(T & t)
-        : m_saver{t}
+    gl_scope(const T & t)
+        : m_obj(t)
     {
         gl_state_traits<T>::save_state();
-        m_saver.bind();
+        m_obj.bind();
     }
 
     /**
@@ -41,7 +41,7 @@ public:
      */
     ~gl_scope()
     {
-        m_saver.unbind();
+        m_obj.unbind();
         gl_state_traits<T>::restore_state();
     }
 
@@ -51,8 +51,14 @@ private:
     // ================================================================ //
 
     /** The state bound and unbound during the lifetime of this object. */
-    T & m_saver;
+    const T & m_obj;
 };
+
+template<typename T>
+gl_scope<T> bind_at_scope(const T& p_obj)
+{
+    return gl_scope<T>(p_obj);
+}
 
 } /* namepsace gl. */
 } /* namespace core. */

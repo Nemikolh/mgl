@@ -95,7 +95,7 @@ public:
     }
 
     gl_vector(const gl_vector& p_rhs)
-        : m_vector(p_rhs)
+        : m_vector(p_rhs.m_vector)
         , m_is_mapped{false}
     {
         get_ptr_impl().unmap();
@@ -103,8 +103,8 @@ public:
 
 
     gl_vector(gl_vector && p_rhs)
-        : m_vector(std::move(p_rhs))
-        , m_is_mapped(std::move(p_rhs))
+        : m_vector(std::move(p_rhs.m_vector))
+        , m_is_mapped(std::move(p_rhs.m_is_mapped))
     {}
 
     gl_vector(std::initializer_list<value_type> p_l,
@@ -130,9 +130,17 @@ public:
     /**
      * \brief Bind the underlying buffer.
      */
-    void bind()
+    void bind() const
     {
         get_ptr_impl().bind();
+    }
+
+    /**
+     * \brief Unbind the buffer.
+     */
+    void unbind() const
+    {
+
     }
 
     gl_vector&
@@ -251,7 +259,7 @@ public:
         unmap();
     }
 
-    base_vector_type
+    const base_vector_type&
     base() const            { return m_vector;          }
 
     reference
@@ -384,9 +392,9 @@ private:
     // ================================================================ //
 
     /**
-     * \brief Bind the vector.
+     * \brief Map the vector.
      */
-    void map()
+    void map() const
     {
         if(!m_is_mapped)
             get_ptr_impl().map_range(0, m_vector.capacity());
@@ -394,18 +402,18 @@ private:
     }
 
     /**
-     * \brief Unbind the vector.
+     * \brief Unmap the vector.
      */
-    void unmap()
+    void unmap() const
     {
         if(m_is_mapped)
             get_ptr_impl().unmap();
         m_is_mapped = false;
     }
 
-    pointer get_ptr_impl()
+    pointer get_ptr_impl() const
     {
-        return m_vector.begin().base();
+        return m_vector.cbegin().base();
     }
 
     // ================================================================ //
@@ -415,7 +423,7 @@ private:
     /** underlying vector. */
     base_vector_type    m_vector;
     /** the mapping state. */
-    bool                m_is_mapped;
+    mutable bool        m_is_mapped;
 };
 
 
@@ -487,8 +495,8 @@ gl_instanced<T> make_instanced(const gl_vector<T>& p_buffer)
     inline bool operator==(const gl_vector<T, B, A>& p_x,
                            const gl_vector<T, B, A>& p_y)
     {
-        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
-        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        auto binder_x = bind_at_scope(p_x);
+        auto binder_y = bind_at_scope(p_y);
         return p_x.base () == p_y.base ();
     }
 

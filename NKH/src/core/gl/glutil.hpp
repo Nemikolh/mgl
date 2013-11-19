@@ -16,7 +16,8 @@ namespace core {
 namespace gl   {
 
 struct gl_vao;
-struct gl_vector;
+template<typename T>
+class gl_vector;
 struct gl_program;
 
 /**

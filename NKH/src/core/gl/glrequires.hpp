@@ -141,7 +141,7 @@ namespace priv {
  * \param file Source file where the call is located
  * \param line Line number of the source file where the call is located
  */
-void glCheckError(const char* file, unsigned int line);
+bool glCheckError(const char* file, unsigned int line);
 
 /**
  * \brief Same as glCheck but throw an exception if an error occured.

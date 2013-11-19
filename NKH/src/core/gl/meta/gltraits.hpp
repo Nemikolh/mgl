@@ -169,34 +169,46 @@ struct gl_types
 template<typename Buff>
 struct gl_object_buffer
 {
-    static inline void gl_gen(GLsizei p_n​, GLuint * p_buffers)
+#ifdef NKH_TEST
+    static int counter;
+#endif
+
+    static inline void gl_gen(GLsizei p_n, GLuint * p_buffers)
     {
+#ifdef NKH_TEST
+        counter += p_n;
+#endif
         glCheck(glGenBuffers(p_n, p_buffers));
     }
 
     static inline void gl_bind(GLint p_id)
     {
-        glBindBuffer(p_id);
+        glCheck(glBindBuffer(Buff::target, p_id));
     }
 
-    static inline void* gl_map_range(GLintptr p_offset​, GLsizeiptr p_length​, GLbitfield p_access​)
+    static inline void* gl_map_range(GLintptr p_offset, GLsizeiptr p_length, GLbitfield p_access)
     {
         return glMapBufferRange(Buff::target, p_offset, p_length, p_access);
     }
 
-    static inline GLboolean gl_unmap(GLenum target​)
+    static inline GLboolean gl_unmap()
     {
         return glUnmapBuffer(Buff::target);
     }
 
-    static inline void gl_buffer_data(GLsizeiptr p_size​, const GLvoid * p_data​)
+    static inline GLboolean gl_unmap(GLenum target)
     {
-        glBufferData(Buff::target, p_size, p_data, Buff::usage);
+        return glUnmapBuffer(target);
+    }
+
+    static inline void gl_buffer_data(GLsizeiptr p_size, const GLvoid * p_data)
+    {
+        glCheck(glBufferData(Buff::target, p_size, p_data, Buff::usage));
     }
 
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
-        glCheck(glDeleteBuffers(p_n​, p_buffers​));
+        glCheck(glDeleteBuffers(p_n, p_buffers));
     }
 
     static inline void save_state()
@@ -210,16 +222,21 @@ struct gl_object_buffer
     }
 };
 
+#ifdef NKH_TEST
+template<typename T>
+int gl_object_buffer<T>::counter = 0;
+#endif
+
 struct gl_object_framebuffer
 {
-    static inline void gl_gen(GLsizei p_n​, GLuint * p_buffers)
+    static inline void gl_gen(GLsizei p_n, GLuint * p_buffers)
     {
         glCheck(glGenFramebuffers(p_n, p_buffers));
     }
 
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
-        glCheck(glDeleteFramebuffers(p_n​, p_buffers​));
+        glCheck(glDeleteFramebuffers(p_n, p_buffers));
     }
 };
 
@@ -235,8 +252,7 @@ struct gl_object_program
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
         for(int i = 0; i < p_n; ++i)
-            glDeleteProgram(p_buffers​[i]);
-        glCheck();
+            glDeleteProgram(p_buffers[i]);
     }
 };
 
@@ -268,48 +284,47 @@ struct gl_object_shader
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
         for(int i = 0; i < p_n; ++i)
-            glDeleteShader(p_buffers​[i]);
-        glCheck();
+            glDeleteShader(p_buffers[i]);
     }
 };
 
 
 struct gl_object_texture
 {
-    static inline void gl_gen(GLsizei p_n​, GLuint * p_buffers)
+    static inline void gl_gen(GLsizei p_n, GLuint * p_buffers)
     {
         glCheck(glGenTextures(p_n, p_buffers));
     }
 
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
-        glCheck(glDeleteTextures(p_n​, p_buffers​));
+        glCheck(glDeleteTextures(p_n, p_buffers));
     }
 };
 
 struct gl_object_transformfeedback
 {
-    static inline void gl_gen(GLsizei p_n​, GLuint * p_buffers)
+    static inline void gl_gen(GLsizei p_n, GLuint * p_buffers)
     {
         glCheck(glGenTransformFeedbacks(p_n, p_buffers));
     }
 
     static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
     {
-        glCheck(glDeleteTransformFeedbacks(p_n​, p_buffers​));
+        glCheck(glDeleteTransformFeedbacks(p_n, p_buffers));
     }
 };
 
 struct gl_object_vertexarrays
 {
-    static inline void gl_gen(GLsizei p_n​, GLuint * p_vao)
+    static inline void gl_gen(GLsizei p_n, GLuint * p_vao)
     {
         glCheck(glGenVertexArrays(p_n, p_vao));
     }
 
     static inline void gl_delete(GLsizei p_n, const GLuint * p_vao)
     {
-        glCheck(glDeleteVertexArrays(p_n​, p_vao));
+        glCheck(glDeleteVertexArrays(p_n, p_vao));
     }
 
     static inline void gl_bind(GLuint p_vao)
@@ -375,7 +390,7 @@ struct gl_state_traits
      */
     template<typename U = GLState>
     static inline constexpr
-    std::enable_if<has_typedef_gl_object_type<U>::value, void>::type
+    typename std::enable_if<has_typedef_gl_object_type<U>::value, void>::type
     save_state()
     {
         U::gl_object_type::save_state();
@@ -386,7 +401,7 @@ struct gl_state_traits
      */
     template<typename U = GLState>
     static inline constexpr
-    std::enable_if<!has_typedef_gl_object_type<U>::value, void>::type
+    typename std::enable_if<!has_typedef_gl_object_type<U>::value, void>::type
     save_state()
     {}
 
@@ -396,7 +411,7 @@ struct gl_state_traits
      */
     template<typename U = GLState>
     static inline constexpr
-    std::enable_if<has_typedef_gl_object_type<U>::value, void>::type
+    typename std::enable_if<has_typedef_gl_object_type<U>::value, void>::type
     restore_state()
     {
         U::gl_object_type::restore_state();
@@ -407,7 +422,7 @@ struct gl_state_traits
      */
     template<typename U = GLState>
     static inline constexpr
-    std::enable_if<!has_typedef_gl_object_type<U>::value, void>::type
+    typename std::enable_if<!has_typedef_gl_object_type<U>::value, void>::type
     restore_state()
     {}
 };

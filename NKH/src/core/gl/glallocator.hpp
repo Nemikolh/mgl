@@ -36,15 +36,16 @@ public:
     /**
      * Allocator requirements.
      */
-    typedef gl_ptr<T, Buff>                         pointer;
-    typedef const gl_ptr<T, Buff>                   const_pointer;
-    typedef typename pointer::void_pointer          void_pointer;
-    typedef typename pointer::const_void_pointer    const_void_pointer;
+    typedef gl_ptr<T, Buff>             pointer;
+    typedef const gl_ptr<T, Buff>       const_pointer;
+    typedef gl_ptr<void, Buff>          void_pointer;
+    typedef const gl_ptr<void, Buff>    const_void_pointer;
 
 
     typedef T                               value_type;
     typedef size_t                          size_type;
-    typedef typename pointer::ptrdiff_t     difference_type;
+    typedef typename pointer::difference_type
+                                            difference_type;
 
     template<typename U, typename B2 = Buff>
     struct rebind
@@ -69,7 +70,7 @@ public:
     /**
      * \brief Default move constructor.
      */
-    gl_allocator(const gl_allocator&&) = default;
+    gl_allocator(gl_allocator&&) = default;
 
     /**
      * \brief Copy constructor
@@ -87,16 +88,17 @@ public:
     {
         pointer _ret = nullptr;
 #ifndef NKH_NDEBUG
-        if(!_ret.hasValidContext())
-            throw gl_context_exception();
+        // TODO : context.
+        //if(!_ret.hasValidContext())
+        //    throw gl_context_exception();
 #endif
         if (p_n > this->max_size())
             throw std::bad_alloc();
 
         // TODO : is it correct ? Doesn't it need an unmapping ? -> see it when doing the gl_vector.
-        if(p_cptr)
-            _ret(p_cptr);
-        else
+//        if(p_cptr)
+//            _ret(p_cptr);
+//        else
             _ret.create();
 
         _ret.bind();

@@ -40,7 +40,7 @@ void glTryError()
     }
 }
 
-void glCheckError(const char* file, unsigned int line)
+bool glCheckError(const char* file, unsigned int line)
 {
     // Get the last error
     GLenum errorCode = glGetError();
@@ -109,7 +109,11 @@ void glCheckError(const char* file, unsigned int line)
                     << fileString.substr(fileString.find_last_of("\\/") + 1) << " (" << line << ") : "
                     << error << ", " << description
                     << std::endl;
+
+        return false;
     }
+
+    return true;
 }
 
 } /* namespace priv */

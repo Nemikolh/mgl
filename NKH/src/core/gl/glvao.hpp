@@ -10,22 +10,29 @@
 
 #include <utility>
 #include <type_traits>
+#include <cassert>
 #include "meta/gltraits.hpp"
+
 
 namespace nkh {
 namespace core {
 namespace gl {
 
 struct gl_program;
+template<typename T>
+struct gl_vector;
 
 /**
- * \class gl_vao enables to use vao in a convenient way.
+ * \class gl_vao
+ * \brief gl_vao enables to use vao in a convenient way.
  * The class offers automatic bindings for attributes, plus
  * the management of the underlying Vertex Array Object(VAO)
  * in a transparent way.
- * -------
+ *
  * Usage :
  * -------
+ * This code example illustrate the basic use of this class, plus the way
+ * the library has been thought.
  *  \code
  *      // Start with some data :
  *      gl_vector<Vertex> geometry;     // Attribute data per vertex
@@ -136,7 +143,7 @@ private:
         gl_attribute_binder binder{p_program_id};
         gl_bind_attributes<T>::map(binder);
 #ifndef NKH_NDEBUG
-        assert(m_size == 0 || m_size = p_buffer.size());
+        assert(m_size == 0 || m_size == p_buffer.size());
 #endif
         m_size = p_buffer.size();
     }

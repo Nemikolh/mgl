@@ -54,7 +54,8 @@ public:
 	    TS_ASSERT_THROWS_NOTHING(priv::glTryError());
 	    TS_ASSERT_EQUALS(copy == test, true);
 #ifdef NKH_TEST
-	    TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer<float>>::counter, 3);
+	    TS_TRACE("Additional Test : Number of buffers");
+	    TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer<float>>::counter, 2);
 #endif
 	}
 

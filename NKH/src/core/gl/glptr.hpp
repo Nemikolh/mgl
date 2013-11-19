@@ -286,8 +286,8 @@ protected:
 	    *m_isMap = false;
 #endif
 //	    glCheck(glUnmapBuffer(Buff::target));
-	    gl_object_buffer<Buff>::gl_unmap();
-	    m_ptr = nullptr;
+	    assert(gl_object_buffer<Buff>::gl_unmap());
+	    glCheck(m_ptr = nullptr);
 	}
 
 	/**

@@ -195,6 +195,7 @@
 									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
 									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
 									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
+									<listOptionValue builtIn="false" value="NKH_TEST"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1630939210" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

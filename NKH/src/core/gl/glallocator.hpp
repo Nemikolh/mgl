@@ -58,7 +58,7 @@ public:
     /**
      * \brief Default constructor.
      */
-    explicit gl_allocator(const Container& p_owner)
+    explicit gl_allocator(Container& p_owner)
         : m_owner(p_owner)
     {}
 
@@ -125,7 +125,7 @@ private:
     // ================================================================ //
 
     /** The owner of this instance of allocator. */
-    const Container& m_owner;
+    Container& m_owner;
 };
 
 /*

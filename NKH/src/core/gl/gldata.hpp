@@ -26,16 +26,14 @@
 
 BOOST_PP_SEQ_FOR_EACH(TEST, constexpr std::uint8_t, EAT_FIRST(SEQ)) // expands to w_ x_ y_ z_
 
-namespace nkh  {
-namespace core {
-namespace gl   {
+
+namespace mgl  {
 namespace priv {
 template<typename T>
 struct in_impl;
 }
 }
-}
-}
+
 /**
  * Macro to define attributes data.
  * --------------------------------------------------------------
@@ -66,9 +64,7 @@ struct in_impl;
  */
 #define NKH_DEFINE_GL_ATTRIBUTES(NAMESPACE_SEQ, NAME, ATTRIBUTES)             \
         BOOST_FUSION_DEFINE_STRUCT(NAMESPACE_SEQ, NAME, ATTRIBUTES)    \
-        namespace nkh  {                                               \
-        namespace core {                                               \
-        namespace gl   {                                               \
+        namespace mgl  {                                               \
         namespace priv {                                               \
             template<>                                                 \
             struct is_gl_attributes<                                         \
@@ -82,8 +78,6 @@ struct in_impl;
             BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DECLARATION((0)NAMESPACE_SEQ) NAME>              \
             {                                                          \
             };                                                         \
-        }                                                              \
-        }                                                              \
         }                                                              \
         }
 

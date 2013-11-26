@@ -11,9 +11,7 @@
 #include <iostream>
 #include <string>
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 namespace priv {
 
@@ -119,6 +117,4 @@ bool glCheckError(const char* file, unsigned int line)
 } /* namespace priv */
 
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
+} /* namespace mgl */

@@ -16,18 +16,18 @@
 #include "glscope.hpp"
 
 namespace mgl {
-namespace priv{
 
-template<typename T, typename Buff, typename Alloc>
+template<typename T, typename Buff>
 class gl_vector
 {
 public:
 
-    typedef std::vector<T, Alloc>                       base_vector_type;
-
     // ================================================================ //
     // ============================= TYPES ============================ //
     // ================================================================ //
+
+    typedef gl_allocator<T, gl_vector<T, Buff>, Buff>       allocator_type;
+    typedef std::vector<T, allocator_type>                  base_vector_type;
 
     typedef typename base_vector_type::pointer              pointer;
     typedef typename base_vector_type::const_pointer        const_pointer;
@@ -41,7 +41,6 @@ public:
     typedef typename pointer::size_type                     size_type;
     typedef typename pointer::difference_type               difference_type;
     typedef T                                               value_type;
-    typedef Alloc                                           allocator_type;
 
     // TODO check the correct behaviour of the reverse_iterator with the custom iterator.
     typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
@@ -507,7 +506,8 @@ private:
 
     template<typename, typename> friend class gl_vector_iterator;
     template<typename> friend class gl_scope;
-    template<typename, typename, typename> friend class gl_vector;
+    template<typename, typename> friend class gl_vector;
+    friend allocator_type;
 
     // ================================================================ //
     // ============================ METHODS =========================== //
@@ -561,8 +561,6 @@ private:
     /** underlying vector. */
     base_vector_type        m_vector;
 };
-
-}/* namespace priv */
 
 /**
  * \brief gl_instanced is the class turning on buffer data per instance
@@ -624,8 +622,8 @@ gl_instanced<T> make_instanced(const gl_vector<T>& p_buffer)
     return gl_instanced<T>(p_buffer);
 }
 
-template<typename T, typename B, typename A>
-class gl_scope<priv::gl_vector<T, B, A>>
+template<typename T, typename B>
+class gl_scope<gl_vector<T, B>>
 {
 public:
     // ================================================================ //
@@ -636,7 +634,7 @@ public:
      * @brief Construct a scope object to map at scope the passed gl_vector.
      * @param p_vector is the instance object that will be mapped.
      */
-    gl_scope(const priv::gl_vector<T, B, A> & p_vector)
+    gl_scope(const gl_vector<T, B> & p_vector)
         : m_obj(p_vector)
     {
         m_obj.map();
@@ -652,7 +650,7 @@ public:
 
 private:
 
-    const priv::gl_vector<T, B, A>& m_obj;
+    const gl_vector<T, B>& m_obj;
 };
 
 /*
@@ -662,9 +660,9 @@ private:
     /**
      * operator==
      */
-    template <class T, class B, class A>
-    inline bool operator==(const priv::gl_vector<T, B, A>& p_x,
-                           const priv::gl_vector<T, B, A>& p_y)
+    template <class T, class B>
+    inline bool operator==(const gl_vector<T, B>& p_x,
+                           const gl_vector<T, B>& p_y)
     {
         auto binder_x = bind_at_scope(p_x);
         auto binder_y = bind_at_scope(p_y);
@@ -682,12 +680,12 @@ private:
 //                           const gl_vector<T, B, A>& y)
 //    {return x == y.base ();}
 
-    template <class T, class B, class A>
-    inline bool operator< (const priv::gl_vector<T, B, A>& p_x,
-                           const priv::gl_vector<T, B, A>& p_y)
+    template <class T, class B>
+    inline bool operator< (const gl_vector<T, B>& p_x,
+                           const gl_vector<T, B>& p_y)
     {
-        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
-        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
+        gl_scope<gl_vector<T, B> > binder_x(p_x);
+        gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () < p_y.base ();
     }
 
@@ -701,12 +699,12 @@ private:
 //                          const gl_vector<T, B, A>& y)
 //    {return x < y.base ();}
 
-    template <class T, class B, class A>
-    inline bool operator!=(const priv::gl_vector<T, B, A>& p_x,
-                           const priv::gl_vector<T, B, A>& p_y)
+    template <class T, class B>
+    inline bool operator!=(const gl_vector<T, B>& p_x,
+                           const gl_vector<T, B>& p_y)
     {
-        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
-        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
+        gl_scope<gl_vector<T, B> > binder_x(p_x);
+        gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () != p_y.base ();
     }
 
@@ -720,21 +718,21 @@ private:
 //                           const gl_vector<T, B, A>& y)
 //    {return x != y.base ();}
 
-    template <class T, class B, class A>
-    inline bool operator> (const priv::gl_vector<T, B, A>& p_x,
-                           const priv::gl_vector<T, B, A>& p_y)
+    template <class T, class B>
+    inline bool operator> (const gl_vector<T, B>& p_x,
+                           const gl_vector<T, B>& p_y)
     {
-        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
-        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
+        gl_scope<gl_vector<T, B> > binder_x(p_x);
+        gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () > p_y.base ();
     }
 
-    template <class T, class B, class A>
-    inline bool operator>=(const priv::gl_vector<T, B, A>& p_x,
-                           const priv::gl_vector<T, B, A>& p_y)
+    template <class T, class B>
+    inline bool operator>=(const gl_vector<T, B>& p_x,
+                           const gl_vector<T, B>& p_y)
     {
-        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
-        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
+        gl_scope<gl_vector<T, B> > binder_x(p_x);
+        gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () >= p_y.base ();
     }
 
@@ -748,12 +746,12 @@ private:
 //                           const gl_vector<T, B, A>& y)
 //    {return x >= y.base ();}
 
-    template <class T, class B, class A>
-    inline bool operator<=(const priv::gl_vector<T, B, A>& p_x,
-                           const priv::gl_vector<T, B, A>& p_y)
+    template <class T, class B>
+    inline bool operator<=(const gl_vector<T, B>& p_x,
+                           const gl_vector<T, B>& p_y)
     {
-        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
-        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
+        gl_scope<gl_vector<T, B> > binder_x(p_x);
+        gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () <= p_y.base ();
     }
 

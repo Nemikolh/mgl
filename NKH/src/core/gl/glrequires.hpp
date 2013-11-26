@@ -20,7 +20,7 @@ namespace mgl {
 #ifndef NKH_NDEBUG
 
     // In debug mode, perform a test on every OpenGL call
-    #define glCheck(call) ((call), nkh::core::gl::priv::glCheckError(__FILE__, __LINE__))
+    #define glCheck(call) ((call), priv::glCheckError(__FILE__, __LINE__))
 
 #else
 

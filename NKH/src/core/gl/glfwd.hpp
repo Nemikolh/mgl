@@ -55,14 +55,9 @@ bool operator==(const gl_ptr<T, Buff>&, const gl_ptr<T, Buff>&);
 /*
  * Forward declaration for the gl_vector type.
  */
-namespace priv {
-    template<typename T, typename Buff, typename Alloc>
-    class gl_vector;
-} /* namespace priv */
-
 template<typename T, typename Buff = gl_buffer<T>>
-class gl_vector : public priv::gl_vector<T, Buff, gl_allocator<T, gl_vector<T, Buff>, Buff>>
-{};
+class gl_vector;
+
 
 }  /* namespace mgl */
 

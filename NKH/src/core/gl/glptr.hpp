@@ -14,9 +14,7 @@
 #include "glfwd.hpp"
 #include "meta/gltraits.hpp"
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 namespace priv {
 
@@ -45,13 +43,11 @@ public:
      * \brief Default Constructor.
      */
 	gl_ptr_impl(std::nullptr_t = nullptr)
-	    : m_id{0}
-	    , m_ptr{nullptr}
-	    , m_offset{0}
+	    : m_ptr(std::make_shared<pointer>(nullptr))
+	    , m_offset(0)
         #ifndef NKH_NDEBUG
 	    , m_isMap(std::make_shared<bool>(false))
         #endif
-//	    , m_context{nullptr}
     {}
 
     /**
@@ -59,13 +55,11 @@ public:
      * \param rhs is an other gl_ptr.
      */
     gl_ptr_impl(const gl_ptr_impl& rhs)
-        : m_id{rhs.m_id}
-        , m_ptr{rhs.m_ptr}
-        , m_offset{rhs.m_offset}
+        : m_ptr(rhs.m_ptr)
+        , m_offset(rhs.m_offset)
         #ifndef NKH_NDEBUG
         , m_isMap(rhs.m_isMap)
         #endif
-//        , m_context{rhs.m_context}
     {}
 
 	/**
@@ -75,13 +69,11 @@ public:
     template<typename U, typename B, typename = typename
             std::enable_if<std::is_convertible<U*, T*>::value>::type>
 	gl_ptr_impl(const gl_ptr_impl<U, B>& rhs)
-	    : m_id{rhs.m_id}
-	    , m_ptr{rhs.m_ptr}  // why not static_cast? -> to avoid accepting downcasting. Actually is_convertible wouldn't accept it.
-	    , m_offset{rhs.m_offset}
+	    : m_ptr(rhs.m_ptr)  // why not static_cast? -> to avoid accepting downcasting. Actually is_convertible wouldn't accept it.
+	    , m_offset(rhs.m_offset)
         #ifndef NKH_NDEBUG
         , m_isMap(rhs.m_isMap)
         #endif
-//        , m_context{rhs.m_context}
 	{}
 
 	/**
@@ -89,13 +81,11 @@ public:
 	 * \param rhs the moved value.
 	 */
 	gl_ptr_impl(gl_ptr_impl && rhs)
-        : m_id{std::move(rhs.m_id)}
-        , m_ptr{std::move(rhs.m_ptr)}
-        , m_offset{std::move(rhs.m_offset)}
+        : m_ptr(std::move(rhs.m_ptr))
+        , m_offset(std::move(rhs.m_offset))
         #ifndef NKH_NDEBUG
         , m_isMap(std::move(rhs.m_isMap))
         #endif
-//        , m_context{std::move(rhs.m_context)}
 	{}
 
 	/**
@@ -105,19 +95,16 @@ public:
     template<typename U, typename B, typename = typename
             std::enable_if<std::is_convertible<U*, T*>::value>::type>
     gl_ptr_impl(gl_ptr_impl<U, B>&& rhs)
-        : m_id{std::move(rhs.m_id)}
-        , m_ptr{std::move(rhs.m_ptr)}
-        , m_offset{std::move(rhs.m_offset)}
+        : m_ptr(std::move(rhs.m_ptr))
+        , m_offset(std::move(rhs.m_offset))
         #ifndef NKH_NDEBUG
         , m_isMap(std::move(rhs.m_isMap))
         #endif
-//        , m_context{std::move(rhs.m_context)}
     {}
 
 
 	gl_ptr_impl& operator= (const gl_ptr_impl& rhs)
 	{
-	    m_id = rhs.m_id;
 	    m_ptr = rhs.m_ptr;
 	    m_offset = rhs.m_offset;
 #ifndef NKH_NDEBUG
@@ -128,7 +115,6 @@ public:
 
 	gl_ptr_impl& operator= (std::nullptr_t)
 	{
-	    m_id = 0;
 	    m_ptr = nullptr;
 	    m_offset = 0;
 #ifndef NKH_NDEBUG
@@ -139,7 +125,6 @@ public:
 
 	gl_ptr_impl& operator= (gl_ptr_impl&& p_rhs)
 	{
-	    m_id = std::move(p_rhs.m_id);
 	    m_ptr = std::move(p_rhs.m_ptr);
 	    m_offset = std::move(p_rhs.m_offset);
 #ifndef NKH_NDEBUG
@@ -158,7 +143,7 @@ public:
         if(!*m_isMap)
             throw gl_exception("Pointer access not mapped");
 #endif
-	    return (m_ptr+m_offset);
+	    return (*m_ptr+m_offset);
 	}
 
 	gl_ptr_impl&     operator++()
@@ -218,9 +203,9 @@ public:
     {
 #ifndef NKH_NDEBUG
         assert(*m_isMap);
-        return *m_isMap && m_ptr != nullptr;
+        return *m_isMap && *m_ptr != nullptr;
 #else
-        return m_ptr != nullptr;
+        return *m_ptr != nullptr;
 #endif
     }
 
@@ -236,8 +221,7 @@ public:
 protected:
 
     gl_ptr_impl(difference_type p_offset, const gl_ptr_impl & p_other)
-        : m_id{p_other.m_id}
-        , m_ptr{p_other.m_ptr}
+        : m_ptr{p_other.m_ptr}
         , m_offset{p_offset}
 #ifndef NKH_NDEBUG
         , m_isMap{p_other.m_isMap}
@@ -265,7 +249,7 @@ protected:
 #endif
 	    // We make the assumption than the buffer content isn't used in draw call, that's why we have the GL_MAP_UNSYNCHRONIZED_BIT flag
 	    // And finally, because of the static_assert, the cast can't fail.
-	    m_ptr = reinterpret_cast<T*>(
+        *m_ptr = reinterpret_cast<T*>(
 	            gl_object_buffer<Buff>::gl_map_range(p_offset * sizeof(T),
 	                                                 p_length * sizeof(T),
 	                                                 GL_MAP_WRITE_BIT | GL_MAP_READ_BIT/*| GL_MAP_UNSYNCHRONIZED_BIT*/));
@@ -285,25 +269,8 @@ protected:
 #ifndef NKH_NDEBUG
 	    *m_isMap = false;
 #endif
-//	    glCheck(glUnmapBuffer(Buff::target));
 	    assert(gl_object_buffer<Buff>::gl_unmap());
-	    glCheck(m_ptr = nullptr);
-	}
-
-	/**
-	 * \brief Bind the underlying buffer to Buff::target point.
-	 */
-	void bind() const
-	{
-	    gl_object_buffer<Buff>::gl_bind(m_id);
-	}
-
-	/**
-	 * \brief Create a valid buffer id for this, with Buff::target.
-	 */
-	void create()
-	{
-	    gl_object_buffer<Buff>::gl_gen(1, &m_id);
+	    glCheck(*m_ptr = nullptr);
 	}
 
 #ifndef NKH_NDEBUG
@@ -317,7 +284,6 @@ protected:
 	    assert(*m_isMap);// && m_context
 	    // Now we check for error.
 	    assert(priv::glCheckError(__FILE__, __LINE__));
-	    //priv::glTryError();
 	}
 #endif
 
@@ -325,26 +291,22 @@ protected:
     // ============================ FRIENDS =========================== //
     // ================================================================ //
 
-	friend class gl_allocator<T, Buff>;
-	friend class gl_vector<T, Buff>;
+	template<typename, typename, typename> friend class gl_allocator;
+	friend class mgl::gl_vector<T, Buff>;
 	template<typename, typename> friend class gl_ptr;
 
 	// ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-	/** The shared id. */
-	GLuint                  m_id;
 	/** The pointer to the data. */
-	pointer                 m_ptr;
+	std::shared_ptr<pointer> m_ptr;
 	/** The offset to apply to the pointer once bound. */
-	difference_type         m_offset;
+	difference_type          m_offset;
 #ifndef NKH_NDEBUG
 	/** True if the pointer is valid. */
-	std::shared_ptr<bool>   m_isMap;
+	std::shared_ptr<bool>    m_isMap;
 #endif
-	/** The gl context associated with this pointer. */
-//	context         m_context;
 };
 
 } /* namespace priv. */
@@ -359,6 +321,12 @@ struct gl_ptr<void, Buff> : public priv::gl_ptr_impl<void, Buff>
 
     typedef priv::gl_ptr_impl<void, Buff>      base_type;
     typedef typename base_type::difference_type difference_type;
+
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
+    void** operator&() { return &(*(this->m_ptr)); }
 
     // ================================================================ //
     // ============================ FRIENDS =========================== //
@@ -429,7 +397,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
     gl_ptr(const gl_ptr<void, Buff>& vptr)
         : base_type()
     {
-        this->m_id = vptr.m_id;
         this->m_ptr = vptr.m_ptr;
         this->m_offset = vptr.m_offset;
     #ifndef NKH_NDEBUG
@@ -443,7 +410,7 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
 
     /**
      * @brief A non void pointer is dereferencable
-     * @return
+     * @return a reference to the data pointed by this pointer.
      */
     reference   operator*() const
     {
@@ -451,7 +418,7 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
         if(!*(this->m_isMap))
             throw gl_buffer_not_mapped();
 #endif
-        return *(this->m_ptr+this->m_offset);
+        return *(*(this->m_ptr)+this->m_offset);
     }
 
     /**
@@ -463,8 +430,14 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
         if(!*(this->m_isMap))
             throw gl_buffer_not_mapped();
 #endif
-        return this->m_ptr[this->m_offset + __n];
+        return *(this->m_ptr)[this->m_offset + __n];
     }
+
+    /**
+     * @brief Taking the address of the pointer.
+     * @return Return the address of the underlying pointer.
+     */
+    void** operator&() { return &(*(this->m_ptr)); }
 
     // ================================================================ //
     // ============================ FRIENDS =========================== //
@@ -525,9 +498,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
     typename gl_ptr<T, B>::difference_type
                 operator-(const gl_ptr<T, B>& p_a, const gl_ptr<T, B>& p_b)
     {
-#       ifndef NKH_NDEBUG
-            assert(p_a.m_id == p_b.m_id);
-#       endif
         return p_a.m_offset - p_b.m_offset;
     }
 
@@ -535,7 +505,7 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
     inline bool
     operator==( const gl_ptr<T, B>& p_a,
                 const gl_ptr<T, B>& p_b)
-    { return (p_a.m_id == p_b.m_id) && (p_a.m_offset == p_b.m_offset); }
+    { return (p_a.m_ptr == p_b.m_ptr) && (p_a.m_offset == p_b.m_offset); }
 
     template<typename T, typename B>
     inline bool
@@ -546,9 +516,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
     template<typename T, typename B>
     bool operator<(const gl_ptr<T, B>& p_a, const gl_ptr<T, B>& p_b)
     {
-#       ifndef NKH_NDEBUG
-            assert(p_a.m_id == p_b.m_id);
-#       endif
         return p_a.m_offset < p_b.m_offset;
     }
 
@@ -570,42 +537,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
         return !(p_a > p_b);
     }
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
-
-//namespace std {
-//
-///**
-// * \brief Specialization of the iterator_traits for gl_ptr.
-// */
-//template<typename T, typename B>
-//struct iterator_traits<nkh::core::gl::gl_ptr<T, B>>
-//{
-//    // ================================================================ //
-//    // ============================ TYPEDEFS ========================== //
-//    // ================================================================ //
-//
-//
-//};
-//
-///**
-// * \brief Specialization of the iterator_traits for gl_ptr.
-// */
-//template<typename T, typename B>
-//struct iterator_traits<const nkh::core::gl::gl_ptr<T, B>>
-//{
-//    // ================================================================ //
-//    // ============================ TYPEDEFS ========================== //
-//    // ================================================================ //
-//
-//    typedef T                               value_type;
-//    typedef ptrdiff_t                       difference_type;
-//    typedef const T &                       reference;
-//    typedef const T *                       pointer;
-//    typedef std::random_access_iterator_tag iterator_category;
-//};
-//
-//}  /* namespace std */
+} /* namespace mgl */
 
 #endif /* GLPTR_H_ */

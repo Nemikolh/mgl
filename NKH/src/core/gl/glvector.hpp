@@ -15,9 +15,8 @@
 #include "glallocator.hpp"
 #include "glscope.hpp"
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
+namespace priv{
 
 template<typename T, typename Buff, typename Alloc>
 class gl_vector
@@ -55,45 +54,41 @@ public:
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    gl_vector()
-        : m_vector()
+    explicit gl_vector()
+        : m_id(0)
         , m_mapped(0)
-    {
-        get_ptr_impl().unmap();
-    }
-
-    explicit gl_vector(const allocator_type& p_a = allocator_type())
-        : m_vector(p_a)
-        , m_mapped(0)
-    {
-        get_ptr_impl().unmap();
-    }
+        , m_vector(allocator_type(*this))
+    {}
 
     explicit gl_vector(size_type p_n)
-        : m_vector(p_n)
+        : m_id(0)
         , m_mapped(0)
+        , m_vector(p_n)
     {
         get_ptr_impl().unmap();
     }
 
-    gl_vector(size_type p_n, const value_type& p_value, const allocator_type& p_a = allocator_type())
-        : m_vector(p_n, p_value, p_a)
+    gl_vector(size_type p_n, const value_type& p_value)
+        : m_id(0)
         , m_mapped(0)
+        , m_vector(p_n, p_value,  allocator_type(*this))
     {
         get_ptr_impl().unmap();
     }
 
     template<class InputIt>
-    gl_vector(InputIt p_first, InputIt p_last, const Alloc& p_a = Alloc() )
-        : m_vector(p_first, p_last, p_a)
+    gl_vector(InputIt p_first, InputIt p_last)
+        : m_id(0)
         , m_mapped(0)
+        , m_vector(p_first, p_last, allocator_type(*this))
     {
         get_ptr_impl().unmap();
     }
 
     gl_vector(const gl_vector& p_rhs)
-        : m_vector(map_vector(p_rhs))
+        : m_id(0)
         , m_mapped(0)
+        , m_vector(map_vector(p_rhs))
     {
         get_ptr_impl().unmap();
         p_rhs.unmap();
@@ -101,14 +96,15 @@ public:
 
 
     gl_vector(gl_vector && p_rhs)
-        : m_vector(std::move(p_rhs.m_vector))
+        : m_id(std::move(p_rhs.m_id))
         , m_mapped(std::move(p_rhs.m_mapped))
+        , m_vector(std::move(p_rhs.m_vector))
     {}
 
-    gl_vector(std::initializer_list<value_type> p_l,
-       const allocator_type& p_a = allocator_type())
-        : m_vector(p_l, p_a)
+    gl_vector(std::initializer_list<value_type> p_l)
+        : m_id(0)
         , m_mapped(0)
+        , m_vector(p_l, allocator_type(*this))
     {
         get_ptr_impl().unmap();
     }
@@ -130,15 +126,7 @@ public:
      */
     void bind() const
     {
-        get_ptr_impl().bind();
-    }
-
-    /**
-     * \brief Unbind the buffer.
-     */
-    void unbind() const
-    {
-
+        gl_object_buffer<Buff>::gl_bind(m_id);
     }
 
     gl_vector&
@@ -155,6 +143,7 @@ public:
     gl_vector&
     operator=(gl_vector&& p_rhs)
     {
+        m_id     = std::move(p_rhs.m_id);
         m_vector = std::move(p_rhs.m_vector);
         m_mapped = std::move(p_rhs.m_mapped);
         return *this;
@@ -197,10 +186,22 @@ public:
     }
 
     iterator
-    begin()         {   return m_vector.begin();    }
+    begin()
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.begin();
+    }
 
     const_iterator
-    begin() const   {   return m_vector.begin();    }
+    begin() const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.begin();
+    }
 
     iterator
     end()           {   return m_vector.end();      }
@@ -209,7 +210,13 @@ public:
     end() const     {   return m_vector.end();      }
 
     const_iterator
-    cbegin() const  {   return m_vector.cbegin();   }
+    cbegin() const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.cbegin();
+    }
 
     const_iterator
     cend() const    {   return m_vector.cend();     }
@@ -262,44 +269,110 @@ public:
     base() const            { return m_vector;          }
 
     reference
-    operator[](size_type p_n) { return m_vector[p_n];   }
+    operator[](size_type p_n)
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector[p_n];
+    }
 
     const_reference
-    operator[](size_type p_n) const { return m_vector[p_n]; }
+    operator[](size_type p_n) const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector[p_n];
+    }
 
     reference
-    at(size_type p_n)       { return m_vector.at(p_n);  }
+    at(size_type p_n)
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.at(p_n);
+    }
 
     const_reference
-    at(size_type p_n) const { return m_vector.at(p_n);  }
+    at(size_type p_n) const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.at(p_n);
+    }
 
     reference
-    front()                 { return m_vector.front();  }
+    front()
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.front();
+    }
 
     const_reference
-    front() const           { return m_vector.front();  }
+    front() const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.front();
+    }
 
     reference
-    back()                  { return m_vector.back();   }
+    back()
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.back();
+    }
 
     const_reference
-    back()  const           { return m_vector.back();   }
+    back()  const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.back();
+    }
 
     T*
-    data()                  { return m_vector.data();   }
+    data()
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.data();
+    }
 
     const T*
-    data()  const           { return m_vector.data();   }
+    data()  const
+    {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
+        return m_vector.data();
+    }
 
     void
     push_back(const value_type& p_val)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.push_back(p_val);
     }
 
     void
     push_back(value_type&& p_val)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.push_back(std::move(p_val));
     }
 
@@ -307,40 +380,63 @@ public:
     void
     emplace_back(Args&&... p_args)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.emplace_back(std::forward<Args>(p_args)...);
     }
 
     void
-    pop_back()              { m_vector.pop_back();      }
+    pop_back()
+    {
+        map();
+        m_vector.pop_back();
+        unmap();
+    }
 
     template<typename... Args>
     iterator
     emplace(iterator p_position, Args&&... p_args)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.emplace(p_position, std::forward<Args>(p_args)...);
     }
 
     iterator
     insert(iterator p_position, const value_type& p_x)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         return m_vector.insert(p_position, p_x);
     }
 
     iterator
     insert(iterator p_position, value_type&& p_x)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         return m_vector.insert(p_position, std::move(p_x));
     }
 
     void
     insert(iterator p_position, std::initializer_list<value_type> p_list)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.insert(p_position, p_list);
     }
 
     void
     insert(iterator p_position, size_type p_n, const value_type& p_x)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.insert(p_position, p_n, p_x);
     }
 
@@ -348,31 +444,49 @@ public:
     void
     insert(iterator p_position, InputIterator p_first, InputIterator p_last)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         m_vector.insert(p_position, p_first, p_last);
     }
 
     iterator
     erase(iterator p_position)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         return m_vector.erase(p_position);
     }
 
     iterator
     erase(iterator p_first, iterator p_last)
     {
+#       ifndef NKH_NDEBUG
+        assert(m_mapped);
+#       endif
         return m_vector.erase(p_first, p_last);
     }
 
     void
     swap(gl_vector& p_x)
     {
+        map();
+        p_x.map();
         using std::swap;
         m_vector.swap(p_x.m_vector);
         swap(m_mapped, p_x.m_mapped);
+        unmap();
+        p_x.unmap();
     }
 
     void
-    clear()     { m_vector.clear(); }
+    clear()
+    {
+        map();
+        m_vector.clear();
+        unmap();
+    }
 
 
 private:
@@ -394,7 +508,6 @@ private:
     template<typename, typename> friend class gl_vector_iterator;
     template<typename> friend class gl_scope;
     template<typename, typename, typename> friend class gl_vector;
-    //friend gl_vector;
 
     // ================================================================ //
     // ============================ METHODS =========================== //
@@ -405,6 +518,9 @@ private:
      */
     void map() const
     {
+#ifndef NKH_DEBUG
+        assert(m_id);
+#endif
         if(!m_mapped)
         {
             bind();
@@ -438,11 +554,15 @@ private:
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    /** underlying vector. */
-    base_vector_type        m_vector;
+    /** The id of the buffer. */
+    GLuint                  m_id;
     /** the mapping state. */
     mutable unsigned int    m_mapped;
+    /** underlying vector. */
+    base_vector_type        m_vector;
 };
+
+}/* namespace priv */
 
 /**
  * \brief gl_instanced is the class turning on buffer data per instance
@@ -505,7 +625,7 @@ gl_instanced<T> make_instanced(const gl_vector<T>& p_buffer)
 }
 
 template<typename T, typename B, typename A>
-class gl_scope<gl_vector<T, B, A>>
+class gl_scope<priv::gl_vector<T, B, A>>
 {
 public:
     // ================================================================ //
@@ -516,7 +636,7 @@ public:
      * @brief Construct a scope object to map at scope the passed gl_vector.
      * @param p_vector is the instance object that will be mapped.
      */
-    gl_scope(const gl_vector<T, B, A> & p_vector)
+    gl_scope(const priv::gl_vector<T, B, A> & p_vector)
         : m_obj(p_vector)
     {
         m_obj.map();
@@ -532,7 +652,7 @@ public:
 
 private:
 
-    const gl_vector<T, B, A>& m_obj;
+    const priv::gl_vector<T, B, A>& m_obj;
 };
 
 /*
@@ -543,8 +663,8 @@ private:
      * operator==
      */
     template <class T, class B, class A>
-    inline bool operator==(const gl_vector<T, B, A>& p_x,
-                           const gl_vector<T, B, A>& p_y)
+    inline bool operator==(const priv::gl_vector<T, B, A>& p_x,
+                           const priv::gl_vector<T, B, A>& p_y)
     {
         auto binder_x = bind_at_scope(p_x);
         auto binder_y = bind_at_scope(p_y);
@@ -563,11 +683,11 @@ private:
 //    {return x == y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator< (const gl_vector<T, B, A>& p_x,
-                           const gl_vector<T, B, A>& p_y)
+    inline bool operator< (const priv::gl_vector<T, B, A>& p_x,
+                           const priv::gl_vector<T, B, A>& p_y)
     {
-        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
-        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
+        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
         return p_x.base () < p_y.base ();
     }
 
@@ -582,11 +702,11 @@ private:
 //    {return x < y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator!=(const gl_vector<T, B, A>& p_x,
-                           const gl_vector<T, B, A>& p_y)
+    inline bool operator!=(const priv::gl_vector<T, B, A>& p_x,
+                           const priv::gl_vector<T, B, A>& p_y)
     {
-        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
-        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
+        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
         return p_x.base () != p_y.base ();
     }
 
@@ -601,20 +721,20 @@ private:
 //    {return x != y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator> (const gl_vector<T, B, A>& p_x,
-                           const gl_vector<T, B, A>& p_y)
+    inline bool operator> (const priv::gl_vector<T, B, A>& p_x,
+                           const priv::gl_vector<T, B, A>& p_y)
     {
-        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
-        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
+        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
         return p_x.base () > p_y.base ();
     }
 
     template <class T, class B, class A>
-    inline bool operator>=(const gl_vector<T, B, A>& p_x,
-                           const gl_vector<T, B, A>& p_y)
+    inline bool operator>=(const priv::gl_vector<T, B, A>& p_x,
+                           const priv::gl_vector<T, B, A>& p_y)
     {
-        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
-        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
+        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
         return p_x.base () >= p_y.base ();
     }
 
@@ -629,11 +749,11 @@ private:
 //    {return x >= y.base ();}
 
     template <class T, class B, class A>
-    inline bool operator<=(const gl_vector<T, B, A>& p_x,
-                           const gl_vector<T, B, A>& p_y)
+    inline bool operator<=(const priv::gl_vector<T, B, A>& p_x,
+                           const priv::gl_vector<T, B, A>& p_y)
     {
-        gl_scope<gl_vector<T, B, A> > binder_x{p_x};
-        gl_scope<gl_vector<T, B, A> > binder_y{p_y};
+        gl_scope<priv::gl_vector<T, B, A> > binder_x(p_x);
+        gl_scope<priv::gl_vector<T, B, A> > binder_y(p_y);
         return p_x.base () <= p_y.base ();
     }
 
@@ -647,11 +767,7 @@ private:
 //                           const gl_vector<T, B, A>& y)
 //    {return x <= y.base ();}
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
+} /* namespace mgl */
 
-
-#include "glvector.inl"
 
 #endif /* GLVECTOR_HPP_ */

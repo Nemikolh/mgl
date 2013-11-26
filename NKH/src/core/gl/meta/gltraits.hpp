@@ -12,9 +12,7 @@
 #include "../glrequires.hpp"
 #include <memory>
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 namespace priv {
 
@@ -497,9 +495,7 @@ struct is_gl_attributes
 } /* namespace priv. */
 
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
+} /* namespace mgl */
 
 
 #endif /* GLTRAITS_HPP_ */

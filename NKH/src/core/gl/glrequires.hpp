@@ -11,9 +11,7 @@
 #include <exception>
 #include <GL/glew.h>
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /*
  * Dirty Macro to perform check only on debug mode.
@@ -151,8 +149,6 @@ void glTryError();
 } /* namespace priv */
 
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
+} /* namespace mgl */
 
 #endif /* GLREQUIRES_HPP_ */

@@ -10,9 +10,7 @@
 
 #include "meta/gltraits.hpp"
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /**
  * \brief gl_scope is a class that preserve a gl_state for a scope, and automatically bind the object.
@@ -60,8 +58,13 @@ gl_scope<T> bind_at_scope(const T& p_obj)
     return gl_scope<T>(p_obj);
 }
 
-} /* namepsace gl. */
-} /* namespace core. */
-} /* namespace nkh. */
+template<typename T, typename Func>
+void bind_and_apply(const T& p_obj, Func f)
+{
+    gl_scope<T> _(p_obj);
+    f();
+}
+
+} /* namepsace mgl. */
 
 #endif /* GLSCOPE_HPP_ */

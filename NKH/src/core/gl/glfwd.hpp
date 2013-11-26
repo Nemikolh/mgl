@@ -10,14 +10,12 @@
 
 #include "glrequires.hpp"
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /*
  * Forward declaration.
  */
-template<typename T, typename Buff = gl_buffer<T>>
+template<typename T, typename Container, typename Buff = gl_buffer<T>>
 struct gl_allocator;
 
 template<typename T, typename Buff = gl_buffer<T>>
@@ -57,12 +55,16 @@ bool operator==(const gl_ptr<T, Buff>&, const gl_ptr<T, Buff>&);
 /*
  * Forward declaration for the gl_vector type.
  */
-template<typename T, typename Buff = gl_buffer<T>, typename Alloc = gl_allocator<T, Buff> >
-class gl_vector;
+namespace priv {
+    template<typename T, typename Buff, typename Alloc>
+    class gl_vector;
+} /* namespace priv */
 
-}  /* namespace gl */
-}  /* namespace core */
-}  /* namespace nkh */
+template<typename T, typename Buff = gl_buffer<T>>
+class gl_vector : public priv::gl_vector<T, Buff, gl_allocator<T, gl_vector<T, Buff>, Buff>>
+{};
+
+}  /* namespace mgl */
 
 
 #endif /* GLFWD_HPP_ */

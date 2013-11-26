@@ -12,14 +12,12 @@
 #include <memory>
 #include "glptr.hpp"
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /**
  * \class gl_allocator is the allocator.
  */
-template<typename T, typename Buff>
+template<typename T, typename Container, typename Buff>
 class gl_allocator
 {
 public:
@@ -47,10 +45,10 @@ public:
     typedef typename pointer::difference_type
                                             difference_type;
 
-    template<typename U, typename B2 = Buff>
+    template<typename T2, typename C2 = Container, typename B2 = Buff>
     struct rebind
     {
-        typedef gl_allocator<U, B2> other;
+        typedef gl_allocator<T2, C2, B2> other;
     };
 
     // ================================================================ //
@@ -60,7 +58,9 @@ public:
     /**
      * \brief Default constructor.
      */
-    gl_allocator() = default;
+    explicit gl_allocator(const Container& p_owner)
+        : m_owner(p_owner)
+    {}
 
     /**
      * \brief Default copy constructor.
@@ -76,8 +76,9 @@ public:
      * \brief Copy constructor
      * \param p_rhs is the allocator we copy from.
      */
-    template<typename T2, typename B2>
-    gl_allocator(const gl_allocator<T2, B2>& p_rhs)
+    template<typename T2, typename C2, typename B2>
+    gl_allocator(const gl_allocator<T2, C2, B2>& p_rhs)
+        : m_owner(p_rhs.m_owner)
     {}
 
     // ================================================================ //
@@ -95,24 +96,21 @@ public:
         if (p_n > this->max_size())
             throw std::bad_alloc();
 
-        // TODO : is it correct ? Doesn't it need an unmapping ? -> see it when doing the gl_vector.
-//        if(p_cptr)
-//            _ret(p_cptr);
-//        else
-            _ret.create();
-
-        _ret.bind();
-        gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
+        if(m_owner.m_id == 0)
+        {
+            gl_object_buffer<Buff>::gl_gen(1, &(m_owner.m_id));
+            gl_object_buffer<Buff>::gl_bind(m_owner.m_id);
+            gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
+        }
         _ret.map_range(0, p_n);
         return _ret;
     }
 
     void deallocate(pointer p_ptr, size_type p_n)
     {
-        // TODO should we unbind it before delete ?
-        p_ptr.bind();
         p_ptr.unmap();
-        gl_object_buffer<Buff>::gl_delete(1, &(p_ptr.m_id));
+        gl_object_buffer<Buff>::gl_delete(1, &(m_owner.m_id));
+        m_owner.m_id = 0;
     }
 
     size_type max_size() const
@@ -120,6 +118,14 @@ public:
         return size_t(-1) / sizeof(T);
     }
 
+private:
+
+    // ================================================================ //
+    // ============================= FIELDS =========================== //
+    // ================================================================ //
+
+    /** The owner of this instance of allocator. */
+    const Container& m_owner;
 };
 
 /*
@@ -129,8 +135,8 @@ public:
     /**
      * operator==
      */
-    template<typename T, typename B1, typename U, typename B2>
-    inline bool operator==(gl_allocator<T, B1> a, gl_allocator<U, B2> b)
+    template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
+    inline bool operator==(gl_allocator<T, C1, B1> a, gl_allocator<U, C2, B2> b)
     {
         return true;
     }
@@ -138,14 +144,12 @@ public:
     /**
      * operator !=
      */
-    template<typename T, typename B1, typename U, typename B2>
-    inline bool operator!=(gl_allocator<T, B1> a, gl_allocator<U, B2> b)
+    template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
+    inline bool operator!=(gl_allocator<T, C1, B1> a, gl_allocator<U, C2, B2> b)
     {
         return false;
     }
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
+} /* namespace mgl */
 
 #endif /* GLALLOCATOR_HPP_ */

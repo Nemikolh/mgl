@@ -43,7 +43,7 @@ public:
      * \brief Default Constructor.
      */
 	gl_ptr_impl(std::nullptr_t = nullptr)
-	    : m_ptr(std::make_shared<pointer>(nullptr))
+	    : m_ptr(nullptr)
 	    , m_offset(0)
         #ifndef NKH_NDEBUG
 	    , m_isMap(std::make_shared<bool>(false))
@@ -139,10 +139,6 @@ public:
 	 */
 	pointer     operator->() const
 	{
-#ifndef NKH_NDEBUG
-        if(!*m_isMap)
-            throw gl_exception("Pointer access not mapped");
-#endif
 	    return (*m_ptr+m_offset);
 	}
 
@@ -202,8 +198,9 @@ public:
     explicit operator bool() const
     {
 #ifndef NKH_NDEBUG
-        assert(*m_isMap);
-        return *m_isMap && *m_ptr != nullptr;
+//        assert(*m_isMap);
+//        return *m_isMap && *m_ptr != nullptr;
+        return *m_ptr != nullptr;
 #else
         return *m_ptr != nullptr;
 #endif
@@ -233,59 +230,10 @@ protected:
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-	/**
-	 * \brief Map the pointer to be a valid pointer.
-	 * Careful ! When using this function, the user should take care of saving
-	 * any previously bound Buffer, and bound the buffer hold by this gl_ptr.
-	 * Furthermore, if p_length + p_offset is superior to the size of the buffer
-	 * then error will rise.
-	 * \param p_offset is the offset for the range.
-	 * \param p_length is the number of element to take into account.
-	 */
-	void map_range(difference_type p_offset, size_type p_length)
-	{
-#ifndef NKH_NDEBUG
-	    *m_isMap = true;
-#endif
-	    // We make the assumption than the buffer content isn't used in draw call, that's why we have the GL_MAP_UNSYNCHRONIZED_BIT flag
-	    // And finally, because of the static_assert, the cast can't fail.
-        *m_ptr = reinterpret_cast<T*>(
-	            gl_object_buffer<Buff>::gl_map_range(p_offset * sizeof(T),
-	                                                 p_length * sizeof(T),
-	                                                 GL_MAP_WRITE_BIT | GL_MAP_READ_BIT/*| GL_MAP_UNSYNCHRONIZED_BIT*/));
-#ifndef NKH_NDEBUG
-	    check_integrity();
-#endif
-	}
-
-	/**
-	 * \brief Unmap the underlying buffer.
-	 * Careful ! The buffer isn't manually bound here. This function
-	 * made the assumption than the user has done it with bind(), and
-	 * has saved any previously bound buffers.
-	 */
-	void unmap()
-	{
-#ifndef NKH_NDEBUG
-	    *m_isMap = false;
-#endif
-	    assert(gl_object_buffer<Buff>::gl_unmap());
-	    glCheck(*m_ptr = nullptr);
-	}
-
-#ifndef NKH_NDEBUG
-	/**
-	 * \brief Check for the pointer validity.
-	 * This function make the pointer valid if it wasn't.
-	 */
-	void check_integrity()
-	{
-	    // Rude for now, but will force the code to be ok.
-	    assert(*m_isMap);// && m_context
-	    // Now we check for error.
-	    assert(priv::glCheckError(__FILE__, __LINE__));
-	}
-#endif
+    void set_base_address(pointer* p_ptr)
+    {
+        m_ptr = p_ptr;
+    }
 
 	// ================================================================ //
     // ============================ FRIENDS =========================== //
@@ -300,7 +248,7 @@ protected:
     // ================================================================ //
 
 	/** The pointer to the data. */
-	std::shared_ptr<pointer> m_ptr;
+	pointer *                m_ptr;
 	/** The offset to apply to the pointer once bound. */
 	difference_type          m_offset;
 #ifndef NKH_NDEBUG
@@ -414,10 +362,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
      */
     reference   operator*() const
     {
-#ifndef NKH_NDEBUG
-        if(!*(this->m_isMap))
-            throw gl_buffer_not_mapped();
-#endif
         return *(*(this->m_ptr)+this->m_offset);
     }
 
@@ -426,10 +370,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
      */
     reference   operator[](const difference_type& __n) const
     {
-#ifndef NKH_NDEBUG
-        if(!*(this->m_isMap))
-            throw gl_buffer_not_mapped();
-#endif
         return *(this->m_ptr)[this->m_offset + __n];
     }
 

@@ -101,6 +101,7 @@ public:
         TS_TRACE("Forcing reallocation with push_back.");
         gl_vector<float> test;
 
+        test.create();
         auto lock = bind_at_scope(test);
 
         // TODO : this code is problematic.

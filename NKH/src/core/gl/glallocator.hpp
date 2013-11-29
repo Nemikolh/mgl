@@ -39,6 +39,12 @@ public:
     typedef gl_ptr<void, Buff>          void_pointer;
     typedef const gl_ptr<void, Buff>    const_void_pointer;
 
+    /** Force non copy of the allocator. They must be preserved per Container.  */
+    typedef std::false_type propagate_on_container_copy_assignment;
+    /** Force the non-move of the allocator. They must be preserved per Container.*/
+    typedef std::false_type propagate_on_container_move_assignment;
+    /** Force the non-swap of the allocator. They must be preserved per Container. */
+    typedef std::false_type propagate_on_container_swap;
 
     typedef T                               value_type;
     typedef size_t                          size_type;
@@ -96,21 +102,20 @@ public:
         if (p_n > this->max_size())
             throw std::bad_alloc();
 
-        if(m_owner.m_id == 0)
-        {
-            gl_object_buffer<Buff>::gl_gen(1, &(m_owner.m_id));
-            gl_object_buffer<Buff>::gl_bind(m_owner.m_id);
-            gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
-        }
-        _ret.map_range(0, p_n);
+        m_owner.create();
+        gl_object_buffer<Buff>::gl_bind(m_owner.id());
+        gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
+        m_owner.map_pointer_range(0, p_n);
+        _ret.set_base_address(m_owner.base_address());
+
         return _ret;
     }
 
     void deallocate(pointer p_ptr, size_type p_n)
     {
-        p_ptr.unmap();
-        gl_object_buffer<Buff>::gl_delete(1, &(m_owner.m_id));
-        m_owner.m_id = 0;
+        m_owner.unmap_pointer();
+        gl_object_buffer<Buff>::gl_delete(1, m_owner.id_ptr());
+        m_owner.reset_id();
     }
 
     size_type max_size() const
@@ -119,6 +124,13 @@ public:
     }
 
 private:
+
+    // ================================================================ //
+    // ============================ FRIENDS =========================== //
+    // ================================================================ //
+
+    template<typename T1, typename C1, typename B1, typename T2, typename C2, typename B2>
+    friend bool operator== (const gl_allocator<T1, C1, B1>&, const gl_allocator<T2, C2, B2>&);
 
     // ================================================================ //
     // ============================= FIELDS =========================== //
@@ -136,18 +148,18 @@ private:
      * operator==
      */
     template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
-    inline bool operator==(gl_allocator<T, C1, B1> a, gl_allocator<U, C2, B2> b)
+    inline bool operator==(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b)
     {
-        return true;
+        return (&p_a.m_owner == &p_b.m_owner);
     }
 
     /**
      * operator !=
      */
     template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
-    inline bool operator!=(gl_allocator<T, C1, B1> a, gl_allocator<U, C2, B2> b)
+    inline bool operator!=(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b)
     {
-        return false;
+        return !(p_a == p_b);
     }
 
 } /* namespace mgl */

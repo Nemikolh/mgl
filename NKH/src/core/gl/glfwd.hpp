@@ -51,6 +51,8 @@ bool operator<=(const gl_ptr<T, Buff>&, const gl_ptr<T, Buff>&);
 template<typename T, typename Buff>
 bool operator==(const gl_ptr<T, Buff>&, const gl_ptr<T, Buff>&);
 
+template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
+bool operator==(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b);
 
 /*
  * Forward declaration for the gl_vector type.

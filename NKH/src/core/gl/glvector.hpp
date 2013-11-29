@@ -55,57 +55,85 @@ public:
 
     explicit gl_vector()
         : m_id(0)
+        , m_base_address(0)
         , m_mapped(0)
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(false)
+#endif
         , m_vector(allocator_type(*this))
     {}
 
     explicit gl_vector(size_type p_n)
         : m_id(0)
+        , m_base_address(nullptr)
         , m_mapped(0)
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(false)
+#endif
         , m_vector(p_n)
     {
-        get_ptr_impl().unmap();
+        unmap_pointer();
     }
 
     gl_vector(size_type p_n, const value_type& p_value)
         : m_id(0)
+        , m_base_address(nullptr)
         , m_mapped(0)
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(false)
+#endif
         , m_vector(p_n, p_value,  allocator_type(*this))
     {
-        get_ptr_impl().unmap();
+        unmap_pointer();
     }
 
     template<class InputIt>
     gl_vector(InputIt p_first, InputIt p_last)
         : m_id(0)
+        , m_base_address(nullptr)
         , m_mapped(0)
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(false)
+#endif
         , m_vector(p_first, p_last, allocator_type(*this))
     {
-        get_ptr_impl().unmap();
+        unmap_pointer();
     }
 
     gl_vector(const gl_vector& p_rhs)
         : m_id(0)
+        , m_base_address(nullptr)
         , m_mapped(0)
-        , m_vector(map_vector(p_rhs))
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(false)
+#endif
+        , m_vector(map_vector(p_rhs), allocator_type(*this))
     {
-        get_ptr_impl().unmap();
+        unmap_pointer();
         p_rhs.unmap();
     }
 
 
     gl_vector(gl_vector && p_rhs)
         : m_id(std::move(p_rhs.m_id))
+        , m_base_address(std::move(p_rhs.m_base_address))
         , m_mapped(std::move(p_rhs.m_mapped))
-        , m_vector(std::move(p_rhs.m_vector))
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(std::move(m_map_ranged_called))
+#endif
+        , m_vector(std::move(p_rhs.m_vector), allocator_type(*this))
     {}
 
     gl_vector(std::initializer_list<value_type> p_l)
         : m_id(0)
+        , m_base_address(nullptr)
         , m_mapped(0)
+#ifndef NKH_NDEBUG
+        , m_map_ranged_called(false)
+#endif
         , m_vector(p_l, allocator_type(*this))
     {
-        get_ptr_impl().unmap();
+        unmap_pointer();
     }
 
     ~gl_vector()
@@ -128,6 +156,17 @@ public:
         gl_object_buffer<Buff>::gl_bind(m_id);
     }
 
+    /**
+     * Force the creation of the underlying buffer.
+     */
+    void create()
+    {
+        if(m_id == 0)
+        {
+            gl_object_buffer<Buff>::gl_gen(1, &m_id);
+        }
+    }
+
     gl_vector&
     operator=(const gl_vector& p_rhs)
     {
@@ -142,9 +181,13 @@ public:
     gl_vector&
     operator=(gl_vector&& p_rhs)
     {
-        m_id     = std::move(p_rhs.m_id);
-        m_vector = std::move(p_rhs.m_vector);
-        m_mapped = std::move(p_rhs.m_mapped);
+        m_id            = std::move(p_rhs.m_id);
+        m_base_address  = std::move(p_rhs.m_base_address);
+        m_mapped        = std::move(p_rhs.m_mapped);
+#ifndef NKH_NDEBUG
+        m_map_ranged_called = std::move(p_rhs.m_map_ranged_called);
+#endif
+        m_vector        = std::move(p_rhs.m_vector);
         return *this;
     }
 
@@ -259,9 +302,8 @@ public:
     void
     reserve(size_type p_n)
     {
-        map();
         m_vector.reserve(p_n);
-        unmap();
+        unmap_pointer();
     }
 
     const base_vector_type&
@@ -494,7 +536,7 @@ private:
     // ============================ HELPERS =========================== //
     // ================================================================ //
 
-    base_vector_type map_vector(const gl_vector& p_rhs)
+    const base_vector_type& map_vector(const gl_vector& p_rhs)
     {
         p_rhs.map();
         return p_rhs.m_vector;
@@ -524,7 +566,7 @@ private:
         if(!m_mapped)
         {
             bind();
-            get_ptr_impl().map_range(0, m_vector.capacity());
+            map_pointer_range(0, m_vector.capacity());
         }
         ++m_mapped;
     }
@@ -541,13 +583,79 @@ private:
         if(m_mapped == 0)
         {
             bind();
-            get_ptr_impl().unmap();
+            unmap_pointer();
         }
     }
 
-    pointer get_ptr_impl() const
+    /**
+     * \brief Map the pointer to be a valid pointer.
+     * Careful ! When using this function, the user should take care of saving
+     * any previously bound Buffer, and bound the buffer hold by this gl_ptr.
+     * Furthermore, if p_length + p_offset is superior to the size of the buffer
+     * then error will rise.
+     * \param p_offset is the offset for the range.
+     * \param p_length is the number of element to take into account.
+     */
+    void map_pointer_range(difference_type p_offset, size_type p_length) const
     {
-        return m_vector.cbegin().base();
+        // We make the assumption than the buffer content isn't used in draw call, that's why we have the GL_MAP_UNSYNCHRONIZED_BIT flag
+        // And finally, because of the static_assert, the cast can't fail.
+        m_base_address = reinterpret_cast<T*>(
+                gl_object_buffer<Buff>::gl_map_range(p_offset * sizeof(T),
+                                                     p_length * sizeof(T),
+                                                     GL_MAP_WRITE_BIT | GL_MAP_READ_BIT/*| GL_MAP_UNSYNCHRONIZED_BIT*/));
+#ifndef NKH_NDEBUG
+        m_map_ranged_called = true;
+        check_integrity();
+#endif
+    }
+
+    /**
+     * \brief Unmap the underlying buffer.
+     * Careful ! The buffer isn't manually bound here. This function
+     * made the assumption than the user has done it with bind(), and
+     * has saved any previously bound buffers.
+     */
+    void unmap_pointer() const
+    {
+#ifndef NKH_DEBUG
+        assert(m_map_ranged_called);
+        m_map_ranged_called = false;
+#endif
+        assert(gl_object_buffer<Buff>::gl_unmap());
+        glCheck(m_base_address = nullptr);
+    }
+
+#ifndef NKH_NDEBUG
+    /**
+     * \brief Check for the pointer validity.
+     * This function make the pointer valid if it wasn't.
+     */
+    void check_integrity() const
+    {
+        // Rude for now, but will force the code to be ok.
+        assert(priv::glCheckError(__FILE__, __LINE__));
+    }
+#endif
+
+    inline T** base_address() const
+    {
+        return &m_base_address;
+    }
+
+    inline GLuint* id_ptr()
+    {
+        return &m_id;
+    }
+
+    inline GLuint id() const
+    {
+        return m_id;
+    }
+
+    inline void reset_id()
+    {
+        m_id = 0;
     }
 
     // ================================================================ //
@@ -556,8 +664,13 @@ private:
 
     /** The id of the buffer. */
     GLuint                  m_id;
+    /** The base address for the mapping. */
+    mutable T *             m_base_address;
     /** the mapping state. */
     mutable unsigned int    m_mapped;
+#ifndef NKH_NDEBUG
+    mutable bool            m_map_ranged_called;
+#endif
     /** underlying vector. */
     base_vector_type        m_vector;
 };
@@ -632,6 +745,7 @@ public:
 
     /**
      * @brief Construct a scope object to map at scope the passed gl_vector.
+     * The vector must correspond to an openGL buffer.
      * @param p_vector is the instance object that will be mapped.
      */
     gl_scope(const gl_vector<T, B> & p_vector)

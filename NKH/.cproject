@@ -572,7 +572,7 @@
 									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.allwarn.167076740" name="All warnings (-Wall)" superClass="gnu.cpp.compiler.option.warnings.allwarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.undef.1205436492" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" valueType="undefDefinedSymbols"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.undef.1205436492" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1526606783" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1749408731" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
@@ -622,6 +622,7 @@
 			<resource resourceType="PROJECT" workspacePath="/SFGUI"/>
 		</configuration>
 		<configuration configurationName="Test"/>
+		<configuration configurationName="TestOld"/>
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/SFGUI"/>
 		</configuration>

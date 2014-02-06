@@ -48,7 +48,7 @@ struct priv_gl_buffer<T, true>
  *
  *      \code
  *          template<>
- *          struct gl_buffer<MyType>
+ *          struct gl_buffer_type<MyType>
  *          {
  *              // specify here the target and usage wanted
  *          };
@@ -64,7 +64,7 @@ struct priv_gl_buffer<T, true>
  *
  */
 template<class T>
-struct gl_buffer : public priv::priv_gl_buffer<T>
+struct gl_buffer_type : public priv::priv_gl_buffer<T>
 {};
 
 // -----------------------------------------------------------------------------------------------------------------------------------//

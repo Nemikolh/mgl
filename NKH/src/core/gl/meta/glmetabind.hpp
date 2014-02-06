@@ -20,7 +20,6 @@
 
 #include "../glrequires.hpp"
 #include "../glbinder.hpp"
-#include "gltraits.hpp"
 #include "../glmhelper.hpp"
 
 

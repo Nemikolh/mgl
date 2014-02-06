@@ -15,10 +15,10 @@ namespace mgl {
 /*
  * Forward declaration.
  */
-template<typename T, typename Container, typename Buff = gl_buffer<T>>
+template<typename T, typename Container, typename Buff = gl_buffer_type<T>>
 struct gl_allocator;
 
-template<typename T, typename Buff = gl_buffer<T>>
+template<typename T, typename Buff = gl_buffer_type<T>>
 struct gl_ptr;
 
 /*
@@ -57,7 +57,7 @@ bool operator==(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2
 /*
  * Forward declaration for the gl_vector type.
  */
-template<typename T, typename Buff = gl_buffer<T>>
+template<typename T, typename Buff = gl_buffer_type<T>>
 class gl_vector;
 
 

@@ -13,6 +13,7 @@
 #include <memory>
 #include "glfwd.hpp"
 #include "meta/gltraits.hpp"
+#include "gpu_detail.hpp"
 
 namespace mgl {
 
@@ -29,11 +30,12 @@ public:
 
     typedef T                               value_type;
     typedef ptrdiff_t                       difference_type;
-    typedef T *                             pointer;
+    typedef gpu_buffer<T>                   buff;
+    typedef typename gpu_buffer<T>::pointer pointer;
     typedef std::random_access_iterator_tag iterator_category;
     typedef size_t                          size_type;
-    typedef gl_ptr<void>                    void_pointer;
-    typedef const gl_ptr<void>              const_void_pointer;
+    typedef gl_ptr<void, Buff>              void_pointer;
+    typedef const gl_ptr<void, Buff>        const_void_pointer;
 
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
@@ -45,9 +47,6 @@ public:
 	gl_ptr_impl(std::nullptr_t = nullptr)
 	    : m_ptr(nullptr)
 	    , m_offset(0)
-        #ifndef NKH_NDEBUG
-	    , m_isMap(std::make_shared<bool>(false))
-        #endif
     {}
 
     /**
@@ -57,9 +56,6 @@ public:
     gl_ptr_impl(const gl_ptr_impl& rhs)
         : m_ptr(rhs.m_ptr)
         , m_offset(rhs.m_offset)
-        #ifndef NKH_NDEBUG
-        , m_isMap(rhs.m_isMap)
-        #endif
     {}
 
 	/**
@@ -71,9 +67,6 @@ public:
 	gl_ptr_impl(const gl_ptr_impl<U, B>& rhs)
 	    : m_ptr(rhs.m_ptr)  // why not static_cast? -> to avoid accepting downcasting. Actually is_convertible wouldn't accept it.
 	    , m_offset(rhs.m_offset)
-        #ifndef NKH_NDEBUG
-        , m_isMap(rhs.m_isMap)
-        #endif
 	{}
 
 	/**
@@ -83,9 +76,6 @@ public:
 	gl_ptr_impl(gl_ptr_impl && rhs)
         : m_ptr(std::move(rhs.m_ptr))
         , m_offset(std::move(rhs.m_offset))
-        #ifndef NKH_NDEBUG
-        , m_isMap(std::move(rhs.m_isMap))
-        #endif
 	{}
 
 	/**
@@ -97,9 +87,6 @@ public:
     gl_ptr_impl(gl_ptr_impl<U, B>&& rhs)
         : m_ptr(std::move(rhs.m_ptr))
         , m_offset(std::move(rhs.m_offset))
-        #ifndef NKH_NDEBUG
-        , m_isMap(std::move(rhs.m_isMap))
-        #endif
     {}
 
 
@@ -107,9 +94,6 @@ public:
 	{
 	    m_ptr = rhs.m_ptr;
 	    m_offset = rhs.m_offset;
-#ifndef NKH_NDEBUG
-	    m_isMap = rhs.m_isMap;
-#endif
 	    return *this;
 	}
 
@@ -117,9 +101,6 @@ public:
 	{
 	    m_ptr = nullptr;
 	    m_offset = 0;
-#ifndef NKH_NDEBUG
-        *m_isMap = false;
-#endif
         return *this;
 	}
 
@@ -127,9 +108,6 @@ public:
 	{
 	    m_ptr = std::move(p_rhs.m_ptr);
 	    m_offset = std::move(p_rhs.m_offset);
-#ifndef NKH_NDEBUG
-        m_isMap = std::move(p_rhs.m_isMap);
-#endif
 	    return *this;
 	}
 
@@ -139,7 +117,7 @@ public:
 	 */
 	pointer     operator->() const
 	{
-	    return (*m_ptr+m_offset);
+	    return (m_ptr->ptr+m_offset);
 	}
 
 	gl_ptr_impl&     operator++()
@@ -197,40 +175,21 @@ public:
      */
     explicit operator bool() const
     {
-#ifndef NKH_NDEBUG
-//        assert(*m_isMap);
-//        return *m_isMap && *m_ptr != nullptr;
-        return *m_ptr != nullptr;
-#else
-        return *m_ptr != nullptr;
-#endif
+        return m_ptr != nullptr && m_ptr->ptr != nullptr;
     }
-
-//    /**
-//     * \brief Set the context for this pointer.
-//     * \param p_context is the context.
-//     */
-//    void set_context(context p_context)
-//    {
-//        m_context = p_context;
-//    }
 
 protected:
 
     gl_ptr_impl(difference_type p_offset, const gl_ptr_impl & p_other)
         : m_ptr{p_other.m_ptr}
         , m_offset{p_offset}
-#ifndef NKH_NDEBUG
-        , m_isMap{p_other.m_isMap}
-#endif
-//        , m_context{p_other.m_context}
     {}
 
 	// ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    void set_base_address(pointer* p_ptr)
+    void set_base_address(buff* p_ptr)
     {
         m_ptr = p_ptr;
     }
@@ -248,13 +207,9 @@ protected:
     // ================================================================ //
 
 	/** The pointer to the data. */
-	pointer *                m_ptr;
+	buff *          m_ptr;
 	/** The offset to apply to the pointer once bound. */
-	difference_type          m_offset;
-#ifndef NKH_NDEBUG
-	/** True if the pointer is valid. */
-	std::shared_ptr<bool>    m_isMap;
-#endif
+	difference_type m_offset;
 };
 
 } /* namespace priv. */
@@ -274,7 +229,7 @@ struct gl_ptr<void, Buff> : public priv::gl_ptr_impl<void, Buff>
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    void** operator&() { return &(*(this->m_ptr)); }
+    void** operator&() { return &(this->m_ptr->ptr); }
 
     // ================================================================ //
     // ============================ FRIENDS =========================== //
@@ -347,9 +302,6 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
     {
         this->m_ptr = vptr.m_ptr;
         this->m_offset = vptr.m_offset;
-    #ifndef NKH_NDEBUG
-        this->m_isMap = vptr.m_isMap;
-    #endif
     }
 
     // ================================================================ //
@@ -362,7 +314,7 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
      */
     reference   operator*() const
     {
-        return *(*(this->m_ptr)+this->m_offset);
+        return *(this->m_ptr->ptr+this->m_offset);
     }
 
     /**
@@ -370,14 +322,14 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
      */
     reference   operator[](const difference_type& __n) const
     {
-        return *(this->m_ptr)[this->m_offset + __n];
+        return this->m_ptr->ptr[this->m_offset + __n];
     }
 
     /**
      * @brief Taking the address of the pointer.
      * @return Return the address of the underlying pointer.
      */
-    void** operator&() { return &(*(this->m_ptr)); }
+    void** operator&() { return &(this->m_ptr->ptr); }
 
     // ================================================================ //
     // ============================ FRIENDS =========================== //

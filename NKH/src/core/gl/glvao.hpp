@@ -58,7 +58,7 @@ struct gl_vao
     /**
      * \brief Bind this vao.
      */
-    void bind()
+    void bind() const
     {
         gl_object_vertexarrays::gl_bind(m_id);
     }
@@ -66,7 +66,7 @@ struct gl_vao
     /**
      * \brief Unbind this vao.
      */
-    void unbind()
+    void unbind() const
     {
         gl_object_vertexarrays::gl_bind(0);
     }

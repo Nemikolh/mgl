@@ -10,10 +10,13 @@
 
 #include <vector>
 #include <iterator>
+#include <queue>
 #include "meta/gltraits.hpp"
+#include "glmath.hpp"
 #include "glrequires.hpp"
 #include "glallocator.hpp"
 #include "glscope.hpp"
+#include "gpu_detail.hpp"
 
 namespace mgl {
 
@@ -54,8 +57,7 @@ public:
     // ================================================================ //
 
     explicit gl_vector()
-        : m_id(0)
-        , m_base_address(0)
+        : m_gpu_buff_stack()
         , m_mapped(0)
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(false)
@@ -64,8 +66,7 @@ public:
     {}
 
     explicit gl_vector(size_type p_n)
-        : m_id(0)
-        , m_base_address(nullptr)
+        : m_gpu_buff_stack()
         , m_mapped(0)
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(false)
@@ -76,8 +77,7 @@ public:
     }
 
     gl_vector(size_type p_n, const value_type& p_value)
-        : m_id(0)
-        , m_base_address(nullptr)
+        : m_gpu_buff_stack()
         , m_mapped(0)
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(false)
@@ -89,8 +89,7 @@ public:
 
     template<class InputIt>
     gl_vector(InputIt p_first, InputIt p_last)
-        : m_id(0)
-        , m_base_address(nullptr)
+        : m_gpu_buff_stack()
         , m_mapped(0)
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(false)
@@ -101,8 +100,7 @@ public:
     }
 
     gl_vector(const gl_vector& p_rhs)
-        : m_id(0)
-        , m_base_address(nullptr)
+        : m_gpu_buff_stack()
         , m_mapped(0)
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(false)
@@ -115,8 +113,7 @@ public:
 
 
     gl_vector(gl_vector && p_rhs)
-        : m_id(std::move(p_rhs.m_id))
-        , m_base_address(std::move(p_rhs.m_base_address))
+        : m_gpu_buff_stack(std::move(p_rhs.m_gpu_buff_stack))
         , m_mapped(std::move(p_rhs.m_mapped))
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(std::move(m_map_ranged_called))
@@ -125,8 +122,7 @@ public:
     {}
 
     gl_vector(std::initializer_list<value_type> p_l)
-        : m_id(0)
-        , m_base_address(nullptr)
+        : m_gpu_buff_stack()//{0, nullptr}
         , m_mapped(0)
 #ifndef NKH_NDEBUG
         , m_map_ranged_called(false)
@@ -141,7 +137,8 @@ public:
         // We map because the destructor of the vector will call
         // the destructors on the elements and deallocate with the allocator
         // which do the unbind plus the deletion of the buffer.
-        map();
+        clear();
+        gl_object_buffer<Buff>::gl_delete(1, id_ptr());
     }
 
     // ================================================================ //
@@ -153,19 +150,30 @@ public:
      */
     void bind() const
     {
-        gl_object_buffer<Buff>::gl_bind(m_id);
+        gl_object_buffer<Buff>::gl_bind(current_address().id);
     }
 
-    /**
-     * Force the creation of the underlying buffer.
-     */
-    void create()
-    {
-        if(m_id == 0)
-        {
-            gl_object_buffer<Buff>::gl_gen(1, &m_id);
-        }
-    }
+//    /**
+//     * @brief Force the creation of the underlying buffer.
+//     */
+//    void create()
+//    {
+//        if(m_gpu_buff_stack.empty())
+//        {
+//            push_address();
+//            gl_object_buffer<Buff>::gl_gen(1, &current_address().id);
+//        }
+//    }
+//
+//    /**
+//     * @brief Force the creation of the buffer and reserve some memory.
+//     * @param p_value is the the base value for the reservation.
+//     */
+//    void create_and_reserve(size_type p_number = 1)
+//    {
+//        create();
+//        reserve(p_number);
+//    }
 
     gl_vector&
     operator=(const gl_vector& p_rhs)
@@ -181,8 +189,7 @@ public:
     gl_vector&
     operator=(gl_vector&& p_rhs)
     {
-        m_id            = std::move(p_rhs.m_id);
-        m_base_address  = std::move(p_rhs.m_base_address);
+        m_gpu_buff_stack  = std::move(p_rhs.m_gpu_buff_stack);
         m_mapped        = std::move(p_rhs.m_mapped);
 #ifndef NKH_NDEBUG
         m_map_ranged_called = std::move(p_rhs.m_map_ranged_called);
@@ -561,11 +568,12 @@ private:
     void map() const
     {
 #ifndef NKH_DEBUG
-        assert(m_id);
+        //assert(!m_gpu_buff_stack.empty() && current_address().id);
 #endif
-        if(!m_mapped)
+        if(!m_gpu_buff_stack.empty() && !m_mapped)
         {
             bind();
+            //auto len = max(m_vector.capacity(), 1);
             map_pointer_range(0, m_vector.capacity());
         }
         ++m_mapped;
@@ -598,9 +606,10 @@ private:
      */
     void map_pointer_range(difference_type p_offset, size_type p_length) const
     {
+        //assert(p_length > 0);
         // We make the assumption than the buffer content isn't used in draw call, that's why we have the GL_MAP_UNSYNCHRONIZED_BIT flag
         // And finally, because of the static_assert, the cast can't fail.
-        m_base_address = reinterpret_cast<T*>(
+        current_address().ptr = reinterpret_cast<T*>(
                 gl_object_buffer<Buff>::gl_map_range(p_offset * sizeof(T),
                                                      p_length * sizeof(T),
                                                      GL_MAP_WRITE_BIT | GL_MAP_READ_BIT/*| GL_MAP_UNSYNCHRONIZED_BIT*/));
@@ -623,7 +632,7 @@ private:
         m_map_ranged_called = false;
 #endif
         assert(gl_object_buffer<Buff>::gl_unmap());
-        glCheck(m_base_address = nullptr);
+        glCheck(current_address().ptr = nullptr);
     }
 
 #ifndef NKH_NDEBUG
@@ -638,41 +647,56 @@ private:
     }
 #endif
 
-    inline T** base_address() const
-    {
-        return &m_base_address;
-    }
-
     inline GLuint* id_ptr()
     {
-        return &m_id;
+        return &current_address().id;
     }
 
     inline GLuint id() const
     {
-        return m_id;
+        return current_address().id;
     }
 
     inline void reset_id()
     {
-        m_id = 0;
+        current_address().id = 0;
+    }
+
+    inline gpu_buffer<T>& current_address() const
+    {
+        return m_gpu_buff_stack.back();
+    }
+
+    inline gpu_buffer<T>& current_address()
+    {
+        return m_gpu_buff_stack.back();
+    }
+
+    inline void push_address()
+    {
+        m_gpu_buff_stack.push({0, nullptr});
+    }
+
+    inline gpu_buffer<T> pop_address()
+    {
+        auto old = m_gpu_buff_stack.front();
+        m_gpu_buff_stack.pop();
+        return old;
     }
 
     // ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    /** The id of the buffer. */
-    GLuint                  m_id;
     /** The base address for the mapping. */
-    mutable T *             m_base_address;
+    mutable std::queue<gpu_buffer<T>>   m_gpu_buff_stack;
     /** the mapping state. */
-    mutable unsigned int    m_mapped;
+    mutable unsigned int                m_mapped;
 #ifndef NKH_NDEBUG
-    mutable bool            m_map_ranged_called;
+    mutable bool                        m_map_ranged_called;
 #endif
     /** underlying vector. */
-    base_vector_type        m_vector;
+    base_vector_type                    m_vector;
 };
 
 /**

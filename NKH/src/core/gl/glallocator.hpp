@@ -91,31 +91,49 @@ public:
     // ============================ METHODS =========================== //
     // ================================================================ //
 
+    /**
+     * @brief This function assumes that the allocate are only
+     * made for the owner. Thus this one has a queue where allocate
+     * push on top and deallocate pop on back.
+     * @param p_n is the number of object to allocate.
+     * @param p_cptr is a conventional argument. Not used in the present code.
+     * @return a new pointer that the owner will represent.
+     */
     pointer allocate(size_type p_n, const_pointer p_cptr = nullptr)
     {
         pointer _ret = nullptr;
-#ifndef NKH_NDEBUG
-        // TODO : context.
-        //if(!_ret.hasValidContext())
-        //    throw gl_context_exception();
-#endif
+
         if (p_n > this->max_size())
             throw std::bad_alloc();
 
-        m_owner.create();
+        // We put on the back of queue a new
+        m_owner.push_address();
+        gl_object_buffer<Buff>::gl_gen(1, &(m_owner.current_address().id));
+
         gl_object_buffer<Buff>::gl_bind(m_owner.id());
         gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
         m_owner.map_pointer_range(0, p_n);
-        _ret.set_base_address(m_owner.base_address());
+        _ret.set_base_address(&(m_owner.current_address()));
 
         return _ret;
     }
 
+    /**
+     * @brief Pop the back of the queue.
+     * @param p_ptr is a pointer to the back of the queue.
+     * @param p_n is the size of the buffer deallocated.
+     */
     void deallocate(pointer p_ptr, size_type p_n)
     {
-        m_owner.unmap_pointer();
-        gl_object_buffer<Buff>::gl_delete(1, m_owner.id_ptr());
-        m_owner.reset_id();
+        // We pop the old address.
+        auto old_address = m_owner.pop_address();
+        assert(p_ptr.m_ptr != nullptr &&
+               p_ptr.m_ptr->id == old_address.id &&
+               p_ptr.m_ptr->ptr == old_address.ptr);
+
+        // We delete the underlying buffer.
+        gl_object_buffer<Buff>::gl_delete(1, &old_address.id);
+        p_ptr.m_ptr = nullptr;
     }
 
     size_type max_size() const

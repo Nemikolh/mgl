@@ -56,8 +56,8 @@ public:
 
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
-            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer<float>>::counter, 2);
-            gl_object_buffer<gl_buffer<float>>::counter = 0;
+            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
+            gl_object_buffer<gl_buffer_type<float>>::counter = 0;
 #       endif
 	}
 
@@ -91,8 +91,8 @@ public:
 
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
-            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer<float>>::counter, 2);
-            gl_object_buffer<gl_buffer<float>>::counter = 0;
+            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
+            gl_object_buffer<gl_buffer_type<float>>::counter = 0;
 #       endif
 	}
 
@@ -101,19 +101,19 @@ public:
         TS_TRACE("Forcing reallocation with push_back.");
         gl_vector<float> test;
 
-        test.create();
         auto lock = bind_at_scope(test);
 
-        // TODO : this code is problematic.
-        // the vector is reallocating a new id everytime.
-        // The id should be part of the gl_vector instance and not
-        // of the pointer.
         for(int i = 0; i < 20; ++i)
         {
             test.push_back(i);
         }
 
         TS_ASSERT_THROWS_NOTHING(priv::glTryError());
+
+        for(auto el : test)
+        {
+            std::cout << el << std::endl;
+        }
 	}
 
 };

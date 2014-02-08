@@ -3,8 +3,8 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include "../src/core/gl/glvector.hpp"
-#include "../src/core/gl/glrequires.hpp"
+#include "../mgl/glvector.hpp"
+#include "../mgl/glrequires.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <functional>

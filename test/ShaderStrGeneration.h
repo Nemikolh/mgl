@@ -3,9 +3,9 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include "../src/core/gl/shader/glsh_var.hpp"
+//#include "../src/core/gl/shader/glsh_var.hpp"
 
-using namespace nkh::core::gl::glsh;
+//using namespace nkh::core::gl::glsh;
 
 class ShaderStrGeneration : public CxxTest::TestSuite
 {
@@ -19,14 +19,14 @@ public:
 	{
 	}
 
-	void test_get_body()
-	{
-        var<int> a("a"), b("b");
-	    a = a + b;
-	    TS_ASSERT_EQUALS(a.get_body(), "a = (a + b);\n")
-	    b = a;
-	    TS_ASSERT_EQUALS(b.get_body(), "a = (a + b);\nb = a;\n")
-	}
+//	void test_get_body()
+//	{
+//        var<int> a("a"), b("b");
+//	    a = a + b;
+//	    TS_ASSERT_EQUALS(a.get_body(), "a = (a + b);\n")
+//	    b = a;
+//	    TS_ASSERT_EQUALS(b.get_body(), "a = (a + b);\nb = a;\n")
+//	}
 
 };
 

@@ -12,7 +12,6 @@
 #include <iterator>
 #include <queue>
 #include "meta/gltraits.hpp"
-#include "glmath.hpp"
 #include "glrequires.hpp"
 #include "glallocator.hpp"
 #include "glscope.hpp"

@@ -67,6 +67,6 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices);
 } /* namespace core. */
 } /* namespace nkh. */
 
-#include "glutil.hpp"
+#include "glutil.inl"
 
 #endif /* GLUTIL_HPP_ */

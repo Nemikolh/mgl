@@ -12,12 +12,10 @@
 #include <boost/type_traits.hpp>
 #include <boost/mpl/arithmetic.hpp>
 #include <boost/mpl/sizeof.hpp>
-
+// TODO : may have change with the last release of mgl.
 #include <glm/core/_detail.hpp>
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /**
  * \class is_vector is the std conformant meta function base on glm::detail::is_vector.
@@ -98,11 +96,7 @@ struct tuple_size
 
 
 
-}  /* namespace gl */
-}  /* namespace core */
-}  /* namespace nkh */
-
-
+}  /* namespace mgl */
 
 
 #endif /* GLMHELPER_HPP_ */

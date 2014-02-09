@@ -16,9 +16,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /**
  * \class gl_program is a wrapper for an opengl shader program.
@@ -206,9 +204,6 @@ private:
 };
 
 
-} /* namespace gl. */
-} /* namespace core. */
-} /* namespace nkh. */
-
+} /* namespace mgl. */
 
 #endif /* GLPROGRAM_HPP_ */

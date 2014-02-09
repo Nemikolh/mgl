@@ -6,14 +6,12 @@
  */
 
 #include "meta/glmetabind.hpp"
-#include "meta/gltraits.hpp"
+#include "type/gltraits.hpp"
 #include "glvao.hpp"
 #include "glprogram.hpp"
 #include "glvector.hpp"
 
-namespace nkh  {
-namespace core {
-namespace gl   {
+namespace mgl {
 
 /*
  * Implementation details.
@@ -76,6 +74,4 @@ void gl_draw(const gl_vao& p_vao)
     glDrawElements(GL_TRIANGLES, p_vao.size(), p_vao.elements_type(), 0);
 }
 
-} /* namespace gl. */
-} /* namespace core. */
-} /* namespace nkh. */
+} /* namespace mgl */

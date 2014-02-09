@@ -11,12 +11,10 @@
 #include <utility>
 #include <type_traits>
 #include <cassert>
-#include "meta/gltraits.hpp"
+#include "gltraits.hpp"
 
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 struct gl_program;
 template<typename T>
@@ -179,9 +177,6 @@ private:
     std::size_t  m_size;
 };
 
-} /* namespace gl. */
-} /* namespace core. */
-} /* namespace nkh. */
-
+} /* namespace mgl. */
 
 #endif /* GLVAO_HPP_ */

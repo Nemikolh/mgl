@@ -19,13 +19,11 @@
 #include <boost/mpl/sizeof.hpp>
 
 #include "../glrequires.hpp"
-#include "../glbinder.hpp"
+#include "glbinder.hpp"
 #include "../glmhelper.hpp"
 
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 namespace priv {
 
@@ -121,9 +119,6 @@ struct gl_bind_attributes : public priv::bind_attributes<T, gl_attribute_binder>
 {};
 
 
-} /* namespace gl */
-} /* namespace core */
-} /* namespace nkh */
-
+} /* namespace mgl */
 
 #endif /* GLMETABIND_HPP_ */

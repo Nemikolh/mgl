@@ -8,11 +8,9 @@
 #ifndef GLBINDER_HPP_
 #define GLBINDER_HPP_
 
-#include "meta/gltraits.hpp"
+#include "../type/gltraits.hpp"
 
-namespace nkh {
-namespace core {
-namespace gl {
+namespace mgl {
 
 /**
  * \class gl_attribute_binder is a functor that encapsulate the OpenGL call binding
@@ -93,8 +91,6 @@ private:
     gl_types::id    m_program_id;
 };
 
-} /* namespacce nkh. */
-} /* namespace core. */
-} /* namespace gl. */
+} /* namespacce mgl */
 
 #endif /* GLBINDER_HPP_ */

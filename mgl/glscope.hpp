@@ -8,7 +8,7 @@
 #ifndef GLSCOPE_HPP_
 #define GLSCOPE_HPP_
 
-#include "meta/gltraits.hpp"
+#include "type/gltraits.hpp"
 
 namespace mgl {
 

@@ -11,9 +11,7 @@
 #include "gldata.hpp"
 #include <type_traits>
 
-namespace nkh  {
-namespace core {
-namespace gl   {
+namespace mgl {
 
 struct gl_vao;
 template<typename T>
@@ -63,9 +61,7 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices);
 
 
 
-} /* namespace gl. */
-} /* namespace core. */
-} /* namespace nkh. */
+} /* namespace mgl */
 
 #include "glutil.inl"
 

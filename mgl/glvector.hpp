@@ -11,11 +11,10 @@
 #include <vector>
 #include <iterator>
 #include <queue>
-#include "meta/gltraits.hpp"
+#include "type/gltraits.hpp"
 #include "glrequires.hpp"
-#include "glallocator.hpp"
+#include "memory/glallocator.hpp"
 #include "glscope.hpp"
-#include "gpu_detail.hpp"
 
 namespace mgl {
 

@@ -55,6 +55,9 @@ public:
 	    TS_ASSERT_THROWS_NOTHING(priv::glTryError());
 	    TS_ASSERT_EQUALS(copy == test, true);
 
+	    TS_ASSERT_EQUALS(test.is_mapped(), false);
+	    TS_ASSERT_EQUALS(copy.is_mapped(), false);
+
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
             TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
@@ -71,23 +74,29 @@ public:
 	    gl_vector<float> other = { 1.0f, 2.0f, 3.0f, 4.0f };
 	    float other_host[4]    = { 1.0f, 2.0f, 3.0f, 4.0f };
 
-	    TS_TRACE("Bind at scope");
-	    auto lock = bind_at_scope(test);
-	    for(int i = 0; i < test.size(); ++i)
+	    // Scope for mapping state.
 	    {
-	        TS_ASSERT_EQUALS(test_host[i], test.at(i));
+            TS_TRACE("Bind at scope");
+            auto lock = bind_at_scope(test);
+            for(int i = 0; i < test.size(); ++i)
+            {
+                TS_ASSERT_EQUALS(test_host[i], test.at(i));
+            }
+
+            TS_TRACE("Bind and apply a lambda");
+            bind_and_apply(other, [&](){
+                int i{0};
+                for(auto el : other)
+                {
+                    TS_ASSERT_EQUALS(other_host[i++], el);
+                }
+            });
+
+            TS_ASSERT_THROWS_NOTHING(priv::glTryError());
 	    }
 
-	    TS_TRACE("Bind and apply a lambda");
-	    bind_and_apply(other, [&](){
-	        int i{0};
-	        for(auto el : other)
-	        {
-	            TS_ASSERT_EQUALS(other_host[i++], el);
-	        }
-	    });
-
-	    TS_ASSERT_THROWS_NOTHING(priv::glTryError());
+	    TS_ASSERT_EQUALS(test.is_mapped(), false);
+	    TS_ASSERT_EQUALS(other.is_mapped(), false);
 
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
@@ -101,21 +110,25 @@ public:
         gl_vector<float> test;
         std::vector<float> valid;
 
-        auto lock = bind_at_scope(test);
-
-        for(int i = 0; i < 20; ++i)
+        // Scope for mapping state.
         {
-            test.push_back(i);
-            valid.push_back(i);
+            auto lock = bind_at_scope(test);
+
+            for(int i = 0; i < 20; ++i)
+            {
+                test.push_back(i);
+                valid.push_back(i);
+            }
+
+            TS_ASSERT_THROWS_NOTHING(priv::glTryError());
+
+            for(int i = 0; i < 20; i++)
+            {
+                TS_ASSERT_EQUALS(test[i], valid[i]);
+            }
         }
 
-        TS_ASSERT_THROWS_NOTHING(priv::glTryError());
-
-        for(int i = 0; i < 20; i++)
-        {
-            TS_ASSERT_EQUALS(test[i], valid[i]);
-            //std::cout << el << std::endl;
-        }
+        TS_ASSERT_EQUALS(test.is_mapped(), false);
 
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");

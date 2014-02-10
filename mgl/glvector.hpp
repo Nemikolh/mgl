@@ -151,6 +151,15 @@ public:
         gl_object_buffer<Buff>::gl_bind(current_address().id);
     }
 
+    /**
+     * @brief This function allows to know the OpenGL mapping state of this buffer.
+     * @return Return true if the vector is mapped.
+     */
+    bool is_mapped() const
+    {
+        return m_mapped;
+    }
+
     gl_vector&
     operator=(const gl_vector& p_rhs)
     {

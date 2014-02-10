@@ -552,7 +552,7 @@ private:
      */
     void map() const
     {
-#ifndef NKH_DEBUG
+#ifndef NKH_NDEBUG
         //assert(!m_gpu_buff_stack.empty() && current_address().id);
 #endif
         if(!m_gpu_buff_stack.empty() && !m_mapped)
@@ -569,7 +569,7 @@ private:
      */
     void unmap() const
     {
-#ifndef NKH_DEBUG
+#ifndef NKH_NDEBUG
         assert(m_mapped > 0);
 #endif
         --m_mapped;
@@ -612,7 +612,7 @@ private:
      */
     void unmap_pointer() const
     {
-#ifndef NKH_DEBUG
+#ifndef NKH_NDEBUG
         assert(m_map_ranged_called);
         m_map_ranged_called = false;
 #endif

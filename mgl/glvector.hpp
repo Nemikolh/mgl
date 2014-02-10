@@ -151,28 +151,6 @@ public:
         gl_object_buffer<Buff>::gl_bind(current_address().id);
     }
 
-//    /**
-//     * @brief Force the creation of the underlying buffer.
-//     */
-//    void create()
-//    {
-//        if(m_gpu_buff_stack.empty())
-//        {
-//            push_address();
-//            gl_object_buffer<Buff>::gl_gen(1, &current_address().id);
-//        }
-//    }
-//
-//    /**
-//     * @brief Force the creation of the buffer and reserve some memory.
-//     * @param p_value is the the base value for the reservation.
-//     */
-//    void create_and_reserve(size_type p_number = 1)
-//    {
-//        create();
-//        reserve(p_number);
-//    }
-
     gl_vector&
     operator=(const gl_vector& p_rhs)
     {
@@ -805,17 +783,6 @@ private:
         return p_x.base () == p_y.base ();
     }
 
-    // TODO rework those, as the std::vector can use an other allocator.
-//    template <class T, class B, class A>
-//    inline bool operator==(const gl_vector<T, B, A>& x,
-//                           const std::vector<T,A>& y)
-//    {return x.base () == y;}
-//
-//    template <class T, class B, class A>
-//    inline bool operator==(const std::vector<T,A>& x,
-//                           const gl_vector<T, B, A>& y)
-//    {return x == y.base ();}
-
     template <class T, class B>
     inline bool operator< (const gl_vector<T, B>& p_x,
                            const gl_vector<T, B>& p_y)
@@ -825,16 +792,6 @@ private:
         return p_x.base () < p_y.base ();
     }
 
-//    template <class T, class B, class A>
-//    inline bool operator<(const gl_vector<T, B, A>& x,
-//                          const std::vector<T,A>& y)
-//    {return x.base () < y;}
-//
-//    template <class T, class B, class A>
-//    inline bool operator<(const std::vector<T,A>& x,
-//                          const gl_vector<T, B, A>& y)
-//    {return x < y.base ();}
-
     template <class T, class B>
     inline bool operator!=(const gl_vector<T, B>& p_x,
                            const gl_vector<T, B>& p_y)
@@ -843,16 +800,6 @@ private:
         gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () != p_y.base ();
     }
-
-//    template <class T, class B, class A>
-//    inline bool operator!=(const gl_vector<T, B, A>& x,
-//                           const std::vector<T,A>& y)
-//    {return x.base () != y;}
-//
-//    template <class T, class B, class A>
-//    inline bool operator!=(const std::vector<T,A>& x,
-//                           const gl_vector<T, B, A>& y)
-//    {return x != y.base ();}
 
     template <class T, class B>
     inline bool operator> (const gl_vector<T, B>& p_x,
@@ -872,16 +819,6 @@ private:
         return p_x.base () >= p_y.base ();
     }
 
-//    template <class T, class B, class A>
-//    inline bool operator>=(const gl_vector<T, B, A>& x,
-//                           const std::vector<T,A>& y)
-//    {return x.base () >= y;}
-//
-//    template <class T, class B, class A>
-//    inline bool operator>=(const std::vector<T,A>& x,
-//                           const gl_vector<T, B, A>& y)
-//    {return x >= y.base ();}
-
     template <class T, class B>
     inline bool operator<=(const gl_vector<T, B>& p_x,
                            const gl_vector<T, B>& p_y)
@@ -890,16 +827,6 @@ private:
         gl_scope<gl_vector<T, B> > binder_y(p_y);
         return p_x.base () <= p_y.base ();
     }
-
-//    template <class T, class B, class A>
-//    inline bool operator<=(const gl_vector<T, B, A>& x,
-//                           const std::vector<T,A>& y)
-//    {return x.base () <= y;}
-//
-//    template <class T, class B, class A>
-//    inline bool operator<=(const std::vector<T,A>& x,
-//                           const gl_vector<T, B, A>& y)
-//    {return x <= y.base ();}
 
 } /* namespace mgl */
 

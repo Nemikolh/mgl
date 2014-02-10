@@ -41,6 +41,7 @@ public:
 	{
 	    window->close();
 	    window.reset();
+        gl_object_buffer<gl_buffer_type<float>>::counter = 0;
 	}
 
 	void testCreation()
@@ -57,7 +58,6 @@ public:
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
             TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
-            gl_object_buffer<gl_buffer_type<float>>::counter = 0;
 #       endif
 	}
 
@@ -92,7 +92,6 @@ public:
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
             TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
-            gl_object_buffer<gl_buffer_type<float>>::counter = 0;
 #       endif
 	}
 
@@ -100,20 +99,28 @@ public:
 	{
         TS_TRACE("Forcing reallocation with push_back.");
         gl_vector<float> test;
+        std::vector<float> valid;
 
         auto lock = bind_at_scope(test);
 
         for(int i = 0; i < 20; ++i)
         {
             test.push_back(i);
+            valid.push_back(i);
         }
 
         TS_ASSERT_THROWS_NOTHING(priv::glTryError());
 
-        for(auto el : test)
+        for(int i = 0; i < 20; i++)
         {
-            std::cout << el << std::endl;
+            TS_ASSERT_EQUALS(test[i], valid[i]);
+            //std::cout << el << std::endl;
         }
+
+#       ifdef NKH_TEST
+            TS_TRACE("Additional Test : Number of buffers");
+            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
+#       endif
 	}
 
 };

@@ -11,8 +11,8 @@
 #include <type_traits>
 #include <assert.h>
 #include <memory>
-#include "glfwd.hpp"
-#include "meta/gltraits.hpp"
+#include "../glfwd.hpp"
+#include "../type/gltraits.hpp"
 #include "gpu_detail.hpp"
 
 namespace mgl {

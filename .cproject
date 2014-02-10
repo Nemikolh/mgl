@@ -92,7 +92,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="memory|mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="shader/gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
@@ -151,7 +151,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="mgl|Test|test|shader|src|log|core/reflect|reflect|Debug" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="memory|mgl|Test|test|shader|src|log|core/reflect|reflect|Debug" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="shader/gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
@@ -502,7 +502,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="memory|mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="shader/gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
@@ -527,12 +527,23 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573." name="/" resourcePath="">
 						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.1079959509" name="Cross GCC" nonInternalBuilderId="cdt.managedbuild.builder.gnu.cross" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.2059571466" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder buildPath="${workspace_loc:/mgl}/Test" id="cdt.managedbuild.builder.gnu.cross.1976561490" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/mgl}/Test" id="cdt.managedbuild.builder.gnu.cross.1976561490" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross">
+								<outputEntries>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="TestOld"/>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Test"/>
+								</outputEntries>
+							</builder>
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.c.compiler.1931958874" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1825338699" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.910469557" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.226182380" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
+									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1947689179" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
@@ -573,17 +584,14 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1749408731" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.240441869" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.689520344" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="sfml-graphics"/>
-									<listOptionValue builtIn="false" value="boost_program_options"/>
+									<listOptionValue builtIn="false" value="GLEW"/>
 									<listOptionValue builtIn="false" value="bfd"/>
+									<listOptionValue builtIn="false" value="sfml-graphics"/>
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="sfml-window"/>
 									<listOptionValue builtIn="false" value="sfml-system"/>
-									<listOptionValue builtIn="false" value="GLEW"/>
 								</option>
-								<option id="gnu.cpp.link.option.paths.1945148539" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0/stage/lib"/>
-								</option>
+								<option id="gnu.cpp.link.option.paths.1945148539" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.841304367" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -593,14 +601,18 @@
 							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.cross.assembler.1002579449" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
 								<option id="gnu.both.asm.option.include.paths.1733221091" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
+									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1856285789" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry excluding="gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
+						<entry excluding="Debug|external|log|core/reflect|client|memory|reflect|app|test|shader|mgl|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="glcontext.cpp|glutil.inl|shader/gltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>

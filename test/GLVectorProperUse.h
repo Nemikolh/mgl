@@ -119,7 +119,7 @@ public:
 
 #       ifdef NKH_TEST
             TS_TRACE("Additional Test : Number of buffers");
-            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 2);
+            TS_ASSERT_EQUALS(gl_object_buffer<gl_buffer_type<float>>::counter, 6);
 #       endif
 	}
 

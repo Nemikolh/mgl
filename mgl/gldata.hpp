@@ -9,7 +9,7 @@
 #define GLDATA_HPP_
 
 #include <boost/fusion/adapted/struct/define_struct.hpp>
-#include "meta/gltraits.hpp"
+#include "type/gltraits.hpp"
 
 
 

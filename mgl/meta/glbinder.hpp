@@ -45,7 +45,8 @@ struct gl_attribute_binder
         // or if the attribute start with the reserved prefix "gl_"
         if(attribute_id != -1)
         {
-            glVertexAttribPointer(attribute_id, p_nb_component, p_component_type, GL_FALSE, p_stride, p_offset);
+            glVertexAttribPointer(attribute_id, p_nb_component, p_component_type, GL_FALSE, p_stride,
+                                  reinterpret_cast<const void*>(p_offset));
             glEnableVertexAttribArray(attribute_id);
             glVertexAttribDivisor(attribute_id, m_divisor);
         }

@@ -74,11 +74,6 @@ struct gl_attribute_binder
     {}
 
     /**
-     * \brief Move constructor.
-     */
-    gl_attribute_binder(gl_attribute_binder&&) = default;
-
-    /**
      * \brief Copy constructor.
      */
     gl_attribute_binder(const gl_attribute_binder&) = default;

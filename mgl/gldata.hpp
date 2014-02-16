@@ -16,15 +16,15 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
 
-#define SEQ (glm::vec3, position)(glm::vec3, normal)(glm::vec2, uvcoord)
-#define EAT_FIRST_2_END
-#define EAT_FIRST_1_END
-#define EAT_FIRST_1(a, b) (b) EAT_FIRST_2
-#define EAT_FIRST_2(a, b) (b) EAT_FIRST_1
-#define EAT_FIRST(seq) BOOST_PP_CAT(EAT_FIRST_1 seq, _END)
-#define TEST(r, data, b) data b = r - 2 ;
-
-BOOST_PP_SEQ_FOR_EACH(TEST, constexpr std::uint8_t, EAT_FIRST(SEQ)) // expands to w_ x_ y_ z_
+//#define SEQ (glm::vec3, position)(glm::vec3, normal)(glm::vec2, uvcoord)
+//#define EAT_FIRST_2_END
+//#define EAT_FIRST_1_END
+//#define EAT_FIRST_1(a, b) (b) EAT_FIRST_2
+//#define EAT_FIRST_2(a, b) (b) EAT_FIRST_1
+//#define EAT_FIRST(seq) BOOST_PP_CAT(EAT_FIRST_1 seq, _END)
+//#define TEST(r, data, b) data b = r - 2 ;
+//
+//BOOST_PP_SEQ_FOR_EACH(TEST, constexpr std::uint8_t, EAT_FIRST(SEQ)) // expands to w_ x_ y_ z_
 
 
 namespace mgl  {

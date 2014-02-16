@@ -17,7 +17,7 @@
 namespace mgl {
 
 struct gl_program;
-template<typename T>
+template<typename T, typename B>
 struct gl_vector;
 
 /**
@@ -133,23 +133,23 @@ private:
     {}
 
     // TODO : don't test if it is integral but if it is an attribute buffer.
-    template<typename T>
+    template<typename T, typename B>
     typename std::enable_if<!std::is_integral<T>::value>::type
-    bindBuffer(gl_types::id p_program_id, const gl_vector<T>& p_buffer)
+    bindBuffer(gl_types::id p_program_id, const gl_vector<T, B>& p_buffer)
     {
         p_buffer.bind();
-        gl_attribute_binder binder{p_program_id};
+        gl_attribute_binder binder(p_program_id);
         gl_bind_attributes<T>::map(binder);
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         assert(m_size == 0 || m_size == p_buffer.size());
 #endif
         m_size = p_buffer.size();
     }
 
     // TODO : same apply here
-    template<typename I>
+    template<typename I, typename B>
     typename std::enable_if<std::is_integral<I>::value>::type
-    bindBuffer(gl_types::id p_program_id, const gl_vector<I>& p_buffer)
+    bindBuffer(gl_types::id p_program_id, const gl_vector<I, B>& p_buffer)
     {
         // Bind the element buffer.
         p_buffer.bind();
@@ -161,7 +161,7 @@ private:
     bindBuffer(gl_types::id p_program_id, const gl_instanced<T>& p_buffer)
     {
         p_buffer.bind();
-        gl_attribute_binder binder{p_program_id, p_buffer.get_divisor()};
+        gl_attribute_binder binder(p_program_id, p_buffer.get_divisor());
         gl_bind_attributes<T>::map(binder);
     }
 

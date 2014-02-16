@@ -12,6 +12,7 @@
 #include <memory>
 #include "../glrequires.hpp"
 #include "glenum.hpp"
+#include "glshader.hpp"
 
 namespace mgl {
 
@@ -159,55 +160,6 @@ struct gl_object_framebuffer
         glCheck(glDeleteFramebuffers(p_n, p_buffers));
     }
 };
-
-
-struct gl_object_program
-{
-
-    static inline GLuint gl_gen()
-    {
-        return glCreateProgram();
-    }
-
-    static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
-    {
-        for(int i = 0; i < p_n; ++i)
-            glDeleteProgram(p_buffers[i]);
-    }
-};
-
-struct gl_object_shader
-{
-    /**
-     * \brief Generate an id for ShaderType.
-     * \return Returns the generated id.
-     */
-    static inline GLuint gl_gen(GLenum p_shader_type)
-    {
-        return glCreateShader(p_shader_type);
-    }
-
-//    /*
-//     * Here we use specialization, to give the user
-//     * a warning on the availability of a shader or not.
-//     * Actually, that's seems pretty useless.
-//     */
-//#ifdef GL_VERTEX_SHADER
-//    template<>
-//    static GLuint gl_gen<GL_VERTEX_SHADER>()
-//    {
-//        return glCreateShader(GL_VERTEX_SHADER);
-//        //glCheckCall(glGenBuffers(p_n, p_buffers));
-//    }
-//#endif
-
-    static inline void gl_delete(GLsizei p_n, const GLuint * p_buffers)
-    {
-        for(int i = 0; i < p_n; ++i)
-            glDeleteShader(p_buffers[i]);
-    }
-};
-
 
 struct gl_object_texture
 {

@@ -48,7 +48,7 @@ struct gl_program
      * \brief Returns the id of this program.
      * \return Returns the opengl id.
      */
-    gl_types::id id()
+    gl_types::id id() const
     {
         return 0;
     }

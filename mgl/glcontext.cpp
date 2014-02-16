@@ -111,7 +111,7 @@ void gl_context_impl::decrement_count<gl_object_buffer>(GLuint p_id)
             m_mapIdsCountBuffers.erase(item);
         }
     }
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     else
     {
         std::cerr << "Error, count decremented for deleted buffer : " << p_id << std::endl;
@@ -133,7 +133,7 @@ void gl_context_impl::decrement_count<gl_object_texture>(GLuint p_id)
             m_mapIdsCountTextures.erase(item);
         }
     }
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     else
     {
         std::cerr << "Error, count decremented for deleted buffer : " << p_id << std::endl;
@@ -155,7 +155,7 @@ void gl_context_impl::decrement_count<gl_object_shader>(GLuint p_id)
             m_mapIdsCountShaders.erase(item);
         }
     }
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     else
     {
         std::cerr << "Error, count decremented for deleted buffer : " << p_id << std::endl;
@@ -177,7 +177,7 @@ void gl_context_impl::decrement_count<gl_object_program>(GLuint p_id)
             m_mapIdsCountPrograms.erase(item);
         }
     }
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     else
     {
         std::cerr << "Error, count decremented for deleted buffer : " << p_id << std::endl;
@@ -199,7 +199,7 @@ void gl_context_impl::decrement_count<gl_object_framebuffer>(GLuint p_id)
             m_mapIdsCountFrameBuffers.erase(item);
         }
     }
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     else
     {
         std::cerr << "Error, count decremented for deleted buffer : " << p_id << std::endl;
@@ -221,7 +221,7 @@ void gl_context_impl::decrement_count<gl_object_vertexarrays>(GLuint p_id)
             m_mapIdsCountVAO.erase(item);
         }
     }
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     else
     {
         std::cerr << "Error, count decremented for deleted buffer : " << p_id << std::endl;

@@ -57,7 +57,7 @@ public:
     explicit gl_vector()
         : m_gpu_buff_stack()
         , m_mapped(0)
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
         , m_vector(allocator_type(*this))
@@ -66,7 +66,7 @@ public:
     explicit gl_vector(size_type p_n)
         : m_gpu_buff_stack()
         , m_mapped(0)
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
         , m_vector(p_n)
@@ -77,7 +77,7 @@ public:
     gl_vector(size_type p_n, const value_type& p_value)
         : m_gpu_buff_stack()
         , m_mapped(0)
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
         , m_vector(p_n, p_value,  allocator_type(*this))
@@ -89,7 +89,7 @@ public:
     gl_vector(InputIt p_first, InputIt p_last)
         : m_gpu_buff_stack()
         , m_mapped(0)
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
         , m_vector(p_first, p_last, allocator_type(*this))
@@ -100,7 +100,7 @@ public:
     gl_vector(const gl_vector& p_rhs)
         : m_gpu_buff_stack()
         , m_mapped(0)
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
         , m_vector(map_vector(p_rhs), allocator_type(*this))
@@ -113,7 +113,7 @@ public:
     gl_vector(gl_vector && p_rhs)
         : m_gpu_buff_stack(std::move(p_rhs.m_gpu_buff_stack))
         , m_mapped(std::move(p_rhs.m_mapped))
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(std::move(m_map_ranged_called))
 #endif
         , m_vector(std::move(p_rhs.m_vector), allocator_type(*this))
@@ -122,7 +122,7 @@ public:
     gl_vector(std::initializer_list<value_type> p_l)
         : m_gpu_buff_stack()//{0, nullptr}
         , m_mapped(0)
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
         , m_vector(p_l, allocator_type(*this))
@@ -176,7 +176,7 @@ public:
     {
         m_gpu_buff_stack  = std::move(p_rhs.m_gpu_buff_stack);
         m_mapped        = std::move(p_rhs.m_mapped);
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         m_map_ranged_called = std::move(p_rhs.m_map_ranged_called);
 #endif
         m_vector        = std::move(p_rhs.m_vector);
@@ -222,7 +222,7 @@ public:
     iterator
     begin()
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.begin();
@@ -231,7 +231,7 @@ public:
     const_iterator
     begin() const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.begin();
@@ -246,7 +246,7 @@ public:
     const_iterator
     cbegin() const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.cbegin();
@@ -304,7 +304,7 @@ public:
     reference
     operator[](size_type p_n)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector[p_n];
@@ -313,7 +313,7 @@ public:
     const_reference
     operator[](size_type p_n) const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector[p_n];
@@ -322,7 +322,7 @@ public:
     reference
     at(size_type p_n)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.at(p_n);
@@ -331,7 +331,7 @@ public:
     const_reference
     at(size_type p_n) const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.at(p_n);
@@ -340,7 +340,7 @@ public:
     reference
     front()
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.front();
@@ -349,7 +349,7 @@ public:
     const_reference
     front() const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.front();
@@ -358,7 +358,7 @@ public:
     reference
     back()
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.back();
@@ -367,7 +367,7 @@ public:
     const_reference
     back()  const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.back();
@@ -376,7 +376,7 @@ public:
     T*
     data()
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.data();
@@ -385,7 +385,7 @@ public:
     const T*
     data()  const
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.data();
@@ -394,7 +394,7 @@ public:
     void
     push_back(const value_type& p_val)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.push_back(p_val);
@@ -403,7 +403,7 @@ public:
     void
     push_back(value_type&& p_val)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.push_back(std::move(p_val));
@@ -413,7 +413,7 @@ public:
     void
     emplace_back(Args&&... p_args)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.emplace_back(std::forward<Args>(p_args)...);
@@ -431,7 +431,7 @@ public:
     iterator
     emplace(iterator p_position, Args&&... p_args)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.emplace(p_position, std::forward<Args>(p_args)...);
@@ -440,7 +440,7 @@ public:
     iterator
     insert(iterator p_position, const value_type& p_x)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.insert(p_position, p_x);
@@ -449,7 +449,7 @@ public:
     iterator
     insert(iterator p_position, value_type&& p_x)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.insert(p_position, std::move(p_x));
@@ -458,7 +458,7 @@ public:
     void
     insert(iterator p_position, std::initializer_list<value_type> p_list)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.insert(p_position, p_list);
@@ -467,7 +467,7 @@ public:
     void
     insert(iterator p_position, size_type p_n, const value_type& p_x)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.insert(p_position, p_n, p_x);
@@ -477,7 +477,7 @@ public:
     void
     insert(iterator p_position, InputIterator p_first, InputIterator p_last)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         m_vector.insert(p_position, p_first, p_last);
@@ -486,7 +486,7 @@ public:
     iterator
     erase(iterator p_position)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.erase(p_position);
@@ -495,7 +495,7 @@ public:
     iterator
     erase(iterator p_first, iterator p_last)
     {
-#       ifndef NKH_NDEBUG
+#       ifndef MGL_NDEBUG
         assert(m_mapped);
 #       endif
         return m_vector.erase(p_first, p_last);
@@ -552,7 +552,7 @@ private:
      */
     void map() const
     {
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         //assert(!m_gpu_buff_stack.empty() && current_address().id);
 #endif
         if(!m_gpu_buff_stack.empty() && !m_mapped)
@@ -569,7 +569,7 @@ private:
      */
     void unmap() const
     {
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         assert(m_mapped > 0);
 #endif
         --m_mapped;
@@ -598,7 +598,7 @@ private:
                 gl_object_buffer<Buff>::gl_map_range(p_offset * sizeof(T),
                                                      p_length * sizeof(T),
                                                      GL_MAP_WRITE_BIT | GL_MAP_READ_BIT/*| GL_MAP_UNSYNCHRONIZED_BIT*/));
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         m_map_ranged_called = true;
         check_integrity();
 #endif
@@ -612,7 +612,7 @@ private:
      */
     void unmap_pointer() const
     {
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
         assert(m_map_ranged_called);
         m_map_ranged_called = false;
 #endif
@@ -620,7 +620,7 @@ private:
         glCheck(current_address().ptr = nullptr);
     }
 
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     /**
      * \brief Check for the pointer validity.
      * This function make the pointer valid if it wasn't.
@@ -677,7 +677,7 @@ private:
     mutable std::queue<gpu_buffer<T>>   m_gpu_buff_stack;
     /** the mapping state. */
     mutable unsigned int                m_mapped;
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
     mutable bool                        m_map_ranged_called;
 #endif
     /** underlying vector. */
@@ -727,7 +727,7 @@ private:
     // ================================================================ //
 
     gl_instanced(const gl_vector<T>& p_buffer)
-        : m_buffer{p_buffer}
+        : m_buffer(p_buffer)
     {}
 
     // ================================================================ //

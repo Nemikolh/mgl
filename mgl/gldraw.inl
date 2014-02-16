@@ -58,7 +58,7 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices)
     // Bind the element buffer.
     p_indices.bind();
 
-    glDrawElements(GL_TRIANGLES, p_data.size(), gl_enum_type<I>::value, 0);
+    glDrawElements(GL_TRIANGLES, p_data.size(), gl_enum_from_type<I>::value, 0);
 }
 
 /*

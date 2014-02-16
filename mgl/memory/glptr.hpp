@@ -168,7 +168,7 @@ public:
 
     /**
      * \brief Return true if the pointer is mapped and allocated.
-     * Note : This is only true when NKH_NDEBUG isn't defined.
+     * Note : This is only true when MGL_NDEBUG isn't defined.
      * This can lead to weird behavior when this macro isn't define
      * if you have defined the NDEBUG macro.
      * \return true if the pointer is non null.
@@ -250,12 +250,12 @@ struct gl_ptr<void, Buff> : public priv::gl_ptr_impl<void, Buff>
 
 /**
  * \class gl_ptr is a pointer to memory located on the GPU through buffer.
- * This class behave in a slightly different way when NKH_NDEBUG isn't
+ * This class behave in a slightly different way when MGL_NDEBUG isn't
  * defined. First its sizeof change as a bool is added to check correct
  * usage whenever we can. Thus the execution will be slower than without it.
  *
  * TODO : I think we should have a way to get this behavior even if
- * the Macro NKH_NDEBUG isn't defined, with for instance an other macro.
+ * the Macro MGL_NDEBUG isn't defined, with for instance an other macro.
  */
 template<typename T, typename Buff>
 struct gl_ptr : public priv::gl_ptr_impl<T, Buff>

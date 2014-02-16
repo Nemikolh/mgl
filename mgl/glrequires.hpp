@@ -17,7 +17,7 @@ namespace mgl {
  * Dirty Macro to perform check only on debug mode.
  * This code comes from the SFML GLCheck.hpp file.
  */
-#ifndef NKH_NDEBUG
+#ifndef MGL_NDEBUG
 
     // In debug mode, perform a test on every OpenGL call
     #define glCheck(call) ((call), priv::glCheckError(__FILE__, __LINE__))

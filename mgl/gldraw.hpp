@@ -63,6 +63,6 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices);
 
 } /* namespace mgl */
 
-#include "glutil.inl"
+#include "gldraw.hpp"
 
 #endif /* GLUTIL_HPP_ */

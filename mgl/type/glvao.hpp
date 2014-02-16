@@ -10,6 +10,7 @@
 
 #include <utility>
 #include <type_traits>
+#include <tuple>
 #include <cassert>
 #include "gltraits.hpp"
 
@@ -79,7 +80,7 @@ struct gl_vao
     }
 
     /**
-     * \brief Returns the elements type.
+     * \brief Returns the elements type needed for the calls to gl_draws.
      * \return Returns the elements type.
      */
     GLenum elements_type() const
@@ -119,50 +120,15 @@ private:
     template<typename... Arg>
     void unpack(gl_types::id p_program_id, Arg&&... p_args)
     {
+        using std::tie;
         // Generate a new vao object and bind it :
         gl_object_vertexarrays::gl_gen(1, &m_id);
         bind();
         // Bind the attributes for each buffer
-        pass(bindBuffer(p_program_id, std::forward<Arg>(p_args))...);
+        gl_bind_buffers binder(p_program_id);
+        tie(m_elements_type, m_size) = binder.map(std::forward<Arg>(p_args)...);
         // Unbind the vao.
         unbind();
-    }
-
-    template<typename... Args>
-    void pass(Args&&...)
-    {}
-
-    // TODO : don't test if it is integral but if it is an attribute buffer.
-    template<typename T, typename B>
-    typename std::enable_if<!std::is_integral<T>::value>::type
-    bindBuffer(gl_types::id p_program_id, const gl_vector<T, B>& p_buffer)
-    {
-        p_buffer.bind();
-        gl_attribute_binder binder(p_program_id);
-        gl_bind_attributes<T>::map(binder);
-#ifndef MGL_NDEBUG
-        assert(m_size == 0 || m_size == p_buffer.size());
-#endif
-        m_size = p_buffer.size();
-    }
-
-    // TODO : same apply here
-    template<typename I, typename B>
-    typename std::enable_if<std::is_integral<I>::value>::type
-    bindBuffer(gl_types::id p_program_id, const gl_vector<I, B>& p_buffer)
-    {
-        // Bind the element buffer.
-        p_buffer.bind();
-        m_elements_type = gl_enum_from_type<I>::value;
-    }
-
-    template<typename T>
-    void
-    bindBuffer(gl_types::id p_program_id, const gl_instanced<T>& p_buffer)
-    {
-        p_buffer.bind();
-        gl_attribute_binder binder(p_program_id, p_buffer.get_divisor());
-        gl_bind_attributes<T>::map(binder);
     }
 
     // ================================================================ //

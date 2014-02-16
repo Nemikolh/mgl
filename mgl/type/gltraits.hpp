@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include "../glrequires.hpp"
 #include "glenum.hpp"
 #include "glshader.hpp"

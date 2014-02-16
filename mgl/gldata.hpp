@@ -100,17 +100,13 @@ struct in_impl;
  */
 #define NKH_ADAPT_TO_GL_ATTRIBUTES(NAMESPACE_SEQ, NAME, ATTRIBUTES)     \
         BOOST_FUSION_ADAPT_STRUCT(NAMESPACE_SEQ, NAME, ATTRIBUTES)      \
-        namespace nkh  {                                                \
-        namespace core {                                                \
-        namespace gl   {                                                \
+        namespace mgl  {                                                \
         namespace priv {                                                \
             struct is_gl_attributes<                                    \
             BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DECLARATION((0)NAMESPACE_SEQ) NAME>              \
             {                                                           \
                 static constexpr bool value = true;                     \
             };                                                          \
-        }                                                               \
-        }                                                               \
         }                                                               \
         }
 

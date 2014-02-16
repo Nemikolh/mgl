@@ -684,66 +684,6 @@ private:
     base_vector_type                    m_vector;
 };
 
-/**
- * \brief gl_instanced is the class turning on buffer data per instance
- */
-template<typename T>
-struct gl_instanced
-{
-    /**
-     * \brief Change the use of this buffer when given to a vao.
-     * \param p_buffer is the buffer that will be considered as an instanced data buffer.
-     * \return Returns the wrapper.
-     */
-    template<typename U>
-    friend gl_instanced<U> make_instanced(const gl_vector<U>& p_buffer);
-
-    // ================================================================ //
-    // ============================ METHODS =========================== //
-    // ================================================================ //
-
-    /**
-     * \brief Bind the instanced buffer.
-     */
-    inline void bind()
-    {
-        m_buffer.bind();
-    }
-
-    /**
-     * \brief Returns the divisor number.
-     * Currently returns just 1. That implies having
-     * the buffer being modified every one instance.
-     * \return Returns the divisor number
-     */
-    inline char get_divisor()
-    {
-        return 1;
-    }
-
-private:
-    // ================================================================ //
-    // =========================== CTOR/DTOR ========================== //
-    // ================================================================ //
-
-    gl_instanced(const gl_vector<T>& p_buffer)
-        : m_buffer(p_buffer)
-    {}
-
-    // ================================================================ //
-    // ============================= FIELDS =========================== //
-    // ================================================================ //
-
-    /** The buffer that will behave like instanced data. */
-    const gl_vector<T>& m_buffer;
-};
-
-template<typename T>
-gl_instanced<T> make_instanced(const gl_vector<T>& p_buffer)
-{
-    return gl_instanced<T>(p_buffer);
-}
-
 template<typename T, typename B>
 class gl_scope<gl_vector<T, B>>
 {

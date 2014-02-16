@@ -1,12 +1,12 @@
 /*
- * glmetabind.hpp
+ * glbindattrib.hpp
  *
  *  Created on: 19 juil. 2013
  *      Author: nemikolh
  */
 
-#ifndef GLMETABIND_HPP_
-#define GLMETABIND_HPP_
+#ifndef GLBINDATTRIB_HPP_
+#define GLBINDATTRIB_HPP_
 
 #include <boost/fusion/adapted/struct/define_struct.hpp>
 #include <boost/fusion/include/sequence.hpp>
@@ -89,7 +89,7 @@ namespace priv {
  *        throught the use of the meta programming language.
  * To use this functionnality, you must be using the macro defined
  * by the library :
- *      - NKH_DEFINE_GLATTRIBUTES
+ *      - MGL_DEFINE_GLATTRIBUTES
  *
  *
  *  For the binding simply make the following call :
@@ -121,4 +121,4 @@ struct gl_bind_attributes : public priv::bind_attributes<T, gl_attribute_binder>
 
 } /* namespace mgl */
 
-#endif /* GLMETABIND_HPP_ */
+#endif /* GLBINDATTRIB_HPP_ */

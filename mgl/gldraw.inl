@@ -5,7 +5,7 @@
  *      Author: nemikolh
  */
 
-#include "meta/glmetabind.hpp"
+#include "meta/glbindattrib.hpp"
 #include "type/gltraits.hpp"
 #include "glvao.hpp"
 #include "glprogram.hpp"

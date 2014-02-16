@@ -9,8 +9,9 @@
 #define GLTRAITS_HPP_
 
 #include <cstdint>
-#include "../glrequires.hpp"
 #include <memory>
+#include "../glrequires.hpp"
+#include "glenum.hpp"
 
 namespace mgl {
 
@@ -55,7 +56,7 @@ struct priv_gl_buffer<T, true>
  *      \endcode
  *
  * Or you can also create your own buffer type, but then you have
- * to explicitly specify it everytime you want to use it. For instance,
+ * to explicitly specify it every time you want to use it. For instance,
  * with the gl_vector, you do like so :
  *
  *      \code
@@ -71,86 +72,7 @@ struct gl_buffer_type : public priv::priv_gl_buffer<T>
 // -----------------------------------------------------------------------------------------------------------------------------------//
 
 /**
- * \class gl_enum_type defines enum types accordingly to C++ types.
- */
-template<typename T>
-struct gl_enum_type;
-
-/**
- * \class tuple_component_type is a MetaFunction to specify the gl value type of your tuple.
- *
- */
-template<typename T>
-struct tuple_component_type
-{
-    static constexpr GLenum value = gl_enum_type<typename T::value_type>::value;
-};
-
-/**
- * Partial specialization for C++ primitives types.
- */
-template<>
-struct gl_enum_type<std::int8_t>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_BYTE;
-};
-
-template<>
-struct gl_enum_type<std::uint8_t>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_UNSIGNED_BYTE;
-};
-
-template<>
-struct gl_enum_type<std::int16_t>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_SHORT;
-};
-
-template<>
-struct gl_enum_type<std::uint16_t>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_UNSIGNED_SHORT;
-};
-
-template<>
-struct gl_enum_type<std::int32_t>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_INT;
-};
-
-template<>
-struct gl_enum_type<std::uint32_t>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_UNSIGNED_INT;
-};
-
-template<>
-struct gl_enum_type<float>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_FLOAT;
-};
-
-template<>
-struct gl_enum_type<double>
-{
-    typedef GLenum          value_type;
-    static constexpr GLenum value = GL_DOUBLE;
-};
-
-
-// -----------------------------------------------------------------------------------------------------------------------------------//
-// -----------------------------------------------------------------------------------------------------------------------------------//
-
-/**
- * \class gl_types offers typedef for common opengl types.
+ * @brief gl_types offers typedef for opengl id and enum.
  */
 struct gl_types
 {

@@ -153,7 +153,7 @@ private:
     {
         // Bind the element buffer.
         p_buffer.bind();
-        m_elements_type = gl_enum_type<I>::value;
+        m_elements_type = gl_enum_from_type<I>::value;
     }
 
     template<typename T>

@@ -46,10 +46,6 @@ struct bind_buffers_helper
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    template<typename... Args>
-    void pass(Args&&...)
-    {}
-
     // Called only if the type T is a gl attribute
     template<typename T, typename B>
     typename std::enable_if<is_gl_attributes<T>::value>::type
@@ -150,11 +146,16 @@ struct gl_bind_buffers
     {
         //pass(bindBuffer(p_program_id, std::forward<Arg>(p_args))...);
         priv::bind_buffers_helper helper(m_program_id);
-        helper.pass(helper.bind_buffer(std::forward<T>(p_buffers))...);
+        pass(helper.bind_buffer(std::forward<T>(p_buffers))...);
         return std::make_pair(helper.m_elements_type, helper.m_size);
     }
 
 private:
+
+    template<typename... Args>
+    void pass(Args&&...)
+    {}
+
     // ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //

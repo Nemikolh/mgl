@@ -12,6 +12,7 @@
 #include <type_traits>
 #include "glvao.hpp"
 #include "../meta/gluniform.hpp"
+#include "gltraits.hpp"
 
 namespace mgl {
 
@@ -130,6 +131,7 @@ private:
 #       ifndef MGL_NDEBUG
         assert(m_program_id);
 #       endif
+        gl_object_program::gl_link(m_program_id);
     }
 
     // ================================================================ //

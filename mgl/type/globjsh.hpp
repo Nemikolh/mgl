@@ -1,5 +1,5 @@
 /*
- * glshader.hpp
+ * globjsh.hpp
  *
  *  Created on: 16 févr. 2014
  *      Author: nemikolh

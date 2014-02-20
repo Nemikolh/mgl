@@ -91,9 +91,9 @@ private:
  * @return Returns a clue for the automatic binding buffers facility.
  */
 template<typename T, typename B>
-typename std::enable_if<!priv::is_gl_attributes<T>::value, gl_simple_buffer<T, B>>::type
-make_buffer(const gl_vector<T, B>& p_buffer, const char* p_name)
+gl_simple_buffer<T, B> make_buffer(const gl_vector<T, B>& p_buffer, const char* p_name)
 {
+    static_assert(!priv::is_gl_attributes<T>::value, "T must be a single attribute data type (glm::vec3, float, ...)");
     return gl_simple_buffer<T, B>(p_buffer, p_name);
 }
 

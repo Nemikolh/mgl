@@ -610,9 +610,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1021828275" name="gldraw.inl" rcbsApplicability="disable" resourcePath="mgl/gldraw.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985.635587811">
-						<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985.635587811" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="Debug|external|log|core/reflect|client|memory|reflect|app|test|shader|mgl|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="gldraw.inl|glcontext.cpp|glutil.inl|shader/gltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>

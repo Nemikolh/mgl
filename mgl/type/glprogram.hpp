@@ -11,10 +11,7 @@
 #include <utility>
 #include <type_traits>
 #include "glvao.hpp"
-#include <glm/gtc/type_ptr.hpp>
-#include <boost/preprocessor/comparison/equal.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/control/expr_if.hpp>
+#include "../meta/gluniform.hpp"
 
 namespace mgl {
 
@@ -27,6 +24,12 @@ struct gl_program
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
+    /**
+     * @brief Default constructor.
+     */
+    gl_program()
+        : m_program_id(0)
+    {}
 
     // ================================================================ //
     // ============================ METHODS =========================== //
@@ -50,7 +53,7 @@ struct gl_program
      */
     gl_types::id id() const
     {
-        return 0;
+        return m_program_id;
     }
 
     /**
@@ -62,7 +65,7 @@ struct gl_program
      *      typedef \/\* your component type \*\/value_type;
      *  \endcode
      * This will compute the value as a simple division. The second solution is specializing
-     * the mlg::tuple_size meta function for your type.
+     * the mgl::tuple_size meta function for your type.
      * \param p_uniform is the uniform element to set.
      * \param p_valueToBind is the value desired.
      */
@@ -70,7 +73,7 @@ struct gl_program
     typename std::enable_if<is_vector<Data>::value>::type
     set(const Uniform& p_uniform, Data p_valueToBind)
     {
-        setVectorImpl(p_uniform, std::move(p_valueToBind));
+        priv::uniform_helper::glm_vector(p_uniform, p_valueToBind);
     }
 
     /**
@@ -90,7 +93,7 @@ struct gl_program
     typename std::enable_if<is_matrix<Data>::value>::type
     set(const Uniform& p_uniform, Data p_valueToBind)
     {
-        setMatrixImpl(p_uniform, std::move(p_valueToBind));
+        priv::uniform_helper::glm_matrix(p_uniform, std::move(p_valueToBind));
     }
 
     /**
@@ -124,83 +127,16 @@ private:
      */
     void ensure_linked()
     {
-
-    }
-
-    template<typename Uniform, typename Data>
-    typename std::enable_if<std::is_integral<typename Data::value_type>::value>::type
-    setVectorImpl(const Uniform& p_uniform, Data&& p_valueToBind)
-    {
-        // TODO use metabind function to make the appropriate glUniform call.
-        glcalli<tuple_size<Data>::value>::bindUniform(p_uniform.id(), std::move(p_valueToBind));
-    }
-
-    template<typename Uniform, typename Data>
-    typename std::enable_if<std::is_floating_point<typename Data::value_type>::value>::type
-    setVectorImpl(const Uniform& p_uniform, Data&& p_valueToBind)
-    {
-        glcallf<tuple_size<Data>::value>::bindUniform(p_uniform.id(), std::move(p_valueToBind));
-    }
-
-    template<typename Uniform, typename Data>
-    void
-    setMatrixImpl(const Uniform& p_uniform, Data&& p_valueToBind)
-    {
-        glcallf<tuple_size<Data>::value>::bindUniformMatrix(p_uniform.id(), std::move(p_valueToBind));
+#       ifndef MGL_NDEBUG
+        assert(m_program_id);
+#       endif
     }
 
     // ================================================================ //
-    // ============================ HELPERS =========================== //
+    // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    /* Implementation details. */
-    template<unsigned int TupleSize>
-    struct glcallf
-    {
-        template<typename Data>
-        inline static void bindUniform(gl_types::id, Data&& p_value);
-        template<typename Data>
-        inline static void bindUniformMatrix(gl_types::id, Data&& p_value);
-    };
-
-    /* Implementation details. */
-    template<unsigned int TupleSize>
-    struct glcalli
-    {
-        template<typename Data>
-        inline static void bindUniform(gl_types::id, Data&& p_value);
-    };
-
-#define NKH_GL_DEF_UNIFORM_CALL(tuple_size, element_type, matrix)  \
-    template<> \
-    struct BOOST_PP_CAT(glcall,element_type)<tuple_size> \
-    { \
-        template<typename Data> \
-        inline static void bindUniform(gl_types::id p_id, Data&& p_value)   \
-        {   \
-            BOOST_PP_CAT(glUniform,BOOST_PP_CAT(tuple_size,BOOST_PP_CAT(element_type,v)))(p_id, 1, glm::value_ptr(p_value)); \
-        } \
-        BOOST_PP_EXPR_IF(matrix,\
-        template<typename Data> \
-        inline static void bindUniformMatrix(gl_types::id p_id, Data&& p_value) \
-        { \
-            BOOST_PP_CAT(glUniformMatrix,BOOST_PP_CAT(tuple_size,BOOST_PP_CAT(element_type,v)))(p_id, 1, GL_FALSE, glm::value_ptr(p_value)); \
-        } \
-        ) \
-    }
-
-    /* Implementation details. */
-    NKH_GL_DEF_UNIFORM_CALL(4,f,1);
-    NKH_GL_DEF_UNIFORM_CALL(3,f,1);
-    NKH_GL_DEF_UNIFORM_CALL(2,f,1);
-
-    /* Implementation details. */
-    NKH_GL_DEF_UNIFORM_CALL(4,i,0);
-    NKH_GL_DEF_UNIFORM_CALL(3,i,0);
-    NKH_GL_DEF_UNIFORM_CALL(2,i,0);
-    NKH_GL_DEF_UNIFORM_CALL(1,i,0);
-
-#undef NKH_GL_DEF_UNIFORM_CALL
+    gl_types::id m_program_id;
 };
 
 

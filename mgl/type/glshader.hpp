@@ -30,12 +30,12 @@ struct gl_shader
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    gl_shader()
+    gl_shader() noexcept
         : m_shader_id(0)
         , m_shader_type(shader_type::VERTEX_SHADER)
     {}
 
-    gl_shader(shader_type p_type)
+    gl_shader(shader_type p_type) noexcept
         : m_shader_id(0)
         , m_shader_type(p_type)
     {}
@@ -50,7 +50,7 @@ struct gl_shader
      * @brief Move constructor.
      * @param p_rhs is the temporary moved here.
      */
-    gl_shader(gl_shader&& p_rhs)
+    gl_shader(gl_shader&& p_rhs) noexcept
         : m_shader_id(p_rhs.m_shader_id)
         , m_shader_type(p_rhs.m_shader_type)
     {
@@ -105,6 +105,11 @@ struct gl_shader
         load_src(c_str);
     }
 
+    gl_types::id id() const
+    {
+        return m_shader_id;
+    }
+
 private:
     // ================================================================ //
     // ============================ METHODS =========================== //
@@ -122,7 +127,7 @@ private:
             gl_object_shader::gl_delete(1, &m_shader_id);
     }
 
-    GLenum convert_to_en(shader_type p_tag)
+    GLenum convert_to_en(shader_type p_tag) const
     {
         switch (p_tag) {
             case shader_type::VERTEX_SHADER:

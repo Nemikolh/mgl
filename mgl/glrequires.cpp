@@ -7,6 +7,7 @@
 
 
 #include "glrequires.hpp"
+#include "glexceptions.hpp"
 
 #include <iostream>
 #include <string>

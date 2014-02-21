@@ -5,8 +5,8 @@
  *      Author: nemikolh
  */
 
-#ifndef GLSHADER_HPP_
-#define GLSHADER_HPP_
+#ifndef GLOBJSH_HPP_
+#define GLOBJSH_HPP_
 
 namespace mgl {
 
@@ -58,7 +58,7 @@ struct gl_object_program
      */
     static inline bool gl_link_status(GLuint p_program_id)
     {
-        GLuint test;
+        GLint test;
         glGetProgramiv(p_program_id, GL_LINK_STATUS, &test);
         return test == GL_TRUE;
     }
@@ -66,7 +66,7 @@ struct gl_object_program
     static inline std::string gl_info_log(GLuint p_id)
     {
         std::string log;
-        GLuint length;
+        GLint length;
         // ------------------------- DECLARE ------------------------ //
 
         // Retrieve the length of the log.
@@ -133,7 +133,7 @@ struct gl_object_shader
      */
     static inline bool gl_compile_status(GLuint p_id)
     {
-        GLuint test;
+        GLint test;
         glGetShaderiv(p_id, GL_COMPILE_STATUS, &test);
         return test == GL_TRUE;
     }
@@ -146,7 +146,7 @@ struct gl_object_shader
     static inline std::string gl_info_log(GLuint p_id)
     {
         std::string log;
-        GLuint length;
+        GLint length;
         // ------------------------- DECLARE ------------------------ //
 
         // Retrieve the length of the log.
@@ -168,4 +168,4 @@ struct gl_object_shader
 
 
 
-#endif /* GLSHADER_HPP_ */
+#endif /* GLOBJSH_HPP_ */

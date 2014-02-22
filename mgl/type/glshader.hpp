@@ -9,6 +9,7 @@
 #define GL_TYPE_SHADER_HPP_
 
 #include <boost/noncopyable.hpp>
+#include <cassert>
 #include "gltraits.hpp"
 #include "../glexceptions.hpp"
 
@@ -130,16 +131,42 @@ struct gl_shader
         load_src(c_str);
     }
 
+    /**
+     * @brief Reset this object to point to a non-valid shader.
+     */
+    void release()
+    {
+        if(m_shader_id && (*m_ref_count) == 1)
+        {
+            gl_object_shader::gl_delete(1, &m_shader_id);
+            delete m_ref_count;
+        }
+        decr_ref_count();
+        m_shader_id = 0;
+        m_ref_count = nullptr;
+    }
+
+    /**
+     * @brief Returns the shader's id.
+     * @return Returns the shader's id.
+     */
     gl_types::id id() const
     {
         return m_shader_id;
     }
 
+    /**
+     * @brief Returns the shader's type.
+     * @return Returns the shader's type.
+     */
     shader_type type() const
     {
         return m_shader_type;
     }
 
+    /**
+     * @brief The gl_shader can be converted to bool and is true if it does correspond to a real shader.
+     */
     explicit operator bool() const
     {
         return m_ref_count && m_shader_id;
@@ -158,13 +185,6 @@ private:
             m_ref_count = new unsigned int;
             *m_ref_count = 1;
         }
-    }
-
-    void release()
-    {
-        if(m_shader_id && (*m_ref_count) == 1)
-            gl_object_shader::gl_delete(1, &m_shader_id);
-        decr_ref_count();
     }
 
     inline void incr_ref_count()

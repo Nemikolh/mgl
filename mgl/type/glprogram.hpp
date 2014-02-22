@@ -62,14 +62,6 @@ struct gl_program
         gl_object_program::gl_attach_shader(m_program_id, p_rhs.id());
     }
 
-    gl_shader get(shader_type p_type) const
-    {
-#       ifndef MGL_NDEBUG
-        assert(p_type != shader_type::Count);
-#       endif
-        return m_attached_shaders[static_cast<std::size_t>(p_type)];
-    }
-
     /**
      * \brief This method allows to create a vao based on this program.
      * \param p_buffers is the buffers that are gonna be part of this vao.
@@ -78,8 +70,39 @@ struct gl_program
     template<typename... T>
     gl_vao make_vao(T&&... p_buffers)
     {
-        ensure_linked();
         return gl_vao(id(), std::forward<T>(p_buffers)...);
+    }
+
+    /**
+     * \brief Perform the linking of the program if note already done.
+     */
+    void link()
+    {
+#       ifndef MGL_NDEBUG
+        assert(m_program_id);
+#       endif
+        if(!gl_object_program::gl_link_status(m_program_id))
+        {
+            gl_object_program::gl_link(m_program_id);
+            if(!gl_object_program::gl_link_status(m_program_id))
+                throw gl_link_error(gl_object_program::gl_info_log(m_program_id));
+            // Link is successfull we can now detach the shaders as recommended here: https://www.opengl.org/wiki/Shader_Compilation.
+            else
+                detach_shaders();
+        }
+    }
+
+    /**
+     * @brief Detach all the shaders attached to this program.
+     */
+    void detach_shaders()
+    {
+        for(auto &shader : m_attached_shaders)
+            if(shader)
+            {
+                gl_object_program::gl_detach_shader(m_program_id, shader.id());
+                shader.release();
+            }
     }
 
     /**
@@ -152,21 +175,6 @@ struct gl_program
     }
 
 private:
-
-    // ================================================================ //
-    // ============================ METHODS =========================== //
-    // ================================================================ //
-
-    /**
-     * \brief Perform the linking of the program if note already done.
-     */
-    void ensure_linked()
-    {
-#       ifndef MGL_NDEBUG
-        assert(m_program_id);
-#       endif
-        gl_object_program::gl_link(m_program_id);
-    }
 
     // ================================================================ //
     // ============================= FIELDS =========================== //

@@ -42,6 +42,11 @@ struct gl_object_program
         glCheck(glAttachShader(p_program_id, p_shader_id));
     }
 
+    static inline void gl_detach_shader(GLuint p_program_id, GLuint p_shader_id)
+    {
+        glCheck(glDetachShader(p_program_id, p_shader_id));
+    }
+
     /**
      * @brief Link the passed program.
      * @param p_program_id is the id of the program to link to.

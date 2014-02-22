@@ -107,26 +107,52 @@ public:
     const char* what() const noexcept override { return "gl_buffer_not_mapped"; }
 };
 
+class gl_exception_specific : public gl_exception
+{
+public:
+    gl_exception_specific(const char* p_msg, const char* p_what)
+        : what_()
+    {
+        what_ = p_msg;
+        what_ += p_what;
+    }
+
+    gl_exception_specific(std::string p_what)
+        : gl_exception_specific(p_what.c_str())
+    {}
+
+    const char* what () const noexcept override { return what_.c_str(); }
+
+private:
+    std::string what_;
+};
+
 /**
  * @brief Exception thrown when a compile error has occured for a shader.
  */
-class gl_compile_error : public gl_exception
+class gl_compile_error : public gl_exception_specific
 {
 public:
     gl_compile_error(const char* p_what)
-        : what_()
-    {
-        what_ = "compilation failed at line ";
-        what_ += p_what;
-    }
+        : gl_exception_specific("compilation failed at line ", p_what)
+    {}
 
     gl_compile_error(std::string p_what)
         : gl_compile_error(p_what.c_str())
     {}
 
-    const char* what () const noexcept override { return what_.c_str(); }
-private:
-    std::string what_;
+};
+
+class gl_link_error : public gl_exception_specific
+{
+public:
+    gl_link_error(const char* p_what)
+        : gl_exception_specific("link failed at line ", p_what)
+    {}
+
+    gl_link_error(std::string p_what)
+        : gl_link_error(p_what.c_str())
+    {}
 };
 
 }  /* namespace mgl */

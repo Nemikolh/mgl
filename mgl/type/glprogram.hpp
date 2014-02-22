@@ -10,6 +10,7 @@
 
 #include <utility>
 #include <type_traits>
+#include <array>
 #include "glvao.hpp"
 #include "../meta/gluniform.hpp"
 #include "gltraits.hpp"
@@ -28,13 +29,46 @@ struct gl_program
     /**
      * @brief Default constructor.
      */
-    gl_program()
+    gl_program() noexcept
         : m_program_id(0)
     {}
+
+    /**
+     * @brief Copy isn't allowed.
+     */
+    gl_program(const gl_program& p_rhs) = delete;
+
+    /**
+     * @brief Move constructor.
+     * @param p_rhs is the temporary.
+     */
+    gl_program(gl_program&& p_rhs) noexcept
+        : m_program_id(p_rhs.m_program_id)
+    {
+        p_rhs.m_program_id = 0;
+    }
 
     // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
+
+    /**
+     * @brief Attach the passed shader to this program.
+     * @param p_rhs is the shader to attach
+     */
+    void attach(const gl_shader& p_rhs) const
+    {
+        m_attached_shaders[static_cast<std::size_t>(p_rhs.type())] = p_rhs;
+        gl_object_program::gl_attach_shader(m_program_id, p_rhs.id());
+    }
+
+    gl_shader get(shader_type p_type) const
+    {
+#       ifndef MGL_NDEBUG
+        assert(p_type != shader_type::Count);
+#       endif
+        return m_attached_shaders[static_cast<std::size_t>(p_type)];
+    }
 
     /**
      * \brief This method allows to create a vao based on this program.
@@ -139,6 +173,7 @@ private:
     // ================================================================ //
 
     gl_types::id m_program_id;
+    gl_shader m_attached_shaders[static_cast<std::size_t>(shader_type::Count)];
 };
 
 

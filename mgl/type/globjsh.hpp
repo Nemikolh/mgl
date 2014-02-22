@@ -33,6 +33,15 @@ struct gl_object_program
     }
 
     /**
+     * @brief Call glUseProgram on the passed program.
+     * @param p_id is the id of the program.
+     */
+    static inline void gl_use(GLuint p_id)
+    {
+        glCheck(glUseProgram(p_id));
+    }
+
+    /**
      * @brief Attach the passed shader to the program.
      * @param p_program_id is the id of the program.
      * @param p_shader_id is the id of the shader.

@@ -53,27 +53,6 @@ struct gl_program
     // ================================================================ //
 
     /**
-     * @brief Attach the passed shader to this program.
-     * @param p_rhs is the shader to attach
-     */
-    void attach(const gl_shader& p_rhs) const
-    {
-        m_attached_shaders[static_cast<std::size_t>(p_rhs.type())] = p_rhs;
-        gl_object_program::gl_attach_shader(m_program_id, p_rhs.id());
-    }
-
-    /**
-     * \brief This method allows to create a vao based on this program.
-     * \param p_buffers is the buffers that are gonna be part of this vao.
-     * \return Returns the created vao.
-     */
-    template<typename... T>
-    gl_vao make_vao(T&&... p_buffers)
-    {
-        return gl_vao(id(), std::forward<T>(p_buffers)...);
-    }
-
-    /**
      * \brief Perform the linking of the program if note already done.
      */
     void link()
@@ -93,6 +72,24 @@ struct gl_program
     }
 
     /**
+     * @brief Call glUseProgram on this program.
+     */
+    void use() const
+    {
+        gl_object_program::gl_use(m_program_id);
+    }
+
+    /**
+     * @brief Attach the passed shader to this program.
+     * @param p_rhs is the shader to attach
+     */
+    void attach(const gl_shader& p_rhs) const
+    {
+        m_attached_shaders[static_cast<std::size_t>(p_rhs.type())] = p_rhs;
+        gl_object_program::gl_attach_shader(m_program_id, p_rhs.id());
+    }
+
+    /**
      * @brief Detach all the shaders attached to this program.
      */
     void detach_shaders()
@@ -106,12 +103,14 @@ struct gl_program
     }
 
     /**
-     * \brief Returns the id of this program.
-     * \return Returns the opengl id.
+     * \brief This method allows to create a vao based on this program.
+     * \param p_buffers is the buffers that are gonna be part of this vao.
+     * \return Returns the created vao.
      */
-    gl_types::id id() const
+    template<typename... T>
+    gl_vao make_vao(T&&... p_buffers)
     {
-        return m_program_id;
+        return gl_vao(id(), std::forward<T>(p_buffers)...);
     }
 
     /**
@@ -172,6 +171,15 @@ struct gl_program
     set(const Uniform& p_uniform, Data p_valueToBind)
     {
         // TODO
+    }
+
+    /**
+     * \brief Returns the id of this program.
+     * \return Returns the opengl id.
+     */
+    gl_types::id id() const
+    {
+        return m_program_id;
     }
 
 private:

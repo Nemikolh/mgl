@@ -11,6 +11,7 @@
 #include <utility>
 #include <type_traits>
 #include <tuple>
+#include <numeric>
 
 #include "glbindattrib.hpp"
 
@@ -40,6 +41,7 @@ struct bind_buffers_helper
         : m_program_id{p_program_id}
         , m_elements_type{0}
         , m_size{0}
+        , m_size_instanced{std::numeric_limits<std::size_t>::max()}
     {}
 
     // ================================================================ //
@@ -93,10 +95,7 @@ struct bind_buffers_helper
         p_wrapper.bind();
         gl_attribute_binder binder(m_program_id, p_wrapper.get_divisor());
         gl_bind_attributes<T>::map(binder);
-#ifndef MGL_NDEBUG
-        assert(m_size == 0 || m_size == p_wrapper.buffer().buffer().size());
-#endif
-        m_size = p_wrapper.buffer().buffer().size();
+        m_size_instanced = min(m_size_instanced, p_wrapper.size());
     }
 
     // Called for simple buffers.
@@ -106,10 +105,7 @@ struct bind_buffers_helper
         p_wrapper.bind();
         gl_attribute_binder binder(m_program_id);
         binder(p_wrapper.buffer().attribute_name(), tuple_size<T>::value, 0, sizeof(T), tuple_component_type<T>::value);
-        #ifndef MGL_NDEBUG
-                assert(m_size == 0 || m_size == p_wrapper.buffer().buffer().size());
-        #endif
-        m_size = p_wrapper.buffer().buffer().size();
+        m_size_instanced = min(m_size_instanced, p_wrapper.size());
     }
 
     // ================================================================ //
@@ -119,6 +115,7 @@ struct bind_buffers_helper
     gl_types::id m_program_id;
     gl_types::en m_elements_type;
     std::size_t  m_size;
+    std::size_t  m_size_instanced;
 };
 
 }  /* namespace priv */
@@ -142,12 +139,12 @@ struct gl_bind_buffers
 
     template<typename... T>
     inline
-    std::pair<gl_types::id, std::size_t> map(T&&... p_buffers)
+    std::tuple<gl_types::id, std::size_t, std::size_t> map(T&&... p_buffers)
     {
         //pass(bindBuffer(p_program_id, std::forward<Arg>(p_args))...);
         priv::bind_buffers_helper helper(m_program_id);
         pass(helper.bind_buffer(std::forward<T>(p_buffers))...);
-        return std::make_pair(helper.m_elements_type, helper.m_size);
+        return std::make_tuple(helper.m_elements_type, helper.m_size, helper.m_size_instanced);
     }
 
 private:

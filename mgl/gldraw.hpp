@@ -33,12 +33,14 @@ struct gl_program;
  * \param p_vao holds both the object data and the per instance data.
  * \param p_primcount is the number of instance to draw.
  */
+template<size_t dummy = 0>
 void gl_draw_instanced(const gl_vao& p_vao, std::size_t p_primcount);
 
 /**
  * \brief Draw the passed vao.
  * \param p_object is the vao to draw.
  */
+template<size_t dummy = 0>
 void gl_draw(const gl_vao& p_vao);
 
 /**
@@ -63,6 +65,6 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices);
 
 } /* namespace mgl */
 
-#include "gldraw.hpp"
+#include "gldraw.inl"
 
 #endif /* GLUTIL_HPP_ */

@@ -16,14 +16,18 @@ namespace mgl {
 /*
  * Implementation details.
  */
+template<size_t dummy>
 void gl_draw_instanced(const gl_vao& p_vao, std::size_t p_primcount)
 {
+#   ifndef MGL_NDEBUG
+    assert(p_vao.size_instanced() == 0 || p_vao.size_instanced() >= p_primcount);
+#   endif
     // ------------------------- DECLARE ------------------------ //
 
     // Bind the  vao.
     p_vao.bind();
 
-    // TODO perform the check on primcount in debug mode.
+    // Call to the draw.
     glDrawElementsInstanced(GL_TRIANGLES, p_vao.size(), p_vao.elements_type(), 0, p_primcount);
 }
 
@@ -41,6 +45,9 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices, const 
 
     // Loop overs all the attributes of T to bind them to the program.
     gl_bind_attributes<T>::map(gl_attribute_binder{p_program.id()});
+
+    // Use the passed program
+    p_program.use();
 
     // Call to the draw
     gl_draw(p_data, p_indices);
@@ -64,6 +71,7 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices)
 /*
  * Implementation details
  */
+template<size_t dummy>
 void gl_draw(const gl_vao& p_vao)
 {
     // ------------------------- DECLARE ------------------------ //

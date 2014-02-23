@@ -152,6 +152,14 @@ public:
     }
 
     /**
+     * @brief Unbind the buffer.
+     */
+    void unbind() const
+    {
+        gl_object_buffer<Buff>::gl_bind(0);
+    }
+
+    /**
      * @brief This function allows to know the OpenGL mapping state of this buffer.
      * @return Return true if the vector is mapped.
      */

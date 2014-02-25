@@ -37,7 +37,7 @@ namespace priv {
         typedef typename boost::mpl::next<N>::type                          next_t;
         typedef boost::fusion::extension::struct_member_name<Seq, N::value> name_t;
 
-        constexpr static inline void map(const AttributeBinder & sh, std::size_t byte_offset)
+        constexpr static inline void map(const AttributeBinder & sh)
         {
             static_assert(tuple_size<current_t>::value < 5,"The tuple size must be either 1, 2, 3 or 4. GL_BGRA is not currently supported.");
             // ------------------------- DECLARE ------------------------ //
@@ -45,12 +45,12 @@ namespace priv {
             sh(
                 name_t::call(),                         // attribute name
                 tuple_size<current_t>::value,           // number of component
-                byte_offset,                            // offsetof(Seq, name_t)
+                offset_at<Seq, N::value>::value,        // offsetof(Seq, name_t) conceptually
                 sizeof(Seq),                            // stride
                 tuple_component_type<current_t>::value  // deduce
             );
 
-            bind_Iter<Seq, AttributeBinder, next_t>::map(sh, byte_offset + sizeof(current_t));
+            bind_Iter<Seq, AttributeBinder, next_t>::map(sh);
         }
     };
 
@@ -78,7 +78,7 @@ namespace priv {
         typedef bind_attributes<Seq, AttributeBinder> type;
         constexpr static inline void map(const AttributeBinder & sh)
         {
-            bind_first<Seq, AttributeBinder>::map(sh, 0);
+            bind_first<Seq, AttributeBinder>::map(sh);
         }
     };
 

@@ -33,8 +33,10 @@ def is_not_system(element):
     return not element[0]
 
 # List the files Recursive function
-def list_files(current_element, guard, map_name_place):
-    output_list = []
+def list_files(current_element, guard, map_name_place, output_list):
+    output_list.append(current_element)
+    index = output_list.index(current_element)
+    map_name_place[get_name(current_element)] = index
     file_path = current_element[2]
     with open(file_path) as content:
         for line in content:
@@ -44,19 +46,21 @@ def list_files(current_element, guard, map_name_place):
                 if get_name(element) in map_name_place:
                     index = map_name_place[get_name(element)]
                 else:
-                    output_list.append(element)
-                    index = output_list.index(element)
-                    map_name_place[get_name(element)] = index
                     if is_not_system(element):
-                        child_list = list_files(element, guard, map_name_place)
-                        output_list += child_list
-                current_element[3].append(index+1)
-    return output_list
+                        list_files(element, guard, map_name_place, output_list)
+                        index = output_list.index(element)
+                    else:
+                        output_list.append(element)
+                        index = output_list.index(element)
+                        map_name_place[get_name(element)] = index
+                current_element[3].append(index)
 
 # Top function that is based on list_files
 def find_includes(file_path):
     root = (False, 0, file_path, [])
-    return [root] + list_files(root, '#include', {})
+    output_list = []
+    list_files(root, '#include', {}, output_list)
+    return output_list
 
 # Generate dot
 def generate_dot(root, table, show_system, is_lr_orientation):
@@ -64,14 +68,12 @@ def generate_dot(root, table, show_system, is_lr_orientation):
     if is_lr_orientation:
         output += "rankdir=LR; \n"
     output += 'root [shape=box fontsize=15 color=blue label="' + os.path.basename(root) + '"];\n'
-    i = 0
-    for el in table:
+    for i in range(0, len(table)):
+        el = table[i]
         el_id = get_node_name(i)
-        i += 1
         edges = link_to_neighbors(el, i, show_system)
         if edges != '':
             output += edges
-            output += "root -> " + el_id + ";\n"
     return output + "\n}"
 
 # Link node to neighbors
@@ -79,7 +81,9 @@ def link_to_neighbors(element, el_id, show_system):
     # Extract information from element
     is_system, nb_included, path, neighbors = element
     # Node Aspect
-    output = get_node_name(el_id) + node_aspect(is_system, path)
+    output = ''
+    if el_id > 0:
+        output = get_node_name(el_id) + node_aspect(is_system, path)
     if is_system:
         if show_system:
             return output
@@ -91,7 +95,9 @@ def link_to_neighbors(element, el_id, show_system):
 
 # Generate name for node
 def get_node_name(i):
-    return "n" + str(i);
+    if i == 0:
+        return "root"
+    return "n" + str(i)
 
 # Return the visual aspect for the node
 def node_aspect(is_filled, node_name):
@@ -107,52 +113,7 @@ def node_aspect(is_filled, node_name):
         fontsize = str(15)
     return ' [shape=box fontsize='+ fontsize +' label="' + name + '" ' + style +  ' color="' + color + '"];\n'
 
-# Old version of generate_dot_aux
-def generate_dot_aux_old(element, el_id, show_system):
-    is_system, path = element
-    if is_system is False:
-        name = os.path.basename(path)
-        color = 'red'
-        style = ''
-        fontsize = str(15)
-    else:
-        name = path
-        color = '.7 .3 1.0'
-        style = 'style=filled'
-        fontsize = str(14)
-    output = el_id + ' [shape=box fontsize='+ fontsize +' label="' + name + '" ' + style +  ' color="' + color + '"];\n'
-    if is_system is True:
-        if show_system:
-            return output
-        else:
-            return ''
     
-    table = find_includes(path)
-    i = 0
-    for child in table:
-        child_id = el_id + "c" + str(i) 
-        i += 1
-        child_tree = generate_dot_aux_old(child, child_id, show_system)
-        if child_tree != '':
-            output += child_tree
-            output += el_id + " -> " + child_id + ";\n"
-    return output
-
-# Old version of generate_dot_aux
-def generate_dot_old(root, table, show_system, is_lr_orientation):
-    output = "digraph graphname {\n"
-    if is_lr_orientation:
-        output += "rankdir=LR; \n"
-    output += 'root [shape=box fontsize=15 color=blue label="' + os.path.basename(root) + '"];\n'
-    i = 0
-    for el in table:
-        el_id = "d" + str(i)
-        i += 1
-        tree = generate_dot_aux_old(el, el_id, show_system)
-        if tree != '':
-            output += tree
-            output += "root -> " + el_id + ";\n"
-    return output + "\n}"
 
 ## main function
 def main():
@@ -169,9 +130,6 @@ def main():
     
     # Convert it to dot format.
     content_dot = generate_dot(input_file, table, args.show_system, args.is_lr_orientation)
-    print table
-    print content_dot
-    return
     
     # Creating temp files    
     fd_dot, output_dot = tempfile.mkstemp()

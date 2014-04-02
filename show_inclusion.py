@@ -162,7 +162,6 @@ def main():
     
     # Then we look for includes.
     table = find_includes(args.input_file, args.show_system)
-    print table
     
     # Convert it to dot format.
     content_dot = generate_dot(input_file, table, args.show_system, args.is_lr_orientation)

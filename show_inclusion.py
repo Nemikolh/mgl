@@ -16,15 +16,35 @@ parser.add_argument('-d', '--dot-parser', dest='dotpa', help='The dot parser', d
 parser.add_argument('-s', '--show-system', dest='show_system', help='If this parameter is set then the system nodes are shown', action='store_true')
 parser.add_argument('-LRO', '--LR-orientation', dest='is_lr_orientation', help='If this parameter is set then the graph is oriented left to right istead of up to down', action='store_true')
 
+# Class to have a ref on an integer
+class IntRef:
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return str(self.value)
+    def __repr__(self):
+        return str(self.value)
+
+#--------------------------------------------------------------------------------------------------#
+# Top function that is based on list_files
+def find_includes(file_path, show_system):
+    root = (False, IntRef(0), file_path, [])
+    output_list = []
+    list_files(root, '#include', {}, output_list, show_system)
+    return output_list
+
 # Auxiliary function to filter between system includes and non-system includes
 def extract_file(s, current_folder):
     if s.startswith("<") and s.endswith(">"):
-        return (True, 0, s, [])
+        return (True, IntRef(0), s, [])
     path = s.strip('"')
     if path.startswith("/"):
-        return (False, 0, current_folder + path, [])
+        return (False, IntRef(0), current_folder + path, [])
     else:
-        return (False, 0, current_folder + '/' + path, [])
+        return (False, IntRef(0), current_folder + '/' + path, [])
+
+def is_not_commented(line):
+    return not line.strip().startswith('//')
 
 def get_name(element):
     return os.path.basename(element[2])
@@ -32,8 +52,11 @@ def get_name(element):
 def is_not_system(element):
     return not element[0]
 
+def rank(element):
+    return element[1]
+
 # List the files Recursive function
-def list_files(current_element, guard, map_name_place, output_list):
+def list_files(current_element, guard, map_name_place, output_list, show_system):
     output_list.append(current_element)
     index = output_list.index(current_element)
     map_name_place[get_name(current_element)] = index
@@ -41,27 +64,25 @@ def list_files(current_element, guard, map_name_place, output_list):
     with open(file_path) as content:
         for line in content:
             pos = line.find(guard)
-            if pos != -1:
+            if pos != -1 and is_not_commented(line):
                 element = extract_file(line[pos + len(guard):].strip(), os.path.dirname(file_path))
+                rank(element).value = rank(current_element).value + 1
                 if get_name(element) in map_name_place:
                     index = map_name_place[get_name(element)]
                 else:
                     if is_not_system(element):
-                        list_files(element, guard, map_name_place, output_list)
+                        list_files(element, guard, map_name_place, output_list, show_system)
                         index = output_list.index(element)
                     else:
                         output_list.append(element)
                         index = output_list.index(element)
                         map_name_place[get_name(element)] = index
-                current_element[3].append(index)
+                if show_system or is_not_system(element):
+                    current_element[3].append(index)
 
-# Top function that is based on list_files
-def find_includes(file_path):
-    root = (False, 0, file_path, [])
-    output_list = []
-    list_files(root, '#include', {}, output_list)
-    return output_list
 
+
+#--------------------------------------------------------------------------------------------------#
 # Generate dot
 def generate_dot(root, table, show_system, is_lr_orientation):
     output = "digraph graphname {\n"
@@ -114,8 +135,8 @@ def node_aspect(is_filled, node_name):
     return ' [shape=box fontsize='+ fontsize +' label="' + name + '" ' + style +  ' color="' + color + '"];\n'
 
     
-
-## main function
+#--------------------------------------------------------------------------------------------------#
+# main function
 def main():
     args = parser.parse_args()
     input_file = args.input_file
@@ -126,7 +147,8 @@ def main():
         return
     
     # Then we look for includes.
-    table = find_includes(args.input_file)
+    table = find_includes(args.input_file, args.show_system)
+    print table
     
     # Convert it to dot format.
     content_dot = generate_dot(input_file, table, args.show_system, args.is_lr_orientation)

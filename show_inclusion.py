@@ -95,6 +95,8 @@ def generate_dot(root, table, show_system, is_lr_orientation):
         edges = link_to_neighbors(el, i, show_system)
         if edges != '':
             output += edges
+    # Add layers:
+    output += define_layers(table)
     return output + "\n}"
 
 # Link node to neighbors
@@ -119,6 +121,18 @@ def get_node_name(i):
     if i == 0:
         return "root"
     return "n" + str(i)
+
+# Define the layers.
+def define_layers(table):
+    map_ = {}
+    for i in range(0, len(table)):
+        element = table[i]
+        r = rank(element).value
+        if r in map_:
+            map_[r].append(get_node_name(i))
+        else:
+            map_[r] = [get_node_name(i)]
+    return reduce(lambda x,y: x + y, map(lambda l: '{rank = same; ' + reduce(lambda x,y: x + ' ' + y, l) + '}\n' , map_.values()))
 
 # Return the visual aspect for the node
 def node_aspect(is_filled, node_name):

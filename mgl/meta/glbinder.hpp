@@ -36,10 +36,10 @@ struct gl_attribute_binder
                     std::size_t     p_stride,
                     GLenum          p_component_type)
     {
-        gl_types::id attribute_id;
+        GLint attribute_id;
         // ------------------------- DECLARE ------------------------ //
 
-        attribute_id = glGetAttribLocation(&m_program_id, p_attribute_name);
+        attribute_id = glGetAttribLocation(m_program_id, p_attribute_name);
 
         // The attribute id can -1 if the attribute is not used inside the shader
         // or if the attribute start with the reserved prefix "gl_"

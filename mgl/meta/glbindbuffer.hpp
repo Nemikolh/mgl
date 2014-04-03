@@ -15,17 +15,9 @@
 #include <algorithm>
 
 #include "glbindattrib.hpp"
+#include "glinstanced.hpp"
 
 namespace mgl {
-
-template<typename T, typename B>
-class gl_vector<T, B>;
-
-template<typename T, typename B>
-class gl_simple_buffer<T, B>;
-
-template<typename T>
-class gl_instanced<T>;
 
 namespace priv {
 

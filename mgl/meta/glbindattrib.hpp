@@ -18,7 +18,6 @@
 #include <boost/mpl/arithmetic.hpp>
 #include <boost/mpl/sizeof.hpp>
 
-#include "../glrequires.hpp"
 #include "glbinder.hpp"
 #include "../glmhelper.hpp"
 

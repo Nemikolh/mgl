@@ -12,8 +12,9 @@
 #include <type_traits>
 #include <array>
 #include "glvao.hpp"
+#include "glshader.hpp"
+#include "../glexceptions.hpp"
 #include "../meta/gluniform.hpp"
-#include "gltraits.hpp"
 
 namespace mgl {
 
@@ -83,7 +84,7 @@ struct gl_program
      * @brief Attach the passed shader to this program.
      * @param p_rhs is the shader to attach
      */
-    void attach(const gl_shader& p_rhs) const
+    void attach(const gl_shader& p_rhs)
     {
         m_attached_shaders[static_cast<std::size_t>(p_rhs.type())] = p_rhs;
         gl_object_program::gl_attach_shader(m_program_id, p_rhs.id());

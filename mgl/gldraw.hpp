@@ -8,15 +8,9 @@
 #ifndef GLUTIL_HPP_
 #define GLUTIL_HPP_
 
-#include "gldata.hpp"
-#include <type_traits>
+#include "glfwd.hpp"
 
 namespace mgl {
-
-struct gl_vao;
-template<typename T>
-class gl_vector;
-struct gl_program;
 
 /**
  * \brief Draw n instance of an object.
@@ -28,7 +22,7 @@ struct gl_program;
  * will be less than the minimum size of the buffers marked as
  * instanced.
  * Note :
- *  - Only if NKH_DEBUG is active you'll get a check on primcount,
+ *  - Only if MGL_DEBUG is active you'll get a check on primcount,
  *    otherwise you need to provide that parameter carefully.
  * \param p_vao holds both the object data and the per instance data.
  * \param p_primcount is the number of instance to draw.

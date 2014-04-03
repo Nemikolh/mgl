@@ -13,7 +13,7 @@
 #include <tuple>
 #include <cassert>
 #include "gltraits.hpp"
-
+#include "../meta/glbindbuffer.hpp"
 
 namespace mgl {
 

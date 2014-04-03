@@ -8,7 +8,6 @@
 #ifndef GL_TYPE_SHADER_HPP_
 #define GL_TYPE_SHADER_HPP_
 
-#include <boost/noncopyable.hpp>
 #include <cassert>
 #include "gltraits.hpp"
 #include "../glexceptions.hpp"

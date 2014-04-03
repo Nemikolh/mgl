@@ -4,8 +4,8 @@
 #include <cxxtest/TestSuite.h>
 #include <SFML/Graphics.hpp>
 
-#include "../mgl/glvector.hpp"
 #include "../mgl/glrequires.hpp"
+#include "../mgl/glvector.hpp"
 #include "../mgl/type/glshader.hpp"
 
 using namespace mgl;

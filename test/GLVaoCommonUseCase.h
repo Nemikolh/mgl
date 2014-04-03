@@ -2,6 +2,8 @@
 #define GLVAOCOMMONUSECASE_H_
 
 #include <cxxtest/TestSuite.h>
+#include "../mgl/glrequires.hpp"
+#include "../mgl/gldraw.hpp"
 
 class GLVaoCommonUseCase : public CxxTest::TestSuite
 {

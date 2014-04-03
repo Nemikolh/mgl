@@ -8,6 +8,7 @@
 #ifndef GLMHELPER_HPP_
 #define GLMHELPER_HPP_
 
+#include <type_traits>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/mpl/arithmetic.hpp>

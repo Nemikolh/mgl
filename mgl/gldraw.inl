@@ -6,9 +6,8 @@
  */
 
 #include "meta/glbindattrib.hpp"
-#include "type/gltraits.hpp"
-#include "glvao.hpp"
-#include "glprogram.hpp"
+#include "type/glvao.hpp"
+#include "type/glprogram.hpp"
 #include "glvector.hpp"
 
 namespace mgl {
@@ -27,7 +26,7 @@ void gl_draw_instanced(const gl_vao& p_vao, std::size_t p_primcount)
     // Bind the  vao.
     p_vao.bind();
 
-    // Call to the draw.
+    // Call to the draw. TODO: offer a way to deal with all primitives type.
     glDrawElementsInstanced(GL_TRIANGLES, p_vao.size(), p_vao.elements_type(), 0, p_primcount);
 }
 
@@ -79,6 +78,7 @@ void gl_draw(const gl_vao& p_vao)
     // Bind the vao.
     p_vao.bind();
 
+    // TODO: Use the appropriate call when no ELEMENT_BUFFER is provided.
     glDrawElements(GL_TRIANGLES, p_vao.size(), p_vao.elements_type(), 0);
 }
 

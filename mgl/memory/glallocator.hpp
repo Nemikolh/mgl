@@ -8,8 +8,6 @@
 #ifndef GLALLOCATOR_HPP_
 #define GLALLOCATOR_HPP_
 
-#include <type_traits>
-#include <memory>
 #include "glptr.hpp"
 
 namespace mgl {

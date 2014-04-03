@@ -8,6 +8,10 @@
 #ifndef GLREQUIRES_HPP_
 #define GLREQUIRES_HPP_
 
+#ifndef MGL_REQUIREMENT
+#define MGL_REQUIREMENT
+#endif
+
 #include <GL/glew.h>
 
 namespace mgl {

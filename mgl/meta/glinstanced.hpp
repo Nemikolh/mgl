@@ -9,14 +9,9 @@
 #define GLINSTANCED_HPP_
 
 #include <type_traits>
+#include "../glfwd.hpp"
 
 namespace mgl {
-
-template<typename T, typename B>
-class gl_vector;
-
-template<typename T, typename B>
-class gl_simple_buffer;
 
 /**
  * \brief gl_instanced is the class turning on buffer data per instance

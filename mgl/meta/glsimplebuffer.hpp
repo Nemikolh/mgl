@@ -9,6 +9,7 @@
 #define GLSINGLEBUFFER_HPP_
 
 #include <type_traits>
+#include "../glfwd.hpp"
 
 namespace mgl {
 

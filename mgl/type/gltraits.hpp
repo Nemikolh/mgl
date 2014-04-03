@@ -8,11 +8,14 @@
 #ifndef GLTRAITS_HPP_
 #define GLTRAITS_HPP_
 
+#ifndef MGL_REQUIREMENT
+#error "You need to include a definition of OpenGL constants"
+#endif
+
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <type_traits>
-#include "../glrequires.hpp"
 #include "glenum.hpp"
 #include "globj.hpp"
 
@@ -36,7 +39,7 @@ namespace priv {
 #define GL_FRAGMENT_SHADER 0x8B30
 #endif
 #ifndef GL_COMPUTE_SHADER
-#define GL_COMPUTE_SHADER 0x0000 // TODO: should set the correct value here.
+#define GL_COMPUTE_SHADER 0x91B9 // TODO: should set the correct value here.
 #endif
 
 template<class T, bool = std::is_integral<T>::value >

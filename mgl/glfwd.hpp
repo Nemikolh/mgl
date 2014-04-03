@@ -8,8 +8,6 @@
 #ifndef GLFWD_HPP_
 #define GLFWD_HPP_
 
-#include "glrequires.hpp"
-
 namespace mgl {
 
 /*
@@ -54,11 +52,23 @@ bool operator==(const gl_ptr<T, Buff>&, const gl_ptr<T, Buff>&);
 template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
 bool operator==(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b);
 
-/*
- * Forward declaration for the gl_vector type.
- */
+/* Forward declaration for the gl_vector type. */
 template<typename T, typename Buff = gl_buffer_type<T>>
 class gl_vector;
+
+/* Forward declaration of gl_vao. */
+struct gl_vao;
+
+/* Forward declaration fo gl_program. */
+struct gl_program;
+
+/* Forward declaration of gl_simple_buffer. */
+template<typename T, typename B>
+class gl_simple_buffer;
+
+/* Forward declaration of gl_instanced. */
+template<typename T>
+struct gl_instanced;
 
 
 }  /* namespace mgl */

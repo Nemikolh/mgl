@@ -11,8 +11,6 @@
 #include <vector>
 #include <iterator>
 #include <queue>
-#include "type/gltraits.hpp"
-#include "glrequires.hpp"
 #include "memory/glallocator.hpp"
 #include "glscope.hpp"
 

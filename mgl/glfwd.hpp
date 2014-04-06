@@ -13,6 +13,9 @@ namespace mgl {
 /*
  * Forward declaration.
  */
+template<typename T>
+struct gl_buffer_type;
+
 template<typename T, typename Container, typename Buff = gl_buffer_type<T>>
 struct gl_allocator;
 

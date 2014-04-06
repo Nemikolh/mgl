@@ -8,13 +8,8 @@
 #ifndef GLITERDATA_HPP_
 #define GLITERDATA_HPP_
 
-//#include <boost/fusion/adapted/struct/define_struct.hpp>
-//#include <boost/fusion/include/sequence.hpp>
-//#include <boost/fusion/include/algorithm.hpp>
-//#include <boost/fusion/include/adapt_struct.hpp>
-//#include <boost/fusion/include/is_sequence.hpp>
-//#include <boost/mpl/eval_if.hpp>
-//#include <boost/type_traits.hpp>
+#include <boost/fusion/include/sequence.hpp>
+#include <boost/fusion/include/algorithm.hpp>
 #include <boost/mpl/arithmetic.hpp>
 #include <boost/mpl/sizeof.hpp>
 
@@ -32,9 +27,10 @@ namespace priv {
         typedef typename boost::mpl::next<N>::type                          next_t;
         typedef boost::fusion::extension::struct_member_name<Seq, N::value> name_t;
 
-        constexpr static inline void apply(const ApplyFunctor& p_func)
+        static inline void apply(ApplyFunctor&& p_func)
         {
-            p_func.apply<current_t>(name_t::call(), N::value);
+            p_func.template apply<current_t>(name_t::call());
+            iter_base<Seq, ApplyFunctor, next_t>::apply(p_func);
         }
     };
 
@@ -44,7 +40,7 @@ namespace priv {
     template<typename Seq, typename ApplyFunctor>
     struct iter_base<Seq, ApplyFunctor, typename boost::fusion::result_of::size<Seq>::type>
     {
-        constexpr static inline void apply(...) {}
+        static inline void apply(ApplyFunctor&&) {}
     };
 
     /**
@@ -56,10 +52,11 @@ namespace priv {
 
 } /* namespace priv */
 
-template<typename T, typename ApplyFunctor>
+template<typename T>
 struct for_each
 {
-    static inline void apply(const ApplyFunctor& p_func)
+    template<typename ApplyFunctor>
+    static inline void apply(ApplyFunctor&& p_func)
     {
         priv::iter_first<T, ApplyFunctor>::apply(p_func);
     }

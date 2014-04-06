@@ -20,10 +20,9 @@
 
 #include "glbinder.hpp"
 #include "../glmhelper.hpp"
-
+#include "../memory/util.hpp"
 
 namespace mgl {
-
 namespace priv {
 
     /**

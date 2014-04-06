@@ -77,6 +77,19 @@ public:
 };
 
 /**
+ * @brief gl_uninitialized_buffer
+ */
+class gl_uninitialized_buffer : public gl_exception
+{
+public:
+    gl_uninitialized_buffer() {}
+    const char* what() const noexcept override
+    {
+        return "gl_uninitialized_buffer: You can't call bind on an uninitialized buffer.";
+    }
+};
+
+/**
  * \brief gl_stack_underflow
  */
 class gl_stack_underflow : public gl_exception

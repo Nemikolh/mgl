@@ -54,11 +54,24 @@ struct gl_vao
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
+    gl_vao() = default;
+    gl_vao(gl_vao&&) = default;
+    const gl_vao& operator=(gl_vao&&) = default;
+
+    gl_vao(const gl_vao&) = delete;
+    const gl_vao& operator=(const gl_vao&) = delete;
+
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
     /**
      * @brief Bind this vao.
      */
     void bind() const
     {
+        if(!m_id)
+            throw gl_uninitialized_buffer();
         gl_object_vertexarrays::gl_bind(m_id);
     }
 

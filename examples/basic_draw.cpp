@@ -14,6 +14,9 @@
  *  implementation required for it. Thus it is
  */
 
+#include <iostream>
+#include <chrono>
+#include <thread>
 #include <SFML/Graphics.hpp>
 #include <glm/glm.hpp>
 
@@ -23,7 +26,8 @@
 #include "../mgl/gldraw.hpp"
 /* With gldata.hpp, we can defines our attributes in a simple standard layout. */
 #include "../mgl/gldata.hpp"
-
+/* We use the extension library here, providing facilities to generate simple shaders. */
+#include "../mgl/extension/default_shaders.hpp"
 
 
 MGL_DEFINE_GL_ATTRIBUTES(
@@ -34,6 +38,26 @@ MGL_DEFINE_GL_ATTRIBUTES(
 
 int main(int argc, char **argv)
 {
+    std::cout << "Example 1" << std::endl;
+
+    // ------------------------- Window Creation ------------------------ //
+    sf::ContextSettings settings;
+    settings.majorVersion = 3;
+    settings.minorVersion = 3;
+    std::unique_ptr<sf::Window> window(new sf::Window(sf::VideoMode(800, 600), "OpenGL", sf::Style::Default, settings));
+
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        std::cerr << "GLEW error: " << glewGetErrorString(err) << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    if (!glewIsSupported("GL_VERSION_3_0"))
+    {
+        std::cerr << "OpenGL version 3.0 isn't supported." << std::endl;
+        return EXIT_FAILURE;
+    }
 
     // ------------------------- DATA DEFINITION ------------------------ //
 
@@ -50,6 +74,59 @@ int main(int argc, char **argv)
     // ------------------------ RENDERING CREATION ----------------------- //
 
     mgl::gl_program prog;
+    mgl::gl_shader vert_sh;
+    mgl::gl_shader frag_sh;
+
+    try
+    {
+        vert_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::VERTEX_SHADER);
+        frag_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::FRAGMENT_SHADER);
+    }
+    catch(const mgl::gl_exception & e)
+    {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    prog.attach(vert_sh);
+    prog.attach(frag_sh);
+
+    try
+    {
+        prog.link();
+    }
+    catch(const mgl::gl_exception & e)
+    {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    mgl::gl_vao vao;
+    vao = prog.make_vao(data, indices);
+
+    // -------------------------- RENDERING LOOP ------------------------- //
+
+    std::chrono::milliseconds duration(10);
+    while(window->isOpen())
+    {
+        // Process events
+       sf::Event event;
+       while (window->pollEvent(event))
+       {
+           // Close window : exit
+           if (event.type == sf::Event::Closed)
+               window->close();
+       }
+
+       glClearColor(0.f, 0.f, 0.f, 0.f);
+       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+       mgl::gl_draw(vao);
+
+       window->display();
+
+       std::this_thread::sleep_for(duration);
+    }
 }
 
 

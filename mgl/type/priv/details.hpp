@@ -99,6 +99,7 @@ struct base_id_ref_count
         {
             this->gl_delete(m_id);
             delete m_ref_count;
+            m_ref_count = nullptr;
         }
         decr_ref_count();
         m_id = 0;

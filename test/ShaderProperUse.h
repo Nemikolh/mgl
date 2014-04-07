@@ -7,6 +7,7 @@
 #include "../mgl/glrequires.hpp"
 #include "../mgl/glvector.hpp"
 #include "../mgl/type/glshader.hpp"
+#include "../mgl/glexceptions.hpp"
 
 using namespace mgl;
 

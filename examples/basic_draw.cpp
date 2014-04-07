@@ -45,7 +45,6 @@ int main(int argc, char **argv)
     settings.majorVersion = 3;
     settings.minorVersion = 3;
     std::unique_ptr<sf::Window> window(new sf::Window(sf::VideoMode(800, 600), "OpenGL", sf::Style::Default, settings));
-    window->setActive();
 
     GLenum err = glewInit();
     if (GLEW_OK != err)

@@ -34,7 +34,7 @@ struct gl_attribute_binder
                     int             p_nb_component,
                     std::size_t     p_offset,
                     std::size_t     p_stride,
-                    GLenum          p_component_type)
+                    GLenum          p_component_type) const
     {
         GLint attribute_id;
         // ------------------------- DECLARE ------------------------ //

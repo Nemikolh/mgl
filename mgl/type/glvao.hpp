@@ -13,6 +13,7 @@
 #include <tuple>
 #include <cassert>
 #include "gltraits.hpp"
+#include "../glexceptions.hpp"
 #include "../meta/glbindbuffer.hpp"
 
 namespace mgl {
@@ -56,7 +57,7 @@ struct gl_vao
 
     gl_vao() = default;
     gl_vao(gl_vao&&) = default;
-    const gl_vao& operator=(gl_vao&&) = default;
+    gl_vao& operator=(gl_vao&&) = default;
 
     gl_vao(const gl_vao&) = delete;
     const gl_vao& operator=(const gl_vao&) = delete;

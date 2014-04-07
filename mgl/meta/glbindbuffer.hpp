@@ -55,7 +55,6 @@ struct bind_buffers_helper
         assert(m_size == 0 || m_size == p_buffer.size());
 #endif
         m_size = p_buffer.size();
-        p_buffer.unbind();
     }
 
     // Called only if the type I is integral and not a gl attribute.
@@ -68,7 +67,6 @@ struct bind_buffers_helper
         m_elements_type = gl_enum_from_type<I>::value;
         // TODO : assert to check that the type of the buffer is ELEMENT_ARRAY
         // TODO : check that this function is called only once in NDEBUG mode.
-        p_buffer.unbind();
     }
 
     // Called for simple integers, floating point or glm vectors types buffers.
@@ -82,7 +80,6 @@ struct bind_buffers_helper
         assert(m_size == 0 || m_size == p_wrapper.buffer().size());
 #endif
         m_size = p_wrapper.buffer().size();
-        p_wrapper.buffer().unbind();
     }
 
     // Called when the buffer is an instanced buffer.
@@ -94,7 +91,6 @@ struct bind_buffers_helper
         gl_attribute_binder binder(m_program_id, p_wrapper.get_divisor());
         gl_bind_attributes<T>::map(binder);
         m_size_instanced = std::min(m_size_instanced, p_wrapper.size());
-        p_wrapper.buffer().unbind();
     }
 
     // Called for simple buffers.
@@ -105,7 +101,6 @@ struct bind_buffers_helper
         gl_attribute_binder binder(m_program_id);
         binder(p_wrapper.buffer().attribute_name(), tuple_size<T>::value, 0, sizeof(T), tuple_component_type<T>::value);
         m_size_instanced = std::min(m_size_instanced, p_wrapper.size());
-        p_wrapper.buffer().unbind();
     }
 
     // ================================================================ //

@@ -38,14 +38,13 @@ MGL_DEFINE_GL_ATTRIBUTES(
 
 int main(int argc, char **argv)
 {
-    std::cout << "Example 1" << std::endl;
-
     // ------------------------- Window Creation ------------------------ //
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 3;
     std::unique_ptr<sf::Window> window(new sf::Window(sf::VideoMode(800, 600), "OpenGL", sf::Style::Default, settings));
 
+    // -------------------- Loading OpenGL functions -------------------- //
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
@@ -53,16 +52,19 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-
     if (!glewIsSupported("GL_VERSION_3_3"))
     {
-        std::cerr << "OpenGL version 3.0 isn't supported." << std::endl;
+        std::cerr << "OpenGL version 3.3 isn't supported." << std::endl;
         return EXIT_FAILURE;
     }
 
-    // ------------------------- DATA DEFINITION ------------------------ //
 
+    // ------------------------------------------------------------------ //
+    // --------------------------------mgl------------------------------- //
+    // ------------------------------------------------------------------ //
+
+
+    // -------------------------- data creation ------------------------- //
     mgl::gl_vector<vertex> data = {
             { glm::vec3{ 0.0, 0.0 ,0.0 }, glm::vec3{ 0., 1., 0. } },
             { glm::vec3{ 0.0, 0.5 ,0.0 }, glm::vec3{ 0., 0., 1. } },
@@ -73,12 +75,13 @@ int main(int argc, char **argv)
             0, 1, 2
     };
 
-    // ------------------------ RENDERING CREATION ----------------------- //
+    // ------------------------ rendering creation ----------------------- //
 
     mgl::gl_program prog;
     mgl::gl_shader vert_sh;
     mgl::gl_shader frag_sh;
 
+    // We load some automatic default generated shaders.
     try
     {
         vert_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::VERTEX_SHADER);
@@ -90,9 +93,11 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    // We attach the shaders to the program.
     prog.attach(vert_sh);
     prog.attach(frag_sh);
 
+    // We try to link
     try
     {
         prog.link();
@@ -103,8 +108,14 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    // We create a Vertex array object that will bind automatically all the buffers.
     mgl::gl_vao vao;
     vao = prog.make_vao(data, indices);
+
+
+    // ------------------------------------------------------------------ //
+    // --------------------------------end------------------------------- //
+    // ------------------------------------------------------------------ //
 
     // -------------------------- RENDERING LOOP ------------------------- //
 
@@ -126,8 +137,8 @@ int main(int argc, char **argv)
        glClearColor(0.f, 0.f, 0.f, 0.f);
        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-       prog.use();
-       mgl::gl_draw(vao);
+       // Helper function providing the simplest code possible.
+       mgl::gl_draw(vao, prog);
 
        window->display();
 

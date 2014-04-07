@@ -29,7 +29,7 @@ namespace priv {
 
         static inline void apply(ApplyFunctor&& p_func)
         {
-            p_func.template apply<current_t>(name_t::call());
+            p_func.template apply<current_t, N::value>(name_t::call());
             iter_base<Seq, ApplyFunctor, next_t>::apply(p_func);
         }
     };

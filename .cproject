@@ -90,9 +90,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2016934130" name="gltranslator_vec.inl" rcbsApplicability="disable" resourcePath="mgl/shader/gltranslator_vec.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1479234713.1140016282">
-						<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1479234713.1140016282" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1479234713"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="examples|memory|mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
@@ -153,9 +150,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.release.1057421516.898490124" name="gltranslator_vec.inl" rcbsApplicability="disable" resourcePath="mgl/shader/gltranslator_vec.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cross.cpp.compiler.540586098.2080467328">
-						<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.540586098.2080467328" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.540586098"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="examples|memory|mgl|Test|test|shader|src|log|core/reflect|reflect|Debug" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
@@ -506,9 +500,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616.1337953195" name="gltranslator_vec.inl" rcbsApplicability="disable" resourcePath="mgl/shader/gltranslator_vec.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cross.cpp.compiler.679634579.1366449092">
-						<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.679634579.1366449092" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.679634579"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="examples|memory|mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
@@ -581,6 +572,8 @@
 									<listOptionValue builtIn="false" value="NKH_TEST"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1243729828" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
+									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include/"/>
 									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include&quot;"/>
 								</option>
@@ -593,6 +586,8 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.240441869" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.689520344" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="GLEW"/>
+									<listOptionValue builtIn="false" value="bfd"/>
+									<listOptionValue builtIn="false" value="z"/>
 									<listOptionValue builtIn="false" value="sfml-graphics"/>
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="sfml-window"/>
@@ -617,12 +612,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1549785124" name="gltranslator_vec.inl" rcbsApplicability="disable" resourcePath="mgl/shader/gltranslator_vec.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985.2076099058">
-						<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985.2076099058" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="examples|Debug|external|log|core/reflect|client|memory|reflect|app|test|shader|mgl|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
+						<entry excluding="basic_draw.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
 						<entry excluding="shader/gltranslator_vec.inl|gldraw.inl|glcontext.cpp|glutil.inl|shader/gltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
@@ -704,13 +696,15 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1771969243" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.83995011" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.1304713488" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="sfml-graphics"/>
 									<listOptionValue builtIn="false" value="GL"/>
+									<listOptionValue builtIn="false" value="GLEW"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+									<listOptionValue builtIn="false" value="sfml-graphics"/>
 									<listOptionValue builtIn="false" value="sfml-window"/>
 									<listOptionValue builtIn="false" value="sfml-system"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1265753417" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths"/>
+								<option id="gnu.cpp.link.option.flags.1684898841" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2054023673" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -729,9 +723,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321.1239114784" name="gltranslator_vec.inl" rcbsApplicability="disable" resourcePath="mgl/shader/gltranslator_vec.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cross.cpp.compiler.237442053.239855672">
-						<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.237442053.239855672" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.237442053"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="examples|runAllTests.cpp|Debug|external|log|core/reflect|client|memory|reflect|app|test|shader|mgl|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>

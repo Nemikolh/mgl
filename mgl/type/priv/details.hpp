@@ -42,9 +42,9 @@ struct base_id_ref_count
             assert(m_id != p_rhs.m_id);
 #           endif
             release();
-            incr_ref_count();
             m_id = p_rhs.m_id;
             m_ref_count = p_rhs.m_ref_count;
+            incr_ref_count();
         }
         return *this;
     }

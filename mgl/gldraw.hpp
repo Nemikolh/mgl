@@ -33,9 +33,10 @@ void gl_draw_instanced(const gl_vao& p_vao, std::size_t p_primcount);
 /**
  * \brief Draw the passed vao.
  * \param p_object is the vao to draw.
+ * \param p_material is the material to use.
  */
 template<size_t dummy = 0>
-void gl_draw(const gl_vao& p_vao);
+void gl_draw(const gl_vao& p_vao, const gl_program& p_material);
 
 /**
  * \brief Draw the passed data.

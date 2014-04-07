@@ -71,13 +71,18 @@ void gl_draw(const gl_vector<T> & p_data, const gl_vector<I> & p_indices)
  * Implementation details
  */
 template<size_t dummy>
-void gl_draw(const gl_vao& p_vao)
+void gl_draw(const gl_vao& p_vao, const gl_program& p_prog)
 {
     // ------------------------- DECLARE ------------------------ //
+
+    // Bind the program.
+    p_prog.use();
 
     // Bind the vao.
     p_vao.bind();
 
+    // TODO: perform a check between the VAO's expected layout for a program
+    // and the attributes layout of the program used.
     // TODO: Use the appropriate call when no ELEMENT_BUFFER is provided.
     glDrawElements(GL_TRIANGLES, p_vao.size(), p_vao.elements_type(), 0);
 }

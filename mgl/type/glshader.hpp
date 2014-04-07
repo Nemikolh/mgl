@@ -11,6 +11,7 @@
 #include <cassert>
 #include "gltraits.hpp"
 #include "../glexceptions.hpp"
+#include "priv/details.hpp"
 
 namespace mgl {
 
@@ -25,71 +26,36 @@ enum class shader_type
     Count
 };
 
-struct gl_shader
+struct gl_shader : public priv::base_id_ref_count
 {
+    typedef priv::base_id_ref_count base;
+
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
     gl_shader() noexcept
-        : m_shader_id(0)
+        : base()
         , m_shader_type(shader_type::VERTEX_SHADER)
-        , m_ref_count(nullptr)
     {}
 
     explicit gl_shader(shader_type p_type) noexcept
-        : m_shader_id(0)
+        : base()
         , m_shader_type(p_type)
-        , m_ref_count(nullptr)
     {}
 
     /**
      * @brief Copy constructor.
      */
-    gl_shader(const gl_shader& p_rhs)
-        : m_shader_id(p_rhs.m_shader_id)
-        , m_shader_type(p_rhs.m_shader_type)
-        , m_ref_count(p_rhs.m_ref_count)
-    {
-#       ifndef MGL_NDEBUG
-        assert(m_ref_count);
-#       endif
-        incr_ref_count();
-    }
-
-    const gl_shader& operator=(const gl_shader& p_rhs)
-    {
-        release();
-        m_shader_id = p_rhs.m_shader_id;
-        m_shader_type = p_rhs.m_shader_type;
-        m_ref_count = p_rhs.m_ref_count;
-        incr_ref_count();
-        return *this;
-    }
+    gl_shader(const gl_shader& p_rhs) = default;
+    gl_shader& operator=(const gl_shader& p_rhs) = default;
 
     /**
      * @brief Move constructor.
      * @param p_rhs is the temporary moved here.
      */
-    gl_shader(gl_shader&& p_rhs) noexcept
-        : m_shader_id(p_rhs.m_shader_id)
-        , m_shader_type(p_rhs.m_shader_type)
-        , m_ref_count(p_rhs.m_ref_count)
-    {
-        p_rhs.m_shader_id = 0;
-        p_rhs.m_ref_count = nullptr;
-    }
-
-    const gl_shader& operator=(gl_shader&& p_rhs)
-    {
-        release();
-        m_shader_id = p_rhs.m_shader_id;
-        m_shader_type = p_rhs.m_shader_type;
-        m_ref_count = p_rhs.m_ref_count;
-        p_rhs.m_shader_id = 0;
-        p_rhs.m_ref_count = nullptr;
-        return *this;
-    }
+    gl_shader(gl_shader&& p_rhs) = default;
+    gl_shader& operator=(gl_shader&& p_rhs) = default;
 
     ~gl_shader()
     {
@@ -110,11 +76,12 @@ struct gl_shader
         // ------------------------- DECLARE ------------------------ //
 
         ensure_created();
-        gl_object_shader::gl_shader_source(m_shader_id, 1, &p_src, nullptr);
-        gl_object_shader::gl_compile(m_shader_id);
+        gl_types::id id = this->id();
+        gl_object_shader::gl_shader_source(id, 1, &p_src, nullptr);
+        gl_object_shader::gl_compile(id);
 
-        if(!gl_object_shader::gl_compile_status(m_shader_id))
-            throw gl_compile_error(gl_object_shader::gl_info_log(m_shader_id));
+        if(!gl_object_shader::gl_compile_status(id))
+            throw gl_compile_error(gl_object_shader::gl_info_log(id));
     }
 
     /**
@@ -131,30 +98,6 @@ struct gl_shader
     }
 
     /**
-     * @brief Reset this object to point to a non-valid shader.
-     */
-    void release()
-    {
-        if(m_shader_id && (*m_ref_count) == 1)
-        {
-            gl_object_shader::gl_delete(1, &m_shader_id);
-            delete m_ref_count;
-        }
-        decr_ref_count();
-        m_shader_id = 0;
-        m_ref_count = nullptr;
-    }
-
-    /**
-     * @brief Returns the shader's id.
-     * @return Returns the shader's id.
-     */
-    gl_types::id id() const
-    {
-        return m_shader_id;
-    }
-
-    /**
      * @brief Returns the shader's type.
      * @return Returns the shader's type.
      */
@@ -163,40 +106,10 @@ struct gl_shader
         return m_shader_type;
     }
 
-    /**
-     * @brief The gl_shader can be converted to bool and is true if it does correspond to a real shader.
-     */
-    explicit operator bool() const
-    {
-        return m_ref_count && m_shader_id;
-    }
-
 private:
     // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
-
-    void ensure_created()
-    {
-        if(!m_shader_id)
-        {
-            m_shader_id = gl_object_shader::gl_gen(convert_to_en(m_shader_type));
-            m_ref_count = new unsigned int;
-            *m_ref_count = 1;
-        }
-    }
-
-    inline void incr_ref_count()
-    {
-        if(m_ref_count)
-            ++(*m_ref_count);
-    }
-
-    inline void decr_ref_count()
-    {
-        if(m_ref_count)
-            --(*m_ref_count);
-    }
 
     GLenum convert_to_en(shader_type p_tag) const
     {
@@ -216,17 +129,22 @@ private:
         }
     }
 
+    gl_types::id gen() override
+    {
+        return gl_object_shader::gl_gen(convert_to_en(m_shader_type));
+    }
+
+    void gl_delete(gl_types::id p_id) override
+    {
+        gl_object_shader::gl_delete(1, &p_id);
+    }
 
     // ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    /** The id of the shader. */
-    gl_types::id m_shader_id;
     /** The type of the shader. */
     shader_type m_shader_type;
-    /** Refcount on this shader. */
-    unsigned int* m_ref_count;
 };
 
 }  /* namespace mgl */

@@ -15,14 +15,17 @@
 #include "glshader.hpp"
 #include "../glexceptions.hpp"
 #include "../meta/gluniform.hpp"
+#include "priv/details.hpp"
 
 namespace mgl {
 
 /**
  * \class gl_program is a wrapper for an opengl shader program.
  */
-struct gl_program
+struct gl_program : public priv::base_id_ref_count
 {
+    typedef priv::base_id_ref_count base;
+
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
@@ -31,22 +34,25 @@ struct gl_program
      * @brief Default constructor.
      */
     gl_program() noexcept
-        : m_program_id(0)
+        : base()
     {}
 
     /**
      * @brief Copy isn't allowed.
      */
-    gl_program(const gl_program& p_rhs) = delete;
+    gl_program(const gl_program&) = default;
+    gl_program& operator=(const gl_program&) = default;
 
     /**
      * @brief Move constructor.
      * @param p_rhs is the temporary.
      */
-    gl_program(gl_program&& p_rhs) noexcept
-        : m_program_id(p_rhs.m_program_id)
+    gl_program(gl_program&&) = default;
+    gl_program& operator=(gl_program&&) = default;
+
+    ~gl_program()
     {
-        p_rhs.m_program_id = 0;
+        release();
     }
 
     // ================================================================ //
@@ -58,14 +64,15 @@ struct gl_program
      */
     void link()
     {
+        gl_types::id id = this->id();
 #       ifndef MGL_NDEBUG
-        assert(m_program_id);
+        assert(id);
 #       endif
-        if(!gl_object_program::gl_link_status(m_program_id))
+        if(!gl_object_program::gl_link_status(id))
         {
-            gl_object_program::gl_link(m_program_id);
-            if(!gl_object_program::gl_link_status(m_program_id))
-                throw gl_link_error(gl_object_program::gl_info_log(m_program_id));
+            gl_object_program::gl_link(id);
+            if(!gl_object_program::gl_link_status(id))
+                throw gl_link_error(gl_object_program::gl_info_log(id));
             // Link is successfull we can now detach the shaders as recommended here: https://www.opengl.org/wiki/Shader_Compilation.
             else
                 detach_shaders();
@@ -77,7 +84,7 @@ struct gl_program
      */
     void use() const
     {
-        gl_object_program::gl_use(m_program_id);
+        gl_object_program::gl_use(id());
     }
 
     /**
@@ -86,8 +93,9 @@ struct gl_program
      */
     void attach(const gl_shader& p_rhs)
     {
+        this->ensure_created();
         m_attached_shaders[static_cast<std::size_t>(p_rhs.type())] = p_rhs;
-        gl_object_program::gl_attach_shader(m_program_id, p_rhs.id());
+        gl_object_program::gl_attach_shader(id(), p_rhs.id());
     }
 
     /**
@@ -98,7 +106,7 @@ struct gl_program
         for(auto &shader : m_attached_shaders)
             if(shader)
             {
-                gl_object_program::gl_detach_shader(m_program_id, shader.id());
+                gl_object_program::gl_detach_shader(id(), shader.id());
                 shader.release();
             }
     }
@@ -174,22 +182,26 @@ struct gl_program
         // TODO
     }
 
-    /**
-     * \brief Returns the id of this program.
-     * \return Returns the opengl id.
-     */
-    gl_types::id id() const
+private:
+
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
+    gl_types::id gen() override
     {
-        return m_program_id;
+        return gl_object_program::gl_gen();
     }
 
-private:
+    void gl_delete(gl_types::id p_id)
+    {
+        gl_object_program::gl_delete(1, &p_id);
+    }
 
     // ================================================================ //
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    gl_types::id m_program_id;
     gl_shader m_attached_shaders[static_cast<std::size_t>(shader_type::Count)];
 };
 

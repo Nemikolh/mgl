@@ -5,8 +5,8 @@
  *      Author: nemikolh
  */
 
-#ifndef DETAILS_HPP_
-#define DETAILS_HPP_
+#ifndef EXTENSION_PRIV_DETAILS_HPP_
+#define EXTENSION_PRIV_DETAILS_HPP_
 
 #include <string>
 #include "../../meta/gliterdata.hpp"
@@ -63,7 +63,7 @@ private:
 };
 
 template<typename T>
-const char * src_pass_through_shader(shader_type p_type)
+std::string src_pass_through_shader(shader_type p_type)
 {
     gen_attributes ins;
     gen_attributes outs;
@@ -76,7 +76,7 @@ const char * src_pass_through_shader(shader_type p_type)
             outs.set_qualifier("smooth out");
             outs.set_prefix("frag_in_");
             outs.set_test(ignore_first);
-            body = "void main{\n gl_Position = position;\n frag_in_color = color;\n}";
+            body = "void main(void){\n gl_Position = vec4(position, 1.0);\n frag_in_color = color;\n}";
             break;
         case shader_type::FRAGMENT_SHADER:
             ins.set_qualifier("smooth in");
@@ -85,7 +85,7 @@ const char * src_pass_through_shader(shader_type p_type)
             outs.set_qualifier("out");
             outs.set_prefix("frag_out_");
             outs.set_test(ignore_first);
-            body = "void main{\n frag_out_color = frag_in_color;\n}";
+            body = "void main(void){\n frag_out_color = frag_in_color;\n}";
             break;
         default:
             return "";
@@ -93,7 +93,7 @@ const char * src_pass_through_shader(shader_type p_type)
     mgl::for_each<T>::apply(ins);
     mgl::for_each<T>::apply(outs);
     auto inputs = "#version 330\n" + ins.content + outs.content + body;
-    return inputs.c_str();
+    return inputs;
 }
 
 
@@ -103,4 +103,4 @@ const char * src_pass_through_shader(shader_type p_type)
 
 
 
-#endif /* DETAILS_HPP_ */
+#endif /* EXTENSION_PRIV_DETAILS_HPP_ */

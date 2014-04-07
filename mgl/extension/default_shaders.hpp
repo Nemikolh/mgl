@@ -18,7 +18,8 @@ template<typename T>
 gl_shader pass_through_shader(shader_type p_type)
 {
     gl_shader sh(p_type);
-    sh.load_src(priv::src_pass_through_shader<T>(p_type));
+    std::string tmp(priv::src_pass_through_shader<T>(p_type));
+    sh.load_src(tmp.c_str());
     return sh;
 }
 

@@ -45,6 +45,7 @@ int main(int argc, char **argv)
     settings.majorVersion = 3;
     settings.minorVersion = 3;
     std::unique_ptr<sf::Window> window(new sf::Window(sf::VideoMode(800, 600), "OpenGL", sf::Style::Default, settings));
+    window->setActive();
 
     GLenum err = glewInit();
     if (GLEW_OK != err)
@@ -53,7 +54,9 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    if (!glewIsSupported("GL_VERSION_3_0"))
+    fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+
+    if (!glewIsSupported("GL_VERSION_3_3"))
     {
         std::cerr << "OpenGL version 3.0 isn't supported." << std::endl;
         return EXIT_FAILURE;
@@ -115,12 +118,16 @@ int main(int argc, char **argv)
        {
            // Close window : exit
            if (event.type == sf::Event::Closed)
+           {
                window->close();
+               return EXIT_SUCCESS;
+           }
        }
 
        glClearColor(0.f, 0.f, 0.f, 0.f);
        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+       prog.use();
        mgl::gl_draw(vao);
 
        window->display();

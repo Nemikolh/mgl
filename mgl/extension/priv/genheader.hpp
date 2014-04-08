@@ -16,9 +16,9 @@ namespace mgl {
 namespace extension {
 namespace priv {
 
-struct gen_attributes
+struct gen_header
 {
-    gen_attributes()
+    gen_header()
         : content()
         , m_qualifier()
         , m_prefix(" ")
@@ -61,41 +61,6 @@ private:
     std::string m_prefix;
     std::function<bool(std::size_t)> m_is_entry_acceptable;
 };
-
-template<typename T>
-std::string src_pass_through_shader(shader_type p_type)
-{
-    gen_attributes ins;
-    gen_attributes outs;
-    std::string body;
-    auto ignore_first = [](std::size_t N) { return N > 0; };
-    switch(p_type)
-    {
-        case shader_type::VERTEX_SHADER:
-            ins.set_qualifier("in");
-            outs.set_qualifier("smooth out");
-            outs.set_prefix("frag_in_");
-            outs.set_test(ignore_first);
-            body = "void main(void){\n gl_Position = vec4(position, 1.0);\n frag_in_color = color;\n}";
-            break;
-        case shader_type::FRAGMENT_SHADER:
-            ins.set_qualifier("smooth in");
-            ins.set_prefix("frag_in_");
-            ins.set_test(ignore_first);
-            outs.set_qualifier("out");
-            outs.set_prefix("frag_out_");
-            outs.set_test(ignore_first);
-            body = "void main(void){\n frag_out_color = frag_in_color;\n}";
-            break;
-        default:
-            return "";
-    }
-    mgl::for_each<T>::apply(ins);
-    mgl::for_each<T>::apply(outs);
-    auto inputs = "#version 330\n" + ins.content + outs.content + body;
-    return inputs;
-}
-
 
 }  /* namespace priv */
 }  /* namespace extension */

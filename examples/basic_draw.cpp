@@ -120,6 +120,11 @@ int main(int argc, char **argv)
     // -------------------------- RENDERING LOOP ------------------------- //
 
     std::chrono::milliseconds duration(10);
+    glm::mat3 rotate(
+            glm::vec3{ 0.0, 1.0, 0.0 },
+            glm::vec3{ -1., 0.0, 0.0 },
+            glm::vec3{ 0.0, 0.0, 1.0 }
+    );
     while(window->isOpen())
     {
         // Process events
@@ -131,6 +136,15 @@ int main(int argc, char **argv)
            {
                window->close();
                return EXIT_SUCCESS;
+           }
+           else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Z)
+           {
+               mgl::bind_and_apply(data, [&data, &rotate](){
+                   for(auto& vertex : data)
+                   {
+                       vertex.position = rotate * vertex.position;
+                   }
+               });
            }
        }
 

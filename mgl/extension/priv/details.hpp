@@ -10,7 +10,7 @@
 
 #include <string>
 #include "../../meta/gliterdata.hpp"
-#include "../../shader/gltranslator.hpp"
+#include "../../shader/glsltranslator.hpp"
 
 namespace mgl {
 namespace extension {
@@ -48,7 +48,7 @@ struct gen_attributes
         if(m_is_entry_acceptable(N))
         {
             content += m_qualifier + " ";
-            content += gl_translator<E>::type_str();
+            content += glsl_translator<E>::type_str();
             content += m_prefix;
             content += str;
             content += ";\n";

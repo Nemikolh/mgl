@@ -13,10 +13,10 @@
 namespace mgl {
 
 /**
- * \class gl_translator Offer translation for a type.
+ * \class glsl_translator Offer translation for a type.
  */
 template<typename T>
-struct gl_translator;
+struct glsl_translator;
 
 } /* namespace mgl. */
 
@@ -25,7 +25,7 @@ struct gl_translator;
  */
 #define DEFINE_TRANSLATOR(name)       \
     template<>                          \
-    struct gl_translator<glm::name>     \
+    struct glsl_translator<glm::name>     \
     {                                   \
         static const char * type_str()  \
         {                               \
@@ -34,8 +34,8 @@ struct gl_translator;
     }
 
 // Inclusion of the translation for vector types.
-#include "gltranslator_vec.inl"
-#include "gltranslator_mat.inl"
+#include "glsltranslator_vec.inl"
+#include "glsltranslator_mat.inl"
 
 #undef DEFINE_TRANSLATOR
 

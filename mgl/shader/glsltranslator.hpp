@@ -8,8 +8,6 @@
 #ifndef GLTRANSLATOR_HPP_
 #define GLTRANSLATOR_HPP_
 
-#include <glm/core/type.hpp>
-
 namespace mgl {
 
 /**
@@ -34,8 +32,11 @@ struct glsl_translator;
     }
 
 // Inclusion of the translation for vector types.
+#include <glm/core/type.hpp>
 #include "glsltranslator_vec.inl"
 #include "glsltranslator_mat.inl"
+// Translation for primitives types.
+#include "glsltranslator_pri.inl"
 
 #undef DEFINE_TRANSLATOR
 

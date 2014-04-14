@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 3;
-    std::unique_ptr<sf::Window> window(new sf::Window(sf::VideoMode(800, 600), "OpenGL", sf::Style::Default, settings));
+    std::unique_ptr<sf::Window> window(new sf::Window(sf::VideoMode(800, 600), "Example 1", sf::Style::Default, settings));
 
     // -------------------- Loading OpenGL functions -------------------- //
     GLenum err = glewInit();
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 
     // -------------------------- RENDERING LOOP ------------------------- //
 
-    std::chrono::milliseconds duration(10);
+    std::chrono::milliseconds duration(20);
     glm::mat3 rotate(
             glm::vec3{ 0.0, 1.0, 0.0 },
             glm::vec3{ -1., 0.0, 0.0 },

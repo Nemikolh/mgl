@@ -15,7 +15,8 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
 
-
+#define IMPL_MGL_CAT_I(a, b) a ## b
+#define IMPL_MGL_CAT(a, b) IMPL_MGL_CAT_I(a, b)
 
 #define IMPL_MGL_CAPTURE_SECOND(ATTRIBUTE) \
         BOOST_PP_TUPLE_ELEM(2, 1, ATTRIBUTE)
@@ -39,6 +40,24 @@
                     IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT,        \
                     NAME,                                       \
                     BOOST_PP_CAT(BOOST_FUSION_ADAPT_STRUCT_FILLER_0 ATTRIBUTES,_END))
+
+#define IMPL_MGL_EAT_ALL_AUX_1_END
+#define IMPL_MGL_EAT_ALL_AUX_2_END
+#define IMPL_MGL_EAT_ALL_AUX_1(a) IMPL_MGL_EAT_ALL_AUX_2
+#define IMPL_MGL_EAT_ALL_AUX_2(a) IMPL_MGL_EAT_ALL_AUX_1
+#define IMPL_MGL_EAT_ALL(SEQ) \
+        IMPL_MGL_CAT(IMPL_MGL_EAT_ALL_AUX_1 SEQ, _END)  \
+
+#define IMPL_MGL_FIRST_AUX(first) \
+        first IMPL_MGL_EAT_ALL
+
+#define IMPL_MGL_FIRST(SEQ) \
+        IMPL_MGL_FIRST_AUX SEQ
+
+#define IMPL_MGL_NAMESPACE(SEQ)                         \
+        namespace IMPL_MGL_FIRST(SEQ) {                 \
+        IMPL_MGL_NAMESPACE_AUX(IMPL_MGL_EAT_FIRST(SEQ)) \
+        }
 
 /**
  * Macro to define attributes data.
@@ -114,16 +133,5 @@
         IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(                                                   \
                 NAME,                                                                           \
                 ATTRIBUTES)
-
-///**
-// * Macro to define uniform data.
-// * --------------------------------------------------------------
-// * Usage :
-// * -------
-// *
-// * Same as NKH_DEFINE_GL_ATTRIBUTES
-// */
-//#define NKH_DEFINE_GL_UNIFORM BOOST_FUSION_DEFINE_STRUCT
-
 
 #endif /* GLDATA_HPP_ */

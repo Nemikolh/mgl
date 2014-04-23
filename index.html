@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="MGL : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>MGL</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Nemikolh/mgl">View on GitHub</a>
+
+          <h1 id="project_title">MGL</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Nemikolh/mgl/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Nemikolh/mgl/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="mgl" class="anchor" href="#mgl"><span class="octicon octicon-link"></span></a>MGL</h2>
+
+<p>mgl is a meta programming library for OpenGL.
+This library offers simpler way to perform OpenGL calls and manipulating OpenGL objects.</p>
+
+<h2>
+<a name="what-can-do-this-library-for-me-" class="anchor" href="#what-can-do-this-library-for-me-"><span class="octicon octicon-link"></span></a>What can do this library for me ?</h2>
+
+<p>When using OpenGL core profile in C++ with at least the 3.0 features it offers, it isn't obvious to get a simple example to work. As soon as you're repeating yourself when writing the code, you feel like you should be wrapping some OpenGL calls. Thus you'll start wrapping some objects, starting to get a proper design working good with the OpenGL state machine. Then you end up writing a library. Not the basic example you wanted to code.</p>
+
+<p>This library provides you a way to do this basic example without having to create the above library. It offers simple way to manage your buffers in GPU memory, fill them with data easily. And most importantly to bind automatically the underlying attributes for the shader stage.</p>
+
+<p>If the library does some of the job in a simpler way, it still requires from you a good knowledge of how OpenGL works.</p>
+
+<h2>
+<a name="basic-example" class="anchor" href="#basic-example"><span class="octicon octicon-link"></span></a>Basic example</h2>
+
+<p>A basic example is available under the folder examples. It shows how to use the wrapper <code>mgl::gl_vector&lt;T&gt;</code> type, the <code>MGL_DEFINE_GL_ATTRIBUTES</code> macro, the vao creation with <code>mgl::gl_program::make_vao(T...)</code> member function and the <code>mgl::gl_draw</code> function which are the base of the library.</p>
+
+<p>Note that the automatic binding of attributes work pretty well, however the automatic generation of the shader isn't properly implemented yet. It does not what we would like it to do. :)</p>
+
+<h2>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<p>The library is aimed to be header-only. Currently in order to get your own version of mgl working, you will need the following additionals librairies:</p>
+
+<ul>
+<li>GLEW</li>
+<li>glm</li>
+<li>Boost.Fusion</li>
+<li>Boost.MPL</li>
+<li>Boost.Preprocessor</li>
+<li>Boost.TypeTraits</li>
+</ul><p>Note that the librairy isn't in alpha yet. Several features will likely be changed over the next months.
+The dependencies on GLEW and Boost will probably be removed over time.
+However, the dependency on <a href="https://github.com/g-truc/glm">glm</a> won't change as mgl has been thought to be well integrated with glm.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">MGL maintained by <a href="https://github.com/Nemikolh">Nemikolh</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-48541756-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>

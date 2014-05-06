@@ -14,37 +14,7 @@
 #include <boost/fusion/adapted/struct/define_struct.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
-
-/**
- * Concatenation macro.
- */
-#define IMPL_MGL_CAT_I(a, b) a ## b
-#define IMPL_MGL_CAT(a, b) IMPL_MGL_CAT_I(a, b)
-
-/**
- * Remove all the element from the given sequence
- */
-#define IMPL_MGL_EAT_ALL_AUX_1_END
-#define IMPL_MGL_EAT_ALL_AUX_2_END
-#define IMPL_MGL_EAT_ALL_AUX_1(a) IMPL_MGL_EAT_ALL_AUX_2
-#define IMPL_MGL_EAT_ALL_AUX_2(a) IMPL_MGL_EAT_ALL_AUX_1
-#define IMPL_MGL_EAT_ALL(SEQ) \
-        IMPL_MGL_CAT(IMPL_MGL_EAT_ALL_AUX_1 SEQ, _END)  \
-
-/**
- * Retrieve the first element of the given sequence.
- */
-#define IMPL_MGL_FIRST_AUX(first) \
-        first IMPL_MGL_EAT_ALL_AUX_1
-#define IMPL_MGL_FIRST(SEQ) \
-        IMPL_MGL_CAT(IMPL_MGL_FIRST_AUX SEQ, _END)
-
-/**
- * Eat the first element of a sequence
- */
-#define IMPL_MGL_EAT_ONE(first)
-#define IMPL_MGL_EAT_FIRST(SEQ) \
-        IMPL_MGL_EAT_ONE SEQ
+#include "preprocessor/glpreprocessor_types.hpp"
 
 /**
  * Convert the given sequence into nested namespaces.
@@ -82,30 +52,9 @@
 #define IMPL_MGL_EXPAND_NAMESPACE(SEQ) \
         IMPL_MGL_CAT(IMPL_MGL_EXPAND_NAMESPACE_AUX_1 SEQ, _END)
 
-//#    define BOOST_PP_IF(cond, t, f) BOOST_PP_IIF(BOOST_PP_BOOL(cond), t, f)
-//#    define BOOST_PP_IIF(bit, t, f) BOOST_PP_IIF_I(bit, t, f)
-//#    define BOOST_PP_IIF_I(bit, t, f) BOOST_PP_IIF_ ## bit(t, f)
-//# define BOOST_PP_IIF_0(t, f) f
-//# define BOOST_PP_IIF_1(t, f) t
 /**
- * BOOST_PP_VARIADIC_SIZE macro renamed to avoid collision.
+ * Macro to return the offset of an attribute in a struct.
  */
-#define IMPL_MGL_VARIADIC_SIZE_I(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, e33, e34, e35, e36, e37, e38, e39, e40, e41, e42, e43, e44, e45, e46, e47, e48, e49, e50, e51, e52, e53, e54, e55, e56, e57, e58, e59, e60, e61, e62, e63, size, ...) size
-#define IMPL_MGL_VARIADIC_SIZE(...) IMPL_MGL_VARIADIC_SIZE_I(__VA_ARGS__, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,)
-#define IMPL_MGL_TUPLE_SIZE(tuple) IMPL_MGL_VARIADIC_SIZE tuple
-
-/**
- * Return the second element in a tuple of three or two attributes.
- */
-#define IMPL_MGL_CAPTURE_FIRST_AUX_3(a, b, c) a
-#define IMPL_MGL_CAPTURE_SECOND_AUX_3(a, b, c) b
-#define IMPL_MGL_CAPTURE_THIRD_AUX_3(a, b, c) c
-#define IMPL_MGL_CAPTURE_FIRST_AUX_2(a, b) a
-#define IMPL_MGL_CAPTURE_SECOND_AUX_2(a, b) b
-#define IMPL_MGL_CAPTURE_THIRD_AUX_2(a, b, c) c
-#define IMPL_MGL_CAPTURE_SECOND(ATTRIBUTE) \
-        IMPL_MGL_CAT(IMPL_MGL_CAPTURE_SECOND_AUX_, IMPL_MGL_TUPLE_SIZE(ATTRIBUTE)) ATTRIBUTE
-
 #define IMPL_MGL_OFFSET_OF(NAME, ATTRIBUTE) \
     offsetof(NAME, IMPL_MGL_CAPTURE_SECOND(ATTRIBUTE))
 
@@ -119,6 +68,9 @@
             };                                                         \
         }
 
+/**
+ *
+ */
 #define IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(NAME, ATTRIBUTES)  \
         BOOST_PP_SEQ_FOR_EACH_I_R(                              \
                     1,                                          \
@@ -126,6 +78,11 @@
                     NAME,                                       \
                     BOOST_PP_CAT(BOOST_FUSION_ADAPT_STRUCT_FILLER_0 ATTRIBUTES,_END))
 
+//#define MACRO(r, data, i, elem) \
+//        data i elem
+//BOOST_PP_SEQ_FOR_EACH_I_R(1, MACRO, coucou, ((gg))((tt)))
+//IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(test, (int, gg)(int, op))
+//BOOST_PP_FOR_2((IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT, test,  ((int, op))  (nil), 1),BOOST_PP_SEQ_FOR_EACH_I_P,BOOST_PP_SEQ_FOR_EACH_I_O,BOOST_PP_SEQ_FOR_EACH_I_M)
 
 /**
  * Macro to define attributes data.

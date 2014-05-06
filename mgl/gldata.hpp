@@ -52,12 +52,13 @@
 #define IMPL_MGL_EXPAND_NAMESPACE(SEQ) \
         IMPL_MGL_CAT(IMPL_MGL_EXPAND_NAMESPACE_AUX_1 SEQ, _END)
 
+// --------------------------------------------------------------------------------- //
+
 /**
- * Macro to return the offset of an attribute in a struct.
+ * Add the offset_at<> template specialization for an attribute.
  */
 #define IMPL_MGL_OFFSET_OF(NAME, ATTRIBUTE) \
     offsetof(NAME, IMPL_MGL_CAPTURE_SECOND(ATTRIBUTE))
-
 #define IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT(ATTRIBUTE, INDEX, NAME) \
        namespace mgl {\
             template<>                                                 \
@@ -69,19 +70,72 @@
         }
 
 /**
- *
+ * Add the offset_at<> template specialization for the attributes.
  */
 #define IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(NAME, ATTRIBUTES)  \
         IMPL_MGL_FOR_EACH(                                      \
-                    IMPL_MGL_FILLER(ATTRIBUTES), \
+                    IMPL_MGL_FILLER(ATTRIBUTES),                \
                     IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT,        \
                     NAME)
 
-//#define MACRO(r, data, i, elem) \
-//        data i elem
-//BOOST_PP_SEQ_FOR_EACH_I_R(1, MACRO, coucou, ((gg))((tt)))
-IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(test, (int, gg, WUT)(int, op, oh))
-//BOOST_PP_FOR_2((IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT, test,  ((int, op))  (nil), 1),BOOST_PP_SEQ_FOR_EACH_I_P,BOOST_PP_SEQ_FOR_EACH_I_O,BOOST_PP_SEQ_FOR_EACH_I_M)
+// --------------------------------------------------------------------------------- //
+
+/**
+ * Add the member name definition for an attribute.
+ */
+#define IMPL_MGL_DEFINE_MEMBER_NAME(MEMBER_NAME, INDEX, STRUCT_NAME)\
+template<>                                                          \
+struct struct_member_name<STRUCT_NAME, INDEX>                       \
+{                                                                   \
+    typedef char const* type;                                       \
+                                                                    \
+    static type call()                                              \
+    { return IMPL_MGL_TO_STR(IMPL_MGL_CAPTURE_SECOND(MEMBER_NAME)); }\
+};
+
+#define IMPL_MGL_DEFINE_MEMBERS_NAMES(NAME, ATTRIBUTES) \
+        IMPL_MGL_FOR_EACH(                              \
+                    IMPL_MGL_FILLER(ATTRIBUTES),        \
+                    IMPL_MGL_DEFINE_MEMBER_NAME,        \
+                    NAME)
+
+// --------------------------------------------------------------------------------- //
+
+/**
+ * Add the members definition inside the class.
+ */
+#define IMPL_MGL_DEFINE_MEMBER(MEMBER, INDEX, _) \
+        IMPL_MGL_CAPTURE_FIRST(MEMBER) IMPL_MGL_CAPTURE_SECOND(MEMBER);
+
+#define IMPL_MGL_DEFINE_MEMBERS(ATTRIBUTES) \
+        IMPL_MGL_FOR_EACH(                  \
+                    IMPL_MGL_FILLER(ATTRIBUTES),\
+                    IMPL_MGL_DEFINE_MEMBER,     \
+                    _)
+
+// --------------------------------------------------------------------------------- //
+
+/**
+ * ...
+ */
+#define MGL_DEFINE_TEST(NAMESPACE_SEQ, NAME, ATTRIBUTES) \
+        IMPL_MGL_NAMESPACE_START(NAMESPACE_SEQ) \
+        struct NAME                             \
+        {                                       \
+            typedef NAME self_type;             \
+                                                \
+            IMPL_MGL_DEFINE_MEMBERS(ATTRIBUTES) \
+        };                                      \
+        IMPL_MGL_NAMESPACE_END(NAMESPACE_SEQ)   \
+        namespace mgl {                         \
+        namespace priv {                        \
+        IMPL_MGL_DEFINE_MEMBERS_NAMES(          \
+            IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME, \
+            ATTRIBUTES)                         \
+        }                                       \
+        }
+
+//MGL_DEFINE_TEST(,test, (int, gg)(float, op))
 
 /**
  * Macro to define attributes data.
@@ -89,7 +143,7 @@ IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(test, (int, gg, WUT)(int, op, oh))
  * Usage :
  * -------
  *  \code
- *      NKH_DEFINE_GL_ATTRIBUTES(
+ *      MGL_DEFINE_GL_ATTRIBUTES(
  *          (namespace0)(namespace1),
  *          attribute_block_name,
  *          (glm::vec3, attribute1)

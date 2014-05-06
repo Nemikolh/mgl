@@ -15,6 +15,12 @@
 #define IMPL_MGL_CAT(a, b) IMPL_MGL_CAT_I(a, b)
 
 /**
+ * Cast to string the passed parameter.
+ */
+#define IMPL_MGL_TO_STR(arg) IMPL_MGL_TO_STR_I(arg)
+#define IMPL_MGL_TO_STR_I(arg) #arg
+
+/**
  * Retrieve the first element of the given sequence.
  */
 #define IMPL_MGL_SEQ_HEAD(seq) IMPL_MGL_SEQ_HEAD_I(seq)
@@ -87,15 +93,16 @@
  * Decrement an integer.
  */
 #define IMPL_MGL_DEC(i) IMPL_MGL_CAT(IMPL_MGL_DEC_, i)
-#define IMPL_MGL_DEC_0 1
-#define IMPL_MGL_DEC_1 2
-#define IMPL_MGL_DEC_2 3
-#define IMPL_MGL_DEC_3 4
-#define IMPL_MGL_DEC_4 5
-#define IMPL_MGL_DEC_5 6
-#define IMPL_MGL_DEC_6 7
-#define IMPL_MGL_DEC_7 8
-#define IMPL_MGL_DEC_8 9
+#define IMPL_MGL_DEC_0 0
+#define IMPL_MGL_DEC_1 0
+#define IMPL_MGL_DEC_2 1
+#define IMPL_MGL_DEC_3 2
+#define IMPL_MGL_DEC_4 3
+#define IMPL_MGL_DEC_5 4
+#define IMPL_MGL_DEC_6 5
+#define IMPL_MGL_DEC_7 6
+#define IMPL_MGL_DEC_8 7
+#define IMPL_MGL_DEC_9 8
 
 /**
  * Returns the size of the sequence.

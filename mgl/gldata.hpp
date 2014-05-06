@@ -58,7 +58,7 @@
 #define IMPL_MGL_OFFSET_OF(NAME, ATTRIBUTE) \
     offsetof(NAME, IMPL_MGL_CAPTURE_SECOND(ATTRIBUTE))
 
-#define IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT(R, NAME, INDEX, ATTRIBUTE) \
+#define IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT(ATTRIBUTE, INDEX, NAME) \
        namespace mgl {\
             template<>                                                 \
             struct offset_at< \
@@ -72,16 +72,15 @@
  *
  */
 #define IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(NAME, ATTRIBUTES)  \
-        BOOST_PP_SEQ_FOR_EACH_I_R(                              \
-                    1,                                          \
+        IMPL_MGL_FOR_EACH(                                      \
+                    IMPL_MGL_FILLER(ATTRIBUTES), \
                     IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT,        \
-                    NAME,                                       \
-                    BOOST_PP_CAT(BOOST_FUSION_ADAPT_STRUCT_FILLER_0 ATTRIBUTES,_END))
+                    NAME)
 
 //#define MACRO(r, data, i, elem) \
 //        data i elem
 //BOOST_PP_SEQ_FOR_EACH_I_R(1, MACRO, coucou, ((gg))((tt)))
-//IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(test, (int, gg)(int, op))
+IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(test, (int, gg, WUT)(int, op, oh))
 //BOOST_PP_FOR_2((IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT, test,  ((int, op))  (nil), 1),BOOST_PP_SEQ_FOR_EACH_I_P,BOOST_PP_SEQ_FOR_EACH_I_O,BOOST_PP_SEQ_FOR_EACH_I_M)
 
 /**

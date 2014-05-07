@@ -14,7 +14,9 @@
 #include <boost/fusion/adapted/struct/define_struct.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
+
 #include "preprocessor/glpreprocessor_types.hpp"
+#include "preprocessor/glpreprocessor_control.hpp"
 
 /**
  * Convert the given sequence into nested namespaces.

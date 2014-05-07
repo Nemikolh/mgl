@@ -62,14 +62,12 @@
 #define IMPL_MGL_OFFSET_OF(NAME, ATTRIBUTE) \
     offsetof(NAME, IMPL_MGL_CAPTURE_SECOND(ATTRIBUTE))
 #define IMPL_MGL_DEFINE_ATTRIBUTE_OFFSET_AT(ATTRIBUTE, INDEX, NAME) \
-       namespace mgl {\
             template<>                                                 \
             struct offset_at< \
                         NAME, INDEX>              \
             {                                                          \
                 static constexpr std::size_t value = IMPL_MGL_OFFSET_OF(NAME, ATTRIBUTE) ; \
-            };                                                         \
-        }
+            };
 
 /**
  * Add the offset_at<> template specialization for the attributes.
@@ -118,6 +116,18 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
 // --------------------------------------------------------------------------------- //
 
 /**
+ * Set gl_attributes to true for a given type.
+ */
+#define IMPL_MGL_DEFINE_IS_GL_ATTRIBUTE(NAME)   \
+        template<>                              \
+        struct is_gl_attributes<NAME>           \
+        {                                       \
+            static constexpr bool value = true; \
+        };
+
+// --------------------------------------------------------------------------------- //
+
+/**
  * ...
  */
 #define MGL_DEFINE_TEST(NAMESPACE_SEQ, NAME, ATTRIBUTES) \
@@ -130,10 +140,15 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
         };                                      \
         IMPL_MGL_NAMESPACE_END(NAMESPACE_SEQ)   \
         namespace mgl {                         \
-        namespace priv {                        \
         IMPL_MGL_DEFINE_MEMBERS_NAMES(          \
             IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME, \
             ATTRIBUTES)                         \
+        IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(   \
+            IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME, \
+            ATTRIBUTES)                         \
+        namespace priv {                        \
+        IMPL_MGL_DEFINE_IS_GL_ATTRIBUTE(        \
+            IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME) \
         }                                       \
         }
 
@@ -179,11 +194,12 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
             };                                                                                  \
         }                                                                                       \
         }                                                                                       \
+        namespace mgl  {                                                                        \
         IMPL_MGL_DEFINE_ATTRIBUTES_OFFSET_AT(                                                   \
-                IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME,         \
-                ATTRIBUTES)
+            IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME,                                      \
+            ATTRIBUTES)                                                                         \
+        }
 
-//                BOOST_FUSION_ADAPT_STRUCT_NAMESPACE_DECLARATION((0)NAMESPACE_SEQ) NAME,
 /**
  * Macro to adapt existing attributes data.
  * ----------------------------------------------------------------

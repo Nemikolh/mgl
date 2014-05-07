@@ -14,6 +14,10 @@ template<typename T, unsigned int N>
 struct offset_at
 {};
 
+template<typename T, unsigned int N>
+struct struct_member_name
+{};
+
 }  /* namespace mgl */
 
 #endif /* UTIL_HPP_ */

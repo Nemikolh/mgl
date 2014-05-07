@@ -91,9 +91,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="examples|memory|mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Debug|client|app|examples|shader|mgl|Test|src|log|external|core/reflect|memory|reflect|test|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="shader/glsltranslator_pri.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|shader/gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
+						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|glcontext.cpp|shader/gltranslator_mat.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|glvector.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
@@ -151,9 +151,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="examples|memory|mgl|Test|test|shader|src|log|core/reflect|reflect|Debug" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Debug|log|core/reflect|memory|reflect|test|examples|shader|mgl|Test|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="shader/glsltranslator_pri.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|shader/gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
+						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|glcontext.cpp|shader/gltranslator_mat.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|glvector.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
@@ -501,9 +501,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="examples|memory|mgl|Test|test|Debug|log|external|core/reflect|client|reflect|app|shader|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Debug|client|app|examples|shader|mgl|Test|src|log|external|core/reflect|memory|reflect|test|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="shader/glsltranslator_pri.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|shader/gltranslator_vec.inl|shader/gltranslator_mat.inl|glutil.inl|glvector.inl|glcontext.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
+						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|glcontext.cpp|shader/gltranslator_mat.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|glvector.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
@@ -613,9 +613,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="examples|Debug|external|log|core/reflect|client|memory|reflect|app|test|shader|mgl|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Debug|log|external|core/reflect|memory|client|reflect|test|app|examples|mgl|shader|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="basic_draw.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="shader/glsltranslator_pri.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|shader/gltranslator_vec.inl|gldraw.inl|glcontext.cpp|glutil.inl|shader/gltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
+						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|shader/gltranslator_mat.inl|glcontext.cpp|shader/glsltranslator_vec.inl|gldraw.inl|shader/glsltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
@@ -725,9 +725,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="examples|runAllTests.cpp|Debug|external|log|core/reflect|client|memory|reflect|app|test|shader|mgl|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Debug|client|app|examples|mgl|shader|Test|src|external|log|runAllTests.cpp|core/reflect|memory|reflect|test|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="shader/glsltranslator_pri.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|shader/gltranslator_vec.inl|gldraw.inl|glcontext.cpp|glutil.inl|shader/gltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
+						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|shader/gltranslator_mat.inl|glcontext.cpp|shader/glsltranslator_vec.inl|gldraw.inl|shader/glsltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>

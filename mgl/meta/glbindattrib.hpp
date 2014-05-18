@@ -18,11 +18,11 @@ namespace priv {
     /**
      * Meta function iterating over attributes of the Sequence.
      */
-    template<typename Seq, typename AttributeBinder, unsigned int N>
+    template<typename Seq, typename AttributeBinder, typename N>
     struct bind_Iter
     {
-        typedef typename value_at<Seq, N>::type     current_t;
-        typedef struct_member_name<Seq, N>          name_t;
+        typedef typename value_at<Seq, N::value>::type     current_t;
+        typedef struct_member_name<Seq, N::value>          name_t;
 
         constexpr static inline void map(const AttributeBinder & sh)
         {
@@ -32,12 +32,12 @@ namespace priv {
             sh(
                 name_t::call(),                         // attribute name
                 tuple_size<current_t>::value,           // number of component
-                offset_at<Seq, N>::value,               // offsetof(Seq, name_t) conceptually
+                offset_at<Seq, N::value>::value,        // offsetof(Seq, name_t) conceptually
                 sizeof(Seq),                            // stride
                 tuple_component_type<current_t>::value  // deduce
             );
 
-            bind_Iter<Seq, AttributeBinder, N + 1>::map(sh);
+            bind_Iter<Seq, AttributeBinder, int_<N::value + 1>>::map(sh);
         }
     };
 
@@ -45,7 +45,7 @@ namespace priv {
      * End of iteration.
      */
     template<typename Seq, typename AttributeBinder>
-    struct bind_Iter<Seq, AttributeBinder, seq_size<Seq>::value>
+    struct bind_Iter<Seq, AttributeBinder, int_<seq_size<Seq>::value>>
     {
         constexpr static inline void map(...) {}
     };
@@ -54,7 +54,7 @@ namespace priv {
      * Start of the iteration.
      */
     template<typename Seq, typename AttributeBinder>
-    struct bind_first : bind_Iter<Seq, AttributeBinder, 0> {};
+    struct bind_first : bind_Iter<Seq, AttributeBinder, int_<0>> {};
 
     /**
      * External entry for the mapping.

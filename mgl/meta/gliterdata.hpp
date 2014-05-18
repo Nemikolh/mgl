@@ -16,16 +16,16 @@ namespace priv {
     /**
      * Meta function iterating over attributes of the Sequence.
      */
-    template<typename Seq, typename ApplyFunctor, unsigned int N>
+    template<typename Seq, typename ApplyFunctor, typename N>
     struct iter_base
     {
-        typedef typename value_at<Seq, N>::type     current_t;
-        typedef struct_member_name<Seq, N>          name_t;
+        typedef typename value_at<Seq, N::value>::type     current_t;
+        typedef struct_member_name<Seq, N::value>          name_t;
 
         static inline void apply(ApplyFunctor&& p_func)
         {
-            p_func.template apply<current_t, N>(name_t::call());
-            iter_base<Seq, ApplyFunctor, N + 1>::apply(p_func);
+            p_func.template apply<current_t, N::value>(name_t::call());
+            iter_base<Seq, ApplyFunctor, int_<N::value + 1>>::apply(p_func);
         }
     };
 
@@ -33,7 +33,7 @@ namespace priv {
      * End of iteration.
      */
     template<typename Seq, typename ApplyFunctor>
-    struct iter_base<Seq, ApplyFunctor, seq_size<Seq>::value>
+    struct iter_base<Seq, ApplyFunctor, int_<seq_size<Seq>::value>>
     {
         static inline void apply(ApplyFunctor&&) {}
     };
@@ -42,7 +42,7 @@ namespace priv {
      * Start of the iteration.
      */
     template<typename Seq, typename ApplyFunctor>
-    struct iter_first : iter_base<Seq, ApplyFunctor, 0> {};
+    struct iter_first : iter_base<Seq, ApplyFunctor, int_<0>> {};
 
 
 } /* namespace priv */

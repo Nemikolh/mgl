@@ -28,6 +28,12 @@ template<typename T>
 struct seq_size
 {};
 
+template<unsigned int N>
+struct int_
+{
+    static constexpr unsigned int value = N;
+};
+
 }  /* namespace priv */
 
 }  /* namespace mgl */

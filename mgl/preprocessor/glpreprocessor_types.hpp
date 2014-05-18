@@ -8,11 +8,7 @@
 #ifndef GLPREPROCESSOR_TYPES_HPP_
 #define GLPREPROCESSOR_TYPES_HPP_
 
-/**
- * Concatenation macro.
- */
-#define IMPL_MGL_CAT_I(a, b) a ## b
-#define IMPL_MGL_CAT(a, b) IMPL_MGL_CAT_I(a, b)
+#include "glpreprocessor_base.hpp"
 
 /**
  * Cast to string the passed parameter.

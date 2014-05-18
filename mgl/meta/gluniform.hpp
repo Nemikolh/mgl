@@ -9,10 +9,8 @@
 #define GLUNIFORM_HPP_
 
 #include <glm/gtc/type_ptr.hpp>
-#include <boost/preprocessor/comparison/equal.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/control/expr_if.hpp>
 #include "../type/gltraits.hpp"
+#include "../preprocessor/glpreprocessor_base.hpp"
 
 namespace mgl {
 
@@ -42,20 +40,20 @@ struct glcalli
 
 #define MGL_DEF_UNIFORM_CALL(tuple_size, element_type, matrix)  \
 template<> \
-struct BOOST_PP_CAT(glcall,element_type)<tuple_size> \
+struct IMPL_MGL_CAT(glcall,element_type)<tuple_size> \
 { \
     template<typename Data> \
     inline static void bindUniform(gl_types::id p_id, Data p_value)   \
     {   \
-        BOOST_PP_CAT(glUniform,BOOST_PP_CAT(tuple_size,BOOST_PP_CAT(element_type,v)))(p_id, 1, glm::value_ptr(p_value)); \
+        IMPL_MGL_CAT(glUniform,IMPL_MGL_CAT(tuple_size,IMPL_MGL_CAT(element_type,v)))(p_id, 1, glm::value_ptr(p_value)); \
     } \
-    BOOST_PP_EXPR_IF(matrix,\
+    IMPL_MGL_IF(matrix,\
     template<typename Data> \
     inline static void bindUniformMatrix(gl_types::id p_id, Data p_value) \
     { \
-        BOOST_PP_CAT(glUniformMatrix,BOOST_PP_CAT(tuple_size,BOOST_PP_CAT(element_type,v)))(p_id, 1, GL_FALSE, glm::value_ptr(p_value)); \
+        IMPL_MGL_CAT(glUniformMatrix,IMPL_MGL_CAT(tuple_size,IMPL_MGL_CAT(element_type,v)))(p_id, 1, GL_FALSE, glm::value_ptr(p_value)); \
     } \
-    ) \
+    ,) \
 }
 
 /* Implementation details. */

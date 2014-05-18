@@ -15,6 +15,10 @@ struct offset_at
 {};
 
 template<typename T, unsigned int N>
+struct value_at
+{};
+
+template<typename T, unsigned int N>
 struct struct_member_name
 {};
 

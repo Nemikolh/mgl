@@ -8,11 +8,7 @@
 #ifndef GLITERDATA_HPP_
 #define GLITERDATA_HPP_
 
-#include <boost/fusion/include/sequence.hpp>
-#include <boost/fusion/include/algorithm.hpp>
-#include <boost/mpl/arithmetic.hpp>
-#include <boost/mpl/sizeof.hpp>
-
+#include "glutil.hpp"
 
 namespace mgl {
 namespace priv {
@@ -20,17 +16,16 @@ namespace priv {
     /**
      * Meta function iterating over attributes of the Sequence.
      */
-    template<typename Seq, typename ApplyFunctor, typename N>
+    template<typename Seq, typename ApplyFunctor, unsigned int N>
     struct iter_base
     {
-        typedef typename boost::fusion::result_of::value_at<Seq, N>::type   current_t;
-        typedef typename boost::mpl::next<N>::type                          next_t;
-        typedef boost::fusion::extension::struct_member_name<Seq, N::value> name_t;
+        typedef typename value_at<Seq, N>::type     current_t;
+        typedef struct_member_name<Seq, N>          name_t;
 
         static inline void apply(ApplyFunctor&& p_func)
         {
-            p_func.template apply<current_t, N::value>(name_t::call());
-            iter_base<Seq, ApplyFunctor, next_t>::apply(p_func);
+            p_func.template apply<current_t, N>(name_t::call());
+            iter_base<Seq, ApplyFunctor, N + 1>::apply(p_func);
         }
     };
 
@@ -38,7 +33,7 @@ namespace priv {
      * End of iteration.
      */
     template<typename Seq, typename ApplyFunctor>
-    struct iter_base<Seq, ApplyFunctor, typename boost::fusion::result_of::size<Seq>::type>
+    struct iter_base<Seq, ApplyFunctor, seq_size<Seq>::value>
     {
         static inline void apply(ApplyFunctor&&) {}
     };
@@ -47,7 +42,7 @@ namespace priv {
      * Start of the iteration.
      */
     template<typename Seq, typename ApplyFunctor>
-    struct iter_first : iter_base<Seq, ApplyFunctor, boost::mpl::int_<0> > {};
+    struct iter_first : iter_base<Seq, ApplyFunctor, 0> {};
 
 
 } /* namespace priv */

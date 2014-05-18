@@ -9,12 +9,10 @@
 #define GLMHELPER_HPP_
 
 #include <type_traits>
-#include <boost/mpl/eval_if.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/mpl/arithmetic.hpp>
-#include <boost/mpl/sizeof.hpp>
 // TODO : may have change with the last release of mgl.
 #include <glm/core/_detail.hpp>
+
+#include "meta/glutil.hpp"
 
 namespace mgl {
 
@@ -68,9 +66,9 @@ class tuple_size_glm
 public:
 
     typedef
-        typename boost::mpl::divides<
-                    boost::mpl::sizeof_<T>
-                ,   boost::mpl::sizeof_<decltype(deduce((T*)0))>
+        typename divides<
+                    int_<sizeof(T)>
+                ,   int_<sizeof(decltype(deduce((T*)0)))>
             >::type type;
     static constexpr typename type::value_type
                     value = type::value;
@@ -88,8 +86,8 @@ template<typename T>
 struct tuple_size
 {
     typedef
-        typename boost::mpl::eval_if< std::is_arithmetic<T>
-            , boost::mpl::int_<1>
+        typename priv::eval_if< std::is_arithmetic<T>
+            , priv::int_<1>
             , priv::tuple_size_glm<T>
         >::type         type;
     static constexpr typename type::value_type value = type::value;

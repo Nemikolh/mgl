@@ -31,7 +31,36 @@ struct seq_size
 template<unsigned int N>
 struct int_
 {
+    typedef int_            type;
+    typedef unsigned int    value_type;
+
     static constexpr unsigned int value = N;
+};
+
+template<bool B, typename T, typename F>
+struct eval_if_c
+{
+    typedef T type;
+};
+
+template<typename T, typename F>
+struct eval_if_c<false, T, F>
+{
+    typedef F type;
+};
+
+template<typename Cond, typename T, typename F>
+struct eval_if
+{
+    typedef typename eval_if_c<Cond::value, T, F>::type _f;
+    typedef typename _f::type type;
+};
+
+template<typename N, typename D>
+struct divides
+{
+    typedef int_<N::value / D::value> type;
+    static constexpr unsigned int value = type::value;
 };
 
 }  /* namespace priv */

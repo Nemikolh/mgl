@@ -9,7 +9,7 @@
 #define GLDATA_HPP_
 
 #include "type/gltraits.hpp"
-#include "memory/util.hpp"
+#include "meta/glutil.hpp"
 
 #include <boost/fusion/adapted/struct/define_struct.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -128,6 +128,19 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
 // --------------------------------------------------------------------------------- //
 
 /**
+ * Set the size for the sequence.
+ */
+#define IMPL_MGL_DEFINE_SEQ_SIZE(NAME, ATTRIBUTES)  \
+        template<>                                  \
+        struct seq_size<NAME>                       \
+        {                                           \
+            static constexpr int value =            \
+            IMPL_MGL_SEQ_SIZE(ATTRIBUTES);          \
+        };
+
+// --------------------------------------------------------------------------------- //
+
+/**
  * ...
  */
 #define MGL_DEFINE_TEST(NAMESPACE_SEQ, NAME, ATTRIBUTES) \
@@ -149,6 +162,9 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
         namespace priv {                        \
         IMPL_MGL_DEFINE_IS_GL_ATTRIBUTE(        \
             IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME) \
+        IMPL_MGL_DEFINE_SEQ_SIZE(               \
+            IMPL_MGL_EXPAND_NAMESPACE(NAMESPACE_SEQ) NAME, \
+            IMPL_MGL_FILLER(ATTRIBUTES)) \
         }                                       \
         }
 

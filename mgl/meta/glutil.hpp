@@ -1,12 +1,12 @@
 /*
- * util.hpp
+ * glutil.hpp
  *
  *  Created on: 25 févr. 2014
  *      Author: nemikolh
  */
 
-#ifndef UTIL_HPP_
-#define UTIL_HPP_
+#ifndef MGL_UTIL_HPP_
+#define MGL_UTIL_HPP_
 
 namespace mgl {
 
@@ -18,6 +18,14 @@ template<typename T, unsigned int N>
 struct struct_member_name
 {};
 
+namespace priv {
+
+template<typename T>
+struct seq_size
+{};
+
+}  /* namespace priv */
+
 }  /* namespace mgl */
 
-#endif /* UTIL_HPP_ */
+#endif /* MGL_UTIL_HPP_ */

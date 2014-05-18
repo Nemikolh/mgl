@@ -1,5 +1,5 @@
 /*
- * glutil.hpp
+ * gldraw.hpp
  *
  *  Created on: 9 juil. 2013
  *      Author: nemikolh

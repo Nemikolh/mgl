@@ -20,7 +20,7 @@
 
 #include "glbinder.hpp"
 #include "../glmhelper.hpp"
-#include "../memory/util.hpp"
+#include "../meta/glutil.hpp"
 
 namespace mgl {
 namespace priv {

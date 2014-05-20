@@ -9,8 +9,15 @@
 #define GLMHELPER_HPP_
 
 #include <type_traits>
-// TODO : may have change with the last release of mgl.
-#include <glm/core/_detail.hpp>
+#ifdef GLM_VERSION
+#   if GLM_VERSION == 94
+#       include <glm/core/_detail.hpp>
+#   elif GLM_VERSION == 95
+#       include <glm/detail/type_gentype.hpp>
+#   endif
+#else
+#error "GLM isn't included ! You need to include glm before anything that requires the glm helpers."
+#endif
 
 #include "meta/glutil.hpp"
 
@@ -25,7 +32,11 @@ struct is_vector
     typedef is_vector<T> type;
     typedef bool         value_type;
 
-    static constexpr bool value = glm::detail::is_vector<T>::_YES == 1;
+    static constexpr bool value =
+#if GLM_VERSION == 94
+            glm::detail::is_vector<T>::_YES == 1;
+#elif GLM_VERSION == 95
+#endif
 };
 
 /**
@@ -36,7 +47,12 @@ struct is_matrix
 {
     typedef is_matrix<T> type;
     typedef bool         value_type;
-    static constexpr bool value = glm::detail::is_matrix<T>::_YES == 1;
+
+    static constexpr bool value =
+#if GLM_VERSION == 94
+            glm::detail::is_matrix<T>::_YES == 1;
+#elif GLM_VERSION == 95
+#endif
 };
 
 

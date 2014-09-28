@@ -116,7 +116,20 @@ struct bind_buffers_helper
 }  /* namespace priv */
 
 /**
- * @class gl_bind_buffers is a class binding buffers automatically.
+ * @ingroup attributes
+ * @brief gl_bind_buffers is a class binding buffers automatically.
+ *
+ * With the following piece of code you can bind any possible buffer:
+ *
+ *      @code
+ *          mgl::gl_vector<vertex> buffer_vector;
+ *          mgl::gl_vector<int> buffer_instanced;
+ *          mgl::gl_vector<glm::vec3> buffer_simple;
+ *          // ...
+ *          mgl::gl_bind_buffers binder(program_id);
+ *          binder.map(buffer_vector, mgl::make_buffer(buffer_simple), mgl::make_instanced(buffer_instanced));
+ *          // Now the buffer have been binded.
+ *      @endcode
  */
 struct gl_bind_buffers
 {

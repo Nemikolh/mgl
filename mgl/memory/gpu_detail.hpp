@@ -11,7 +11,7 @@
 namespace mgl {
 
 /**
- * \class Gpu_buffer
+ * \class gpu_buffer
  * \brief Simple container to simplify the use of gl_ptr.
  */
 template<typename T>

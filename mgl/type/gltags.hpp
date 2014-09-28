@@ -11,9 +11,15 @@
 namespace mgl {
 
 /**
+ * Tag which provides no information.
+ */
+struct gl_tag_none {};
+
+/**
  * Tag to assign an attribute to the gl_Position attribute.
  */
 struct gl_tag_position {};
+
 
 }  /* namespace mgl */
 

@@ -13,19 +13,45 @@
 #include "../glexceptions.hpp"
 #include "priv/details.hpp"
 
+/**
+ * @defgroup shader Shaders module
+ * @brief Classes linked to the creation, manipulation of shaders and compile-time shaders.
+ *
+ * gl_shader and gl_program have reference-counting semantics. \n
+ * This choice of design is justified on the fact that most of the time you don't
+ * want to create a deep copy of your shader. That is if you use copy-construction,
+ * you don't really intend to get a new shader id, and eventually wait for a new compilation step to occurs. \n
+ * What you do want is say: "Give this shader to this game entity in its rendering options."\n
+ * Using reference counting is then a way to ease the use of gl_shader for the developer. \n
+ * We could have used move semantic to prevent this behavior of copying, \n
+ * but it seems reasonable to assume that you'll need shared semantics here.
+ *
+ */
 namespace mgl {
 
+/**
+ * @ingroup shader
+ * @brief mgl enums for the different shader stages.
+ */
 enum class shader_type
 {
-    VERTEX_SHADER,
-    TESS_CONTROL_SHADER,
-    TESS_EVALUATION_SHADER,
-    GEOMETRY_SHADER,
-    FRAGMENT_SHADER,
-    COMPUTE_SHADER,
-    Count
+    VERTEX_SHADER,         //!< VERTEX_SHADER
+    TESS_CONTROL_SHADER,   //!< TESS_CONTROL_SHADER
+    TESS_EVALUATION_SHADER,//!< TESS_EVALUATION_SHADER
+    GEOMETRY_SHADER,       //!< GEOMETRY_SHADER
+    FRAGMENT_SHADER,       //!< FRAGMENT_SHADER
+    COMPUTE_SHADER,        //!< COMPUTE_SHADER
+    Count                  //!< Count for internal use only.
 };
 
+/**
+ * @ingroup shader
+ * @brief Simple wrapper around OpenGL Shaders.
+ *
+ * This class use reference counting semantic when constructing
+ * a new gl_shader object by copy-constructor.\n
+ * @see gl_program
+ */
 struct gl_shader : public priv::base_id_ref_count
 {
     typedef priv::base_id_ref_count base;
@@ -148,6 +174,5 @@ private:
 };
 
 }  /* namespace mgl */
-
 
 #endif /* GL_TYPE_SHADER_HPP_ */

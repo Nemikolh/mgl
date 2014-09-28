@@ -16,6 +16,18 @@
 
 namespace mgl {
 
+/**
+ * @ingroup attributes
+ * @brief The gl_vector class enables you to manage your OpenGL buffers like you
+ * would do with a std::vector.
+ *
+ * When speaking of buffer here, we refer to the OpenGL buffers managed with:
+ *  - glGenBuffers(...)
+ *  - glMapBufferRange/UnmapBuffer(...)
+ *  - glBufferData(...)
+ *
+ * @see gl_buffer_type to see how you can customize the target and usage buffer properties.
+ */
 template<typename T, typename Buff>
 class gl_vector
 {
@@ -25,25 +37,57 @@ public:
     // ============================= TYPES ============================ //
     // ================================================================ //
 
+    /**
+     * @brief Type of the underlying allocator used.
+     *
+     * The allocator is std conformant and is passed to the underlying std::vector.
+     */
     typedef gl_allocator<T, gl_vector<T, Buff>, Buff>       allocator_type;
+
+    /**
+     * @brief Base type used for the implementation of the vector.
+     *
+     * Redirect to the std::vector type with our custom allocator.
+     */
     typedef std::vector<T, allocator_type>                  base_vector_type;
 
+    /**
+     * @brief Pointer type.
+     *
+     * The underlying pointer is the custom type gl_ptr.
+     * @see gl_ptr for more information on the map-aware pointer type.
+     */
     typedef typename base_vector_type::pointer              pointer;
+
+    /** @brief Const pointer type. */
     typedef typename base_vector_type::const_pointer        const_pointer;
+
+    /** @brief Reference type. */
     typedef typename base_vector_type::reference            reference;
+
+    /** @brief Const reference type. */
     typedef typename base_vector_type::const_reference      const_reference;
 
+    /**
+     * @brief Iterator type.
+     *
+     * Currently based on the std::vector<>::iterator type.
+     */
     typedef typename base_vector_type::iterator             iterator;
+
+    /** @brief Const iterator type. */
     typedef typename base_vector_type::const_iterator       const_iterator;
-    //typedef gl_vector_iterator<pointer, gl_vector>          iterator;
-    //typedef gl_vector_iterator<const_pointer, gl_vector>    const_iterator;
+    /** @brief Size type. */
     typedef typename pointer::size_type                     size_type;
+    /** @brief Difference type. */
     typedef typename pointer::difference_type               difference_type;
+    /** @brief Value type. */
     typedef T                                               value_type;
 
-    // TODO check the correct behaviour of the reverse_iterator with the custom iterator.
-    typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
+    /** @brief Reverse iterator type. */
     typedef std::reverse_iterator<iterator>        reverse_iterator;
+    /** @brief Const reverse iterator type. */
+    typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
 
     //** Typedef for the automatic state saving. */
     //typedef gl_object_buffer gl_object_type;
@@ -52,6 +96,12 @@ public:
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
+    /**
+     * @brief Default constructor.
+     *
+     * This constructor does not perform any allocation on the GPU.\n
+     * It creates a buffer that owns nothing.
+     */
     explicit gl_vector()
         : m_gpu_buff_stack()
         , m_mapped(0)
@@ -61,6 +111,12 @@ public:
         , m_vector(allocator_type(*this))
     {}
 
+    /**
+     * @brief Specialized constructor.
+     *
+     * This constructor allocates p_n object of type value_type on the GPU.
+     * @param p_n is the number of object to allocates.
+     */
     explicit gl_vector(size_type p_n)
         : m_gpu_buff_stack()
         , m_mapped(0)
@@ -72,6 +128,14 @@ public:
         unmap_pointer();
     }
 
+    /**
+     * @brief Specialized constructor with default value.
+     *
+     * This constructor allocates p_n object of type value_type on the GPU. \n
+     * The object are copy-constructed with the passed value.
+     * @param p_n is the number of object to allocates.
+     * @param p_value is the default value to copy from.
+     */
     gl_vector(size_type p_n, const value_type& p_value)
         : m_gpu_buff_stack()
         , m_mapped(0)
@@ -690,6 +754,14 @@ private:
     base_vector_type                    m_vector;
 };
 
+/**
+ * @brief Specialization of gl_scope for the gl_vector type.
+ *
+ * Basically this class map the gl_vector passed in its constructor and unmap it
+ * in the destructor.
+ *
+ * Hence the term "scope".
+ */
 template<typename T, typename B>
 class gl_scope<gl_vector<T, B>>
 {

@@ -1,15 +1,14 @@
 /*
- * details.hpp
+ * genheader.hpp
  *
  *  Created on: 5 avr. 2014
  *      Author: nemikolh
  */
 
-#ifndef EXTENSION_PRIV_DETAILS_HPP_
-#define EXTENSION_PRIV_DETAILS_HPP_
+#ifndef EXTENSION_PRIV_DETAILS_GEN_HEADER_HPP_
+#define EXTENSION_PRIV_DETAILS_GEN_HEADER_HPP_
 
 #include <string>
-#include "../../meta/gliterdata.hpp"
 #include "../../shader/glsltranslator.hpp"
 
 namespace mgl {
@@ -68,4 +67,4 @@ private:
 
 
 
-#endif /* EXTENSION_PRIV_DETAILS_HPP_ */
+#endif /* EXTENSION_PRIV_DETAILS_GEN_HEADER_HPP_ */

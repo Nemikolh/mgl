@@ -4,6 +4,7 @@
  *  Created on: 2 juil. 2013
  *      Author: nemikolh
  */
+/** @file */
 
 #ifndef GLDATA_HPP_
 #define GLDATA_HPP_
@@ -155,32 +156,60 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
 // --------------------------------------------------------------------------------- //
 
 /**
- * Macro to define attributes data.
- * --------------------------------------------------------------
+ * @defgroup attributes Attributes module
+ * @brief Everything related to the manipulation of the attributes (creation, use through shaders, ...)
+ *
+ * You'll find here the different classes that play an important role in the manipulation of attributes.\n
+ * Basically, when using the part of this module, you will use the following:
+ *  - #MGL_DEFINE_GL_ATTRIBUTES
+ *      @code
+ *          MGL_DEFINE_GL_ATTRIBUTES(
+ *              (my_namespace),
+ *              attributes,
+ *              (glm::vec3, position)
+ *              (glm::vec3, normal)
+ *          )
+ *      @endcode
+ *  - at least one buffer defined like this:
+ *      @code mgl::gl_vector<my_namespace::attributes> buffer; @endcode
+ *  - gl_vao to automatically bind your buffer.
+ * @{
+ */
+
+/**
+ * @brief Macro to define attributes data.
+ *
  * Usage :
- * -------
- *  \code
+ *  @code
  *      MGL_DEFINE_GL_ATTRIBUTES(
  *          (namespace0)(namespace1),
  *          attribute_block_name,
  *          (glm::vec3, attribute1)
  *          (int      , attribute2)
  *      )
- *  \endcode
+ *  @endcode
  * Define attributes that can be drawn with a shader program.
  * The attributes name must be in the GLSL vertex shader
  * of the same name than in their declaration. For instance,
  * here the vertex shader would be :
- *  \code
+ *  @code
  *      in vec3 attribute1;
  *      in int  attribute2;
  *
  *      ...
- *  \endcode
+ *  @endcode
  * Notes :
  *  - You can't prefix an attribute with "gl_", if you do so the
  *    program will not link. No check is performed on it there, so
  *    it's your job to use it properly.
+ *  - If you don't want to have your type in the global namespace do the following:
+ *      @code
+ *          MGL_DEFINE_GL_ATTRIBUTES(
+ *              ,
+ *              attributes,
+ *              // same as above
+ *          )
+ *      @endcode
  */
 #define MGL_DEFINE_GL_ATTRIBUTES(NAMESPACE_SEQ, NAME, ATTRIBUTES) \
         IMPL_MGL_NAMESPACE_START(NAMESPACE_SEQ) \
@@ -210,6 +239,9 @@ struct struct_member_name<STRUCT_NAME, INDEX>                       \
         }                                       \
         }
 
+/**
+ * @}
+ */
 //MGL_DEFINE_TEST(,test, (int, gg)(float, op))
 
 /**

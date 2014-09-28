@@ -10,6 +10,7 @@
 
 #include "../type/glshader.hpp"
 #include "priv/genheader.hpp"
+#include "../meta/gliterdata.hpp"
 
 namespace mgl {
 namespace extension {

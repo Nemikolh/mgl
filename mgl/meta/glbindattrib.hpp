@@ -72,23 +72,25 @@ namespace priv {
 } /* namespace priv */
 
 /**
- * \class gl_bind_attributes is a class binding attributes automatically
+ * @ingroup attributes
+ * @brief gl_bind_attributes is a class binding attributes automatically
  *        throught the use of the meta programming language.
+ *
  * To use this functionnality, you must be using the macro defined
  * by the library :
- *      - MGL_DEFINE_GLATTRIBUTES
+ *      - #MGL_DEFINE_GL_ATTRIBUTES
  *
  *
  *  For the binding simply make the following call :
  *
- *      \code
+ *      @code
  *          gl_bind_attributes< T >::map(attribute_bind)
- *      \endcode
+ *      @endcode
  *
  *  where T is your attribute structure, and attribute_bind is
  *  a functor defined as follow :
  *
- *      \code
+ *      @code
  *          void operator()(
  *              char const*,                        // attribute name
  *              int,                                // number of component
@@ -96,10 +98,10 @@ namespace priv {
  *              std::size_t,                        // stride
  *              GLenum                              // type of the component (GL_FLOAT, ...)
  *          );
- *      \endcode
+ *      @endcode
  *
  *
- * \param T is the structure defined with NKH_DEFINE_GLATTRIBUTES
+ * @param T is the structure defined with NKH_DEFINE_GLATTRIBUTES
  */
 template<typename T>
 struct gl_bind_attributes : public priv::bind_attributes<T, gl_attribute_binder>::type

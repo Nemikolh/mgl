@@ -13,7 +13,7 @@
 namespace mgl {
 
 /**
- * \brief gl_scope is a class that preserve a gl_state for a scope, and automatically bind the object.
+ * @brief gl_scope is a class that preserve a gl_state for a scope, and automatically bind the object.
  */
 template<typename T>
 class gl_scope
@@ -24,8 +24,8 @@ public:
     // ================================================================ //
 
     /**
-     * \brief Default constructor.
-     * \param The passed parameter is locked.
+     * @brief Default constructor.
+     * @param t The passed parameter is locked.
      */
     gl_scope(const T & t)
         : m_obj(t)
@@ -35,7 +35,7 @@ public:
     }
 
     /**
-     * \brief Destructor.
+     * @brief Destructor.
      */
     ~gl_scope()
     {

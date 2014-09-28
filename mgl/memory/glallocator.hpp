@@ -13,7 +13,7 @@
 namespace mgl {
 
 /**
- * \class gl_allocator is the allocator.
+ * @brief gl_allocator is the allocator.
  */
 template<typename T, typename Container, typename Buff>
 class gl_allocator
@@ -37,11 +37,11 @@ public:
     typedef gl_ptr<void, Buff>          void_pointer;
     typedef const gl_ptr<void, Buff>    const_void_pointer;
 
-    /** Force non copy of the allocator. They must be preserved per Container.  */
+    /** @brief Force non copy of the allocator. They must be preserved per Container.  */
     typedef std::false_type propagate_on_container_copy_assignment;
-    /** Force the non-move of the allocator. They must be preserved per Container.*/
+    /** @brief Force the non-move of the allocator. They must be preserved per Container.*/
     typedef std::false_type propagate_on_container_move_assignment;
-    /** Force the non-swap of the allocator. They must be preserved per Container. */
+    /** @brief Force the non-swap of the allocator. They must be preserved per Container. */
     typedef std::false_type propagate_on_container_swap;
 
     typedef T                               value_type;
@@ -60,25 +60,25 @@ public:
     // ================================================================ //
 
     /**
-     * \brief Default constructor.
+     * @brief Default constructor.
      */
     explicit gl_allocator(Container& p_owner)
         : m_owner(p_owner)
     {}
 
     /**
-     * \brief Default copy constructor.
+     * @brief Default copy constructor.
      */
     gl_allocator(const gl_allocator& ) = default;
 
     /**
-     * \brief Default move constructor.
+     * @brief Default move constructor.
      */
     gl_allocator(gl_allocator&&) = default;
 
     /**
-     * \brief Copy constructor
-     * \param p_rhs is the allocator we copy from.
+     * @brief Copy constructor
+     * @param p_rhs is the allocator we copy from.
      */
     template<typename T2, typename C2, typename B2>
     gl_allocator(const gl_allocator<T2, C2, B2>& p_rhs)
@@ -161,7 +161,9 @@ private:
  */
 
     /**
-     * operator==
+     * @brief operator== for the gl_allocator type.
+     *
+     * Returns true if and only if, the gl_allocators have been created by the same gl_vector.
      */
     template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
     inline bool operator==(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b)
@@ -170,7 +172,7 @@ private:
     }
 
     /**
-     * operator !=
+     * @brief operator != for the gl_allocator type.
      */
     template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
     inline bool operator!=(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b)

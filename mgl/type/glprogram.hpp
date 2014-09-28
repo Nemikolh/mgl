@@ -20,7 +20,12 @@
 namespace mgl {
 
 /**
- * \class gl_program is a wrapper for an opengl shader program.
+ * @ingroup shader
+ * @brief gl_program is a wrapper for an opengl shader program.
+ *
+ * With your gl_program object, you can directly set uniform value.
+ *
+ * @see gl_shader
  */
 struct gl_program : public priv::base_id_ref_count
 {
@@ -38,14 +43,17 @@ struct gl_program : public priv::base_id_ref_count
     {}
 
     /**
-     * @brief Copy isn't allowed.
+     * @brief Default copy constructor.
      */
     gl_program(const gl_program&) = default;
+
+    /**
+     * @brief Default assignment operator.
+     */
     gl_program& operator=(const gl_program&) = default;
 
     /**
      * @brief Move constructor.
-     * @param p_rhs is the temporary.
      */
     gl_program(gl_program&&) = default;
     gl_program& operator=(gl_program&&) = default;
@@ -60,7 +68,7 @@ struct gl_program : public priv::base_id_ref_count
     // ================================================================ //
 
     /**
-     * \brief Perform the linking of the program if note already done.
+     * @brief Perform the linking of the program if not already done.
      */
     void link()
     {
@@ -112,9 +120,9 @@ struct gl_program : public priv::base_id_ref_count
     }
 
     /**
-     * \brief This method allows to create a vao based on this program.
-     * \param p_buffers is the buffers that are gonna be part of this vao.
-     * \return Returns the created vao.
+     * @brief This method allows to create a vao based on this program.
+     * @param p_buffers is the buffers that are gonna be part of this vao.
+     * @return Returns the created vao.
      */
     template<typename... T>
     gl_vao make_vao(T&&... p_buffers)
@@ -123,17 +131,18 @@ struct gl_program : public priv::base_id_ref_count
     }
 
     /**
-     * \brief Set the passed value to the passed uniform.
+     * @brief Set the passed value to the passed uniform.
+     *
      * This is the equivalent to the call to glUniform{1[2|3|4}{i|f}v for glm types.
      * This is done through traits. So if you want to use it for your own vector type, you
      * have two options. First you may add the following nested typedef :
-     *  \code
+     *  @code
      *      typedef \/\* your component type \*\/value_type;
-     *  \endcode
+     *  @endcode
      * This will compute the value as a simple division. The second solution is specializing
      * the mgl::tuple_size meta function for your type.
-     * \param p_uniform is the uniform element to set.
-     * \param p_valueToBind is the value desired.
+     * @param p_uniform is the uniform element to set.
+     * @param p_valueToBind is the value desired.
      */
     template<typename Uniform, typename Data>
     typename std::enable_if<is_vector<Data>::value>::type
@@ -143,17 +152,18 @@ struct gl_program : public priv::base_id_ref_count
     }
 
     /**
-     * \brief Set the passed value to the passed uniform.
+     * @brief Set the passed value to the passed uniform.
+     *
      * This is the equivalent to the call to glUniformMatrix{2|3|4}fv for glm types.
      * This is done through traits. So if you want to use it for your own vector type, you
      * have two options. First you may add the following nested typedef :
-     *  \code
+     *  @code
      *      typedef \/\* your component type \*\/value_type;
-     *  \endcode
+     *  @endcode
      * This will compute the value as a simple division. The second solution is specializing
-     * the mlg::tuple_size meta function for your type.
-     * \param p_uniform is the uniform element to set.
-     * \param p_valueToBind is the value desired.
+     * the mgl::tuple_size meta function for your type.
+     * @param p_uniform is the uniform element to set.
+     * @param p_valueToBind is the value desired.
      */
     template<typename Uniform, typename Data>
     typename std::enable_if<is_matrix<Data>::value>::type
@@ -163,17 +173,18 @@ struct gl_program : public priv::base_id_ref_count
     }
 
     /**
-     * \brief Set the passed value to the passed uniform.
+     * @brief Set the passed value to the passed uniform.
+     *
      * This is the equivalent to the call to glUniform{i|f} for arithmetic types.
      * This is done through traits. So if you want to use it for your own vector type, you
      * have two options. First you may add the following nested typedef :
-     *  \code
+     *  @code
      *      typedef \/\* your component type \*\/value_type;
-     *  \endcode
+     *  @endcode
      * This will compute the value as a simple division. The second solution is specializing
-     * the mlg::tuple_size meta function for your type.
-     * \param p_uniform is the uniform element to set.
-     * \param p_valueToBind is the value desired.
+     * the mgl::tuple_size meta function for your type.
+     * @param p_uniform is the uniform element to set.
+     * @param p_valueToBind is the value desired.
      */
     template<typename Uniform, typename Data>
     typename std::enable_if<std::is_arithmetic<Data>::value>::type

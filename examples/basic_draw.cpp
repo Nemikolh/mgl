@@ -34,7 +34,8 @@ MGL_DEFINE_GL_ATTRIBUTES(
         ,         // The namespace sequence. For instance, (a)(b)(c) is equivalent  to a::b::c
         vertex,     // The struct name.
         (glm::vec3, position)
-        (glm::vec3, color))
+        (glm::vec3, color)
+        )
 
 int main(int argc, char **argv)
 {

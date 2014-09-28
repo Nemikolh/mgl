@@ -13,7 +13,8 @@
 namespace mgl {
 
 /**
- * \class gl_attribute_binder is a functor that encapsulate the OpenGL call binding
+ * @ingroup attributes
+ * @brief gl_attribute_binder is a functor that encapsulate the OpenGL call binding
  *          an attribute to a shader.
  */
 struct gl_attribute_binder

@@ -114,8 +114,6 @@ private:
     GLenum convert_to_en(shader_type p_tag) const
     {
         switch (p_tag) {
-            case shader_type::VERTEX_SHADER:
-                return GL_VERTEX_SHADER;
             case shader_type::TESS_CONTROL_SHADER:
                 return GL_TESS_CONTROL_SHADER;
             case shader_type::TESS_EVALUATION_SHADER:
@@ -126,6 +124,9 @@ private:
                 return GL_FRAGMENT_SHADER;
             case shader_type::COMPUTE_SHADER:
                 return GL_COMPUTE_SHADER;
+            case shader_type::VERTEX_SHADER:
+            default:
+                return GL_VERTEX_SHADER;
         }
     }
 

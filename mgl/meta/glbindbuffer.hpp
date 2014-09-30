@@ -26,8 +26,6 @@ struct is_gl_attributes;
 
 struct bind_buffers_helper
 {
-    typedef int void_;
-
     // ================================================================ //
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
@@ -45,7 +43,7 @@ struct bind_buffers_helper
 
     // Called only if the type T is a gl attribute
     template<typename T, typename B>
-    typename std::enable_if<is_gl_attributes<T>::value, void_>::type
+    typename std::enable_if<is_gl_attributes<T>::value, void>::type
     bind_buffer(const gl_vector<T, B>& p_buffer)
     {
         p_buffer.bind();
@@ -59,7 +57,7 @@ struct bind_buffers_helper
 
     // Called only if the type I is integral and not a gl attribute.
     template<typename I, typename B>
-    typename std::enable_if<std::is_integral<I>::value && !is_gl_attributes<I>::value, void_>::type
+    typename std::enable_if<std::is_integral<I>::value && !is_gl_attributes<I>::value, void>::type
     bind_buffer(const gl_vector<I, B>& p_buffer)
     {
         // Bind the element buffer.
@@ -71,7 +69,7 @@ struct bind_buffers_helper
 
     // Called for simple integers, floating point or glm vectors types buffers.
     template<typename T, typename B>
-    void_ bind_buffer(const gl_simple_buffer<T, B>& p_wrapper)
+    void bind_buffer(const gl_simple_buffer<T, B>& p_wrapper)
     {
         p_wrapper.bind();
         gl_attribute_binder binder(m_program_id);
@@ -84,7 +82,7 @@ struct bind_buffers_helper
 
     // Called when the buffer is an instanced buffer.
     template<typename T, typename B>
-    typename std::enable_if<is_gl_attributes<T>::value, void_>::type
+    typename std::enable_if<is_gl_attributes<T>::value, void>::type
     bind_buffer(const gl_instanced<gl_vector<T, B>>& p_wrapper)
     {
         p_wrapper.bind();
@@ -95,7 +93,7 @@ struct bind_buffers_helper
 
     // Called for simple buffers.
     template<typename T, typename B>
-    void_ bind_buffer(const gl_instanced<gl_simple_buffer<T, B>>& p_wrapper)
+    void bind_buffer(const gl_instanced<gl_simple_buffer<T, B>>& p_wrapper)
     {
         p_wrapper.bind();
         gl_attribute_binder binder(m_program_id);
@@ -138,7 +136,7 @@ struct gl_bind_buffers
     {
         //pass(bindBuffer(p_program_id, std::forward<Arg>(p_args))...);
         priv::bind_buffers_helper helper(m_program_id);
-        pass(helper.bind_buffer(std::forward<T>(p_buffers))...);
+        pass((helper.bind_buffer(std::forward<T>(p_buffers)), 1)...);
         return std::make_tuple(helper.m_elements_type, helper.m_size, helper.m_size_instanced);
     }
 

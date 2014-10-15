@@ -39,6 +39,13 @@ template<size_t dummy = 0>
 void gl_draw(const gl_vao& p_vao, const gl_program& p_material);
 
 /**
+ * @brief Draw the passed vao, assuming a gl_program is already being used.
+ * @param p_vao is the vao to draw.
+ */
+template<size_t dummy = 0>
+void gl_draw(const gl_vao& p_vao);
+
+/**
  * @brief Draw the passed data.
  * @param p_data is the attributes data to use.
  * @param p_indices is the array of indices.

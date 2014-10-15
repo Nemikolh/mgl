@@ -78,6 +78,18 @@ void gl_draw(const gl_vao& p_vao, const gl_program& p_prog)
     // Bind the program.
     p_prog.use();
 
+    // Call to the draw
+    gl_draw(p_vao);
+}
+
+/*
+ * Implementation details
+ */
+template<size_t dummy>
+void gl_draw(const gl_vao& p_vao)
+{
+    // ------------------------- DECLARE ------------------------ //
+
     // Bind the vao.
     p_vao.bind();
 

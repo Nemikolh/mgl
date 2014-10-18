@@ -1,62 +1,17 @@
 /*
- * glmhelper.hpp
+ * gltuplesize.hpp
  *
  *  Created on: 30 sept. 2013
  *      Author: nemikolh
  */
 
-#ifndef GLMHELPER_HPP_
-#define GLMHELPER_HPP_
+#ifndef MGL_GLTUPLESIZE_HPP_
+#define MGL_GLTUPLESIZE_HPP_
 
 #include <type_traits>
-#ifdef GLM_VERSION
-#   if GLM_VERSION == 94
-#       include <glm/core/_detail.hpp>
-#   elif GLM_VERSION == 95
-#       include <glm/detail/type_gentype.hpp>
-#   endif
-#else
-#error "GLM isn't included ! You need to include glm before anything that requires the glm helpers."
-#endif
-
-#include "meta/glutil.hpp"
+#include "glutil.hpp"
 
 namespace mgl {
-
-/**
- * \class is_vector is the std conformant meta function base on glm::detail::is_vector.
- */
-template<typename T>
-struct is_vector
-{
-    typedef is_vector<T> type;
-    typedef bool         value_type;
-
-    static constexpr bool value =
-#if GLM_VERSION == 94
-            glm::detail::is_vector<T>::_YES == 1;
-#elif GLM_VERSION == 95
-#endif
-};
-
-/**
- * \class is_matrix is the std conformant meta function based on glm::detail::is_matrix
- */
-template<typename T>
-struct is_matrix
-{
-    typedef is_matrix<T> type;
-    typedef bool         value_type;
-
-    static constexpr bool value =
-#if GLM_VERSION == 94
-            glm::detail::is_matrix<T>::_YES == 1;
-#elif GLM_VERSION == 95
-#endif
-};
-
-
-
 namespace priv {
 
 /**
@@ -114,4 +69,4 @@ struct tuple_size
 }  /* namespace mgl */
 
 
-#endif /* GLMHELPER_HPP_ */
+#endif /* MGL_GLTUPLESIZE_HPP_ */

@@ -9,7 +9,7 @@
 #define GLBINDATTRIB_HPP_
 
 #include "glbinder.hpp"
-#include "../glmhelper.hpp"
+#include "gltuplesize.hpp"
 #include "../meta/glutil.hpp"
 
 namespace mgl {

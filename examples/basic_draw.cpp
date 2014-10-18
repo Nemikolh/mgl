@@ -18,7 +18,8 @@
 #include <chrono>
 #include <thread>
 #include <SFML/Graphics.hpp>
-#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat3x3.hpp>
 
 // TODO: Remove this include as it won't be part of the library.
 #include "../mgl/glrequires.hpp"
@@ -160,5 +161,3 @@ int main(int argc, char **argv)
        std::this_thread::sleep_for(duration);
     }
 }
-
-

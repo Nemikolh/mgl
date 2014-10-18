@@ -8,6 +8,8 @@
 #ifndef GLUNIFORM_HPP_
 #define GLUNIFORM_HPP_
 
+// TODO: move this header out of here.
+//       create a meta function encapsulating glm::value_ptr
 #include <glm/gtc/type_ptr.hpp>
 #include "../type/gltraits.hpp"
 #include "../preprocessor/glpreprocessor_base.hpp"

@@ -31,10 +31,13 @@ struct glsl_translator;
         }                               \
     }
 
+#ifdef GLM_VERSION
 // Inclusion of the translation for vector types.
-#include <glm/core/type.hpp>
 #include "glsltranslator_vec.inl"
 #include "glsltranslator_mat.inl"
+#else
+#warning "MGL WARN: Translators not defined, GLM types not included."
+#endif
 // Translation for primitives types.
 #include "glsltranslator_pri.inl"
 

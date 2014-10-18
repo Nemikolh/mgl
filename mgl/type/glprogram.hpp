@@ -15,6 +15,7 @@
 #include "glshader.hpp"
 #include "../glexceptions.hpp"
 #include "../meta/gluniform.hpp"
+#include "../meta/glmhelper.hpp"
 #include "priv/details.hpp"
 
 namespace mgl {

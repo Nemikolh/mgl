@@ -24,10 +24,13 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1989921420" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.987955598" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1099532299" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/joan/libs/glm-0.9.4"/>
-									<listOptionValue builtIn="false" value="/home/joan/libs/SFML-2.1/include"/>
+									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.5.3"/>
+									<listOptionValue builtIn="false" value="/usr/local/include/"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.2128082557" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1578064652" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="GLM_FORCE_RADIANS"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1796851927" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1346135498" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
@@ -46,7 +49,7 @@
 									<listOptionValue builtIn="false" value="sfml-system-d"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1046636474" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/joan/libs/SFML-2.1/lib"/>
+									<listOptionValue builtIn="false" value="/usr/local/lib"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1840320890" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -58,6 +61,12 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="cdt.managedbuild.config.gnu.exe.debug.244406973.907136606" name="glsltranslator_pri.inl" rcbsApplicability="disable" resourcePath="mgl/shader/glsltranslator_pri.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1965627005.286746108">
+						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1965627005.286746108" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1965627005"/>
+					</fileInfo>
+					<sourceEntries>
+						<entry excluding="mgl/shader/glsltranslator_pri.inl|mgl/shader/glsltranslator_vec.inl|mgl/shader/glsltranslator_mat.inl|mgl/glvector.inl|mgl/gldraw.inl|runAllTests.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -103,6 +112,12 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="cdt.managedbuild.config.gnu.exe.release.660116061.1732303654" name="glsltranslator_pri.inl" rcbsApplicability="disable" resourcePath="mgl/shader/glsltranslator_pri.inl" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.533387357.971400302">
+						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.533387357.971400302" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.533387357"/>
+					</fileInfo>
+					<sourceEntries>
+						<entry excluding="mgl/shader/glsltranslator_pri.inl|mgl/shader/glsltranslator_vec.inl|mgl/shader/glsltranslator_mat.inl|mgl/glvector.inl|mgl/gldraw.inl|runAllTests.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

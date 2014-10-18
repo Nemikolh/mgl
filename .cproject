@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
-		<cconfiguration id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug.244406973">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug.244406973" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -14,94 +14,56 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787" name="Debug" parent="cdt.managedbuild.config.gnu.cross.exe.debug" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="Precompiled the header glm.hpp g++  -D__GXX_EXPERIMENTAL_CXX0X__ -DGLM_PRECISION_MEDIUMP_UINT -DGLM_PRECISION_MEDIUMP_INT -DGLM_PRECISION_MEDIUMP_FLOAT -DGLM_MESSAGES  -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -std=c++0x -MMD -MP -MF&quot;external/external_glm.d&quot; -MT&quot;external/external_glm.d&quot; -o &quot;external/external_glm.hpp.gch&quot; &quot;../external/external_glm.hpp&quot;" prebuildStep="">
-					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.1921619893" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.935048517" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder arguments="../cdtgch.rb" buildPath="${workspace_loc:/SFGUI}/Debug" command="ruby" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="cdt.managedbuild.builder.gnu.cross.688331840" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
-								</outputEntries>
-							</builder>
-							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.c.compiler.2010187500" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.2021763886" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.592824184" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.440937145" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.244406973" name="Debug" parent="cdt.managedbuild.config.gnu.exe.debug">
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.244406973." name="/" resourcePath="">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.2145010065" name="Linux GCC" nonInternalBuilderId="cdt.managedbuild.target.gnu.builder.exe.debug" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
+							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.750693561" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
+							<builder buildPath="${workspace_loc:/mgl-proj}/Debug" id="cdt.managedbuild.target.gnu.builder.exe.debug.734060861" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.550329324" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1965627005" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
+								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1989921420" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.987955598" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1099532299" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="/home/joan/libs/glm-0.9.4"/>
+									<listOptionValue builtIn="false" value="/home/joan/libs/SFML-2.1/include"/>
 								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1162028511" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1542285960" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.2128082557" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1796851927" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
-							<tool command="g++-4.8" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1479234713" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.492380617" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.1063961072" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.660861762" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.674011805" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++11 -fpermissive -Wno-unused-variable -finstrument-functions" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1571769505" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.1992689374" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include&quot;"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.warnings.allwarn.375872120" name="All warnings (-Wall)" superClass="gnu.cpp.compiler.option.warnings.allwarn" value="false" valueType="boolean"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.449833819" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1346135498" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
+								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1975203927" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1151611641" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.dialect.std.1275892891" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1775922665" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.751767955" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
-							<tool command="g++-4.8" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.1322229445" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.libs.296907249" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="sfml-graphics"/>
-									<listOptionValue builtIn="false" value="boost_program_options"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1110330819" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1284362219" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
+								<option id="gnu.cpp.link.option.libs.2126752429" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="GL"/>
-									<listOptionValue builtIn="false" value="sfml-window"/>
-									<listOptionValue builtIn="false" value="sfml-system"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
+									<listOptionValue builtIn="false" value="sfml-window-d"/>
+									<listOptionValue builtIn="false" value="sfml-graphics-d"/>
+									<listOptionValue builtIn="false" value="sfml-system-d"/>
 								</option>
-								<option id="gnu.cpp.link.option.paths.1921576393" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0/stage/lib"/>
+								<option id="gnu.cpp.link.option.paths.1046636474" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/home/joan/libs/SFML-2.1/lib"/>
 								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2060253656" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1840320890" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.2052036240" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
-							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.cross.assembler.633294744" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.1996519737" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.387058126" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.744476933" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1644286789" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<sourceEntries>
-						<entry excluding="Debug|client|app|examples|shader|mgl|Test|src|log|external|core/reflect|memory|reflect|test|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|glcontext.cpp|shader/gltranslator_mat.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|glvector.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
-					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.cross.exe.release.1057421516">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.exe.release.1057421516" moduleId="org.eclipse.cdt.core.settings" name="Release">
+		<cconfiguration id="cdt.managedbuild.config.gnu.exe.release.660116061">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.660116061" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -113,680 +75,69 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.cross.exe.release.1057421516" name="Release" parent="cdt.managedbuild.config.gnu.cross.exe.release">
-					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.release.1057421516." name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.exe.release.386471967" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.release">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.361331467" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder buildPath="${workspace_loc:/SFGUI}/Release" id="cdt.managedbuild.builder.gnu.cross.845042106" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.451540576" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.1989820760" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.1604437769" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.868654426" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.release.660116061" name="Release" parent="cdt.managedbuild.config.gnu.exe.release">
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.release.660116061." name="/" resourcePath="">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.release.1979110404" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.release">
+							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.release.950793236" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
+							<builder buildPath="${workspace_loc:/mgl-proj}/Release" id="cdt.managedbuild.target.gnu.builder.exe.release.1892579374" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.release"/>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.999525941" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.533387357" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
+								<option id="gnu.cpp.compiler.exe.release.option.optimization.level.1647792141" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.964210830" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.694499551" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.540586098" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.130125803" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.1816865781" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1919171017" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="NDEBUG"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.967305910" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.other.other.1000121254" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1990268599" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.891757361" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
+								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.exe.release.option.optimization.level.585088180" name="Optimization Level" superClass="gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
+								<option id="gnu.c.compiler.exe.release.option.debugging.level.10080078" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1967655150" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.826006103" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.1280252318" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.libs.396497599" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1901567394" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.233222159" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.261052936" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1653006398" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.1830059764" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.1658843528" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1332329098" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.release.192890067" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.release">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1538682270" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<sourceEntries>
-						<entry excluding="Debug|log|core/reflect|memory|reflect|test|examples|shader|mgl|Test|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|glcontext.cpp|shader/gltranslator_mat.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|glvector.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616" moduleId="org.eclipse.cdt.core.settings" name="TestOld">
-				<externalSettings>
-					<externalSetting/>
-				</externalSettings>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="Test suite with extra test code." errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616" name="TestOld" parent="cdt.managedbuild.config.gnu.cross.exe.debug" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="Precompiled the header glm.hpp g++  -D__GXX_EXPERIMENTAL_CXX0X__ -DGLM_PRECISION_MEDIUMP_UINT -DGLM_PRECISION_MEDIUMP_INT -DGLM_PRECISION_MEDIUMP_FLOAT -DGLM_MESSAGES  -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -std=c++0x -MMD -MP -MF&quot;external/external_glm.d&quot; -MT&quot;external/external_glm.d&quot; -o &quot;external/external_glm.hpp.gch&quot; &quot;../external/external_glm.hpp&quot;" prebuildStep="">
-					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.514180186" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.888983201" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder arguments="../cdtgch.rb" buildPath="${workspace_loc:/SFGUI}/Debug" command="ruby" enableCleanBuild="true" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="cdt.managedbuild.builder.gnu.cross.1771792595" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
-								</outputEntries>
-							</builder>
-							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.c.compiler.1936553264" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.638935334" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.1255068202" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.1960258579" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1765748381" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
-									<listOptionValue builtIn="false" value="NKH_TEST"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1630939210" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.679634579" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.1060357104" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.1939505485" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.87109532" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.1107080122" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++11 -fpermissive -Wno-unused-variable" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.89218406" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="NKH_TEST"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.1743811842" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include&quot;"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.warnings.allwarn.1378365421" name="All warnings (-Wall)" superClass="gnu.cpp.compiler.option.warnings.allwarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.undef.2112201504" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" valueType="undefDefinedSymbols">
-									<listOptionValue builtIn="false" value="__x86_64"/>
-									<listOptionValue builtIn="false" value="__INT_FAST32_MAX__"/>
-									<listOptionValue builtIn="false" value="__SIG_ATOMIC_MAX__"/>
-									<listOptionValue builtIn="false" value="__FLT_EPSILON__"/>
-									<listOptionValue builtIn="false" value="__DEC64_MANT_DIG__"/>
-									<listOptionValue builtIn="false" value="__DBL_MIN__"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST64_TYPE__"/>
-									<listOptionValue builtIn="false" value="__SCHAR_MAX__"/>
-									<listOptionValue builtIn="false" value="__DEC128_MANT_DIG__"/>
-									<listOptionValue builtIn="false" value="__UINTPTR_TYPE__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_INT_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__DBL_MIN_10_EXP__"/>
-									<listOptionValue builtIn="false" value="__unix__"/>
-									<listOptionValue builtIn="false" value="__DBL_DENORM_MIN__"/>
-									<listOptionValue builtIn="false" value="__DBL_HAS_DENORM__"/>
-									<listOptionValue builtIn="false" value="__SHRT_MAX__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_WCHAR_T__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_PTRDIFF_T__"/>
-									<listOptionValue builtIn="false" value="__DEC32_MAX__"/>
-									<listOptionValue builtIn="false" value="__linux__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_DOUBLE__"/>
-									<listOptionValue builtIn="false" value="__FLT_MIN_EXP__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MANT_DIG__"/>
-									<listOptionValue builtIn="false" value="__DEC32_EPSILON__"/>
-									<listOptionValue builtIn="false" value="__INTPTR_MAX__"/>
-									<listOptionValue builtIn="false" value="__LDBL_DIG__"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST8_MAX__"/>
-									<listOptionValue builtIn="false" value="__LDBL_DENORM_MIN__"/>
-									<listOptionValue builtIn="false" value="__DEC32_MIN_EXP__"/>
-									<listOptionValue builtIn="false" value="__DEC128_MAX__"/>
-									<listOptionValue builtIn="false" value="__INT_FAST8_MAX__"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST8_MAX__"/>
-									<listOptionValue builtIn="false" value="_GNU_SOURCE"/>
-									<listOptionValue builtIn="false" value="__GNUC_PATCHLEVEL__"/>
-									<listOptionValue builtIn="false" value="__DEC32_SUBNORMAL_MIN__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_POINTER__"/>
-									<listOptionValue builtIn="false" value="__SSE2_MATH__"/>
-									<listOptionValue builtIn="false" value="__WINT_MAX__"/>
-									<listOptionValue builtIn="false" value="__LDBL_HAS_INFINITY__"/>
-									<listOptionValue builtIn="false" value="__FLT_MAX_10_EXP__"/>
-									<listOptionValue builtIn="false" value="__code_model_small__"/>
-									<listOptionValue builtIn="false" value="__DEC64_MIN_EXP__"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_ACQ_REL"/>
-									<listOptionValue builtIn="false" value="__DEC32_MIN__"/>
-									<listOptionValue builtIn="false" value="__MMX__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MIN_10_EXP__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_LONG_LONG__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST8_MAX__"/>
-									<listOptionValue builtIn="false" value="__DEC64_MAX_EXP__"/>
-									<listOptionValue builtIn="false" value="__STDC_IEC_559__"/>
-									<listOptionValue builtIn="false" value="__UINT16_C(c)"/>
-									<listOptionValue builtIn="false" value="__INT16_MAX__"/>
-									<listOptionValue builtIn="false" value="__k8__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MAX_EXP__"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST64_MAX__"/>
-									<listOptionValue builtIn="false" value="__FLT_MANT_DIG__"/>
-									<listOptionValue builtIn="false" value="__SSE__"/>
-									<listOptionValue builtIn="false" value="__FLT_RADIX__"/>
-									<listOptionValue builtIn="false" value="__INTMAX_C(c)"/>
-									<listOptionValue builtIn="false" value="__gnu_linux__"/>
-									<listOptionValue builtIn="false" value="__FLT_DIG__"/>
-									<listOptionValue builtIn="false" value="__UINT8_MAX__"/>
-									<listOptionValue builtIn="false" value="__INTMAX_TYPE__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MIN_EXP__"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST32_TYPE__"/>
-									<listOptionValue builtIn="false" value="__UINT32_MAX__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_INT128__"/>
-									<listOptionValue builtIn="false" value="__LONG_LONG_MAX__"/>
-									<listOptionValue builtIn="false" value="__amd64"/>
-									<listOptionValue builtIn="false" value="_PREDEFS_H"/>
-									<listOptionValue builtIn="false" value="__DBL_HAS_INFINITY__"/>
-									<listOptionValue builtIn="false" value="__UINT32_C(c)"/>
-									<listOptionValue builtIn="false" value="__DBL_MAX_10_EXP__"/>
-									<listOptionValue builtIn="false" value="__FLT_HAS_QUIET_NAN__"/>
-									<listOptionValue builtIn="false" value="__SIG_ATOMIC_TYPE__"/>
-									<listOptionValue builtIn="false" value="__FLT_HAS_DENORM__"/>
-									<listOptionValue builtIn="false" value="__NO_INLINE__"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST16_MAX__"/>
-									<listOptionValue builtIn="false" value="__DEC128_EPSILON__"/>
-									<listOptionValue builtIn="false" value="__FLT_DECIMAL_DIG__"/>
-									<listOptionValue builtIn="false" value="__GNUC__"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST8_TYPE__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_WCHAR_T_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_LONG_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__unix"/>
-									<listOptionValue builtIn="false" value="__k8"/>
-									<listOptionValue builtIn="false" value="__DEC128_MIN_EXP__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST64_TYPE__"/>
-									<listOptionValue builtIn="false" value="__SSP__"/>
-									<listOptionValue builtIn="false" value="__INTPTR_TYPE__"/>
-									<listOptionValue builtIn="false" value="__INT64_TYPE__"/>
-									<listOptionValue builtIn="false" value="__DBL_MAX_EXP__"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_ACQUIRE"/>
-									<listOptionValue builtIn="false" value="__WINT_TYPE__"/>
-									<listOptionValue builtIn="false" value="__FLOAT_WORD_ORDER__"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_CONSUME"/>
-									<listOptionValue builtIn="false" value="__DEC64_SUBNORMAL_MIN__"/>
-									<listOptionValue builtIn="false" value="__INT_FAST32_TYPE__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST8_TYPE__"/>
-									<listOptionValue builtIn="false" value="__PTRDIFF_MAX__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_BOOL_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST16_TYPE__"/>
-									<listOptionValue builtIn="false" value="__SIZE_TYPE__"/>
-									<listOptionValue builtIn="false" value="__DEC32_MANT_DIG__"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_RELAXED"/>
-									<listOptionValue builtIn="false" value="__DBL_MAX__"/>
-									<listOptionValue builtIn="false" value="__GXX_WEAK__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_TEST_AND_SET_TRUEVAL"/>
-									<listOptionValue builtIn="false" value="__INT_FAST16_MAX__"/>
-									<listOptionValue builtIn="false" value="__UINT16_MAX__"/>
-									<listOptionValue builtIn="false" value="__GNUG__"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST8_TYPE__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST32_TYPE__"/>
-									<listOptionValue builtIn="false" value="unix"/>
-									<listOptionValue builtIn="false" value="__cplusplus"/>
-									<listOptionValue builtIn="false" value="__FLT_EVAL_METHOD__"/>
-									<listOptionValue builtIn="false" value="__UINT16_TYPE__"/>
-									<listOptionValue builtIn="false" value="__UINT32_TYPE__"/>
-									<listOptionValue builtIn="false" value="__PRAGMA_REDEFINE_EXTNAME"/>
-									<listOptionValue builtIn="false" value="__FLT_MAX_EXP__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST16_MAX__"/>
-									<listOptionValue builtIn="false" value="__LDBL_EPSILON__"/>
-									<listOptionValue builtIn="false" value="__DEC64_MIN__"/>
-									<listOptionValue builtIn="false" value="_LP64"/>
-									<listOptionValue builtIn="false" value="__UINT64_C(c)"/>
-									<listOptionValue builtIn="false" value="__REGISTER_PREFIX__"/>
-									<listOptionValue builtIn="false" value="__INT_FAST8_TYPE__"/>
-									<listOptionValue builtIn="false" value="__STDC_NO_THREADS__"/>
-									<listOptionValue builtIn="false" value="__ORDER_LITTLE_ENDIAN__"/>
-									<listOptionValue builtIn="false" value="__LDBL_HAS_QUIET_NAN__"/>
-									<listOptionValue builtIn="false" value="__INT8_MAX__"/>
-									<listOptionValue builtIn="false" value="__FLT_DENORM_MIN__"/>
-									<listOptionValue builtIn="false" value="__CHAR32_TYPE__"/>
-									<listOptionValue builtIn="false" value="__WCHAR_MIN__"/>
-									<listOptionValue builtIn="false" value="__ELF__"/>
-									<listOptionValue builtIn="false" value="__FXSR__"/>
-									<listOptionValue builtIn="false" value="__UINTMAX_MAX__"/>
-									<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_HLE_RELEASE"/>
-									<listOptionValue builtIn="false" value="__FLT_MIN_10_EXP__"/>
-									<listOptionValue builtIn="false" value="__UINTPTR_MAX__"/>
-									<listOptionValue builtIn="false" value="__UINT64_MAX__"/>
-									<listOptionValue builtIn="false" value="__WCHAR_MAX__"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_HLE_ACQUIRE"/>
-									<listOptionValue builtIn="false" value="__INT_FAST16_TYPE__"/>
-									<listOptionValue builtIn="false" value="__LDBL_HAS_DENORM__"/>
-									<listOptionValue builtIn="false" value="__GXX_ABI_VERSION"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_RELEASE"/>
-									<listOptionValue builtIn="false" value="__UINTMAX_C(c)"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_POINTER_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST64_MAX__"/>
-									<listOptionValue builtIn="false" value="__DBL_MIN_EXP__"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST32_TYPE__"/>
-									<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_LONG_DOUBLE__"/>
-									<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1"/>
-									<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2"/>
-									<listOptionValue builtIn="false" value="__SIZE_MAX__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST32_MAX__"/>
-									<listOptionValue builtIn="false" value="__EXCEPTIONS"/>
-									<listOptionValue builtIn="false" value="__INT_FAST64_MAX__"/>
-									<listOptionValue builtIn="false" value="__x86_64__"/>
-									<listOptionValue builtIn="false" value="__DBL_DECIMAL_DIG__"/>
-									<listOptionValue builtIn="false" value="__DEPRECATED"/>
-									<listOptionValue builtIn="false" value="__SIG_ATOMIC_MIN__"/>
-									<listOptionValue builtIn="false" value="__FLT_MIN__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_CHAR32_T_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__DBL_EPSILON__"/>
-									<listOptionValue builtIn="false" value="__GXX_RTTI"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST64_MAX__"/>
-									<listOptionValue builtIn="false" value="__DEC128_MAX_EXP__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_SIZE_T__"/>
-									<listOptionValue builtIn="false" value="__DBL_DIG__"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST16_MAX__"/>
-									<listOptionValue builtIn="false" value="__GNUC_MINOR__"/>
-									<listOptionValue builtIn="false" value="__ORDER_PDP_ENDIAN__"/>
-									<listOptionValue builtIn="false" value="__DEC64_MAX__"/>
-									<listOptionValue builtIn="false" value="__BIGGEST_ALIGNMENT__"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST16_TYPE__"/>
-									<listOptionValue builtIn="false" value="__DECIMAL_BID_FORMAT__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_SHORT_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__WINT_MIN__"/>
-									<listOptionValue builtIn="false" value="__INT16_C(c)"/>
-									<listOptionValue builtIn="false" value="__INT64_MAX__"/>
-									<listOptionValue builtIn="false" value="__INT_MAX__"/>
-									<listOptionValue builtIn="false" value="__STDC_ISO_10646__"/>
-									<listOptionValue builtIn="false" value="__DEC64_EPSILON__"/>
-									<listOptionValue builtIn="false" value="__INT32_C(c)"/>
-									<listOptionValue builtIn="false" value="__INT32_TYPE__"/>
-									<listOptionValue builtIn="false" value="__INT_LEAST32_MAX__"/>
-									<listOptionValue builtIn="false" value="__STDC_IEC_559_COMPLEX__"/>
-									<listOptionValue builtIn="false" value="__STDC__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MIN__"/>
-									<listOptionValue builtIn="false" value="__SSE2__"/>
-									<listOptionValue builtIn="false" value="__INT8_TYPE__"/>
-									<listOptionValue builtIn="false" value="__BYTE_ORDER__"/>
-									<listOptionValue builtIn="false" value="_STDC_PREDEF_H"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_FLOAT__"/>
-									<listOptionValue builtIn="false" value="__INTMAX_MAX__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_LLONG_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__INT_FAST64_TYPE__"/>
-									<listOptionValue builtIn="false" value="__UINT64_TYPE__"/>
-									<listOptionValue builtIn="false" value="__DEC32_MAX_EXP__"/>
-									<listOptionValue builtIn="false" value="__ATOMIC_SEQ_CST"/>
-									<listOptionValue builtIn="false" value="__INT32_MAX__"/>
-									<listOptionValue builtIn="false" value="__VERSION__"/>
-									<listOptionValue builtIn="false" value="__INT64_C(c)"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_CHAR_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_WINT_T__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_INT__"/>
-									<listOptionValue builtIn="false" value="__USER_LABEL_PREFIX__"/>
-									<listOptionValue builtIn="false" value="__LONG_MAX__"/>
-									<listOptionValue builtIn="false" value="__INT16_TYPE__"/>
-									<listOptionValue builtIn="false" value="__ORDER_BIG_ENDIAN__"/>
-									<listOptionValue builtIn="false" value="__INT8_C(c)"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST32_MAX__"/>
-									<listOptionValue builtIn="false" value="__PTRDIFF_TYPE__"/>
-									<listOptionValue builtIn="false" value="__CHAR_BIT__"/>
-									<listOptionValue builtIn="false" value="__UINT8_C(c)"/>
-									<listOptionValue builtIn="false" value="__DEC128_SUBNORMAL_MIN__"/>
-									<listOptionValue builtIn="false" value="__DBL_HAS_QUIET_NAN__"/>
-									<listOptionValue builtIn="false" value="__SSE_MATH__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_SHORT__"/>
-									<listOptionValue builtIn="false" value="__DEC_EVAL_METHOD__"/>
-									<listOptionValue builtIn="false" value="__amd64__"/>
-									<listOptionValue builtIn="false" value="__DBL_MANT_DIG__"/>
-									<listOptionValue builtIn="false" value="__FLT_MAX__"/>
-									<listOptionValue builtIn="false" value="__UINT_FAST16_TYPE__"/>
-									<listOptionValue builtIn="false" value="__linux"/>
-									<listOptionValue builtIn="false" value="__UINT_LEAST64_TYPE__"/>
-									<listOptionValue builtIn="false" value="__GNUC_GNU_INLINE__"/>
-									<listOptionValue builtIn="false" value="__DEC128_MIN__"/>
-									<listOptionValue builtIn="false" value="__FLT_HAS_INFINITY__"/>
-									<listOptionValue builtIn="false" value="__UINT8_TYPE__"/>
-									<listOptionValue builtIn="false" value="__GCC_HAVE_DWARF2_CFI_ASM"/>
-									<listOptionValue builtIn="false" value="__STDC_HOSTED__"/>
-									<listOptionValue builtIn="false" value="linux"/>
-									<listOptionValue builtIn="false" value="__DECIMAL_DIG__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MAX_10_EXP__"/>
-									<listOptionValue builtIn="false" value="__SIZEOF_LONG__"/>
-									<listOptionValue builtIn="false" value="__UINTMAX_TYPE__"/>
-									<listOptionValue builtIn="false" value="__LDBL_MAX__"/>
-									<listOptionValue builtIn="false" value="__FINITE_MATH_ONLY__"/>
-									<listOptionValue builtIn="false" value="__WCHAR_TYPE__"/>
-									<listOptionValue builtIn="false" value="__LP64__"/>
-									<listOptionValue builtIn="false" value="__GCC_ATOMIC_CHAR16_T_LOCK_FREE"/>
-									<listOptionValue builtIn="false" value="__CHAR16_TYPE__"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.920672874" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.276085578" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.1938288149" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.libs.380675429" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="sfml-graphics"/>
-									<listOptionValue builtIn="false" value="boost_program_options"/>
-									<listOptionValue builtIn="false" value="GL"/>
-									<listOptionValue builtIn="false" value="sfml-window"/>
-									<listOptionValue builtIn="false" value="sfml-system"/>
-									<listOptionValue builtIn="false" value="GLEW"/>
-								</option>
-								<option id="gnu.cpp.link.option.paths.1197114090" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0/stage/lib"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1174772882" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.285657406" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
-							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.cross.assembler.2062829075" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.1637082684" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.716508580" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry excluding="Debug|client|app|examples|shader|mgl|Test|src|log|external|core/reflect|memory|reflect|test|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|glcontext.cpp|shader/gltranslator_mat.inl|shader/glsltranslator_vec.inl|shader/glsltranslator_mat.inl|glvector.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573" moduleId="org.eclipse.cdt.core.settings" name="Test">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}_test" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="Run all test" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573" name="Test" parent="cdt.managedbuild.config.gnu.cross.exe.debug" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="Precompiled the header glm.hpp g++  -D__GXX_EXPERIMENTAL_CXX0X__ -DGLM_PRECISION_MEDIUMP_UINT -DGLM_PRECISION_MEDIUMP_INT -DGLM_PRECISION_MEDIUMP_FLOAT -DGLM_MESSAGES  -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -std=c++0x -MMD -MP -MF&quot;external/external_glm.d&quot; -MT&quot;external/external_glm.d&quot; -o &quot;external/external_glm.hpp.gch&quot; &quot;../external/external_glm.hpp&quot;" prebuildStep="">
-					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.1079959509" name="Cross GCC" nonInternalBuilderId="cdt.managedbuild.builder.gnu.cross" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.2059571466" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder buildPath="${workspace_loc:/mgl}/Test" id="cdt.managedbuild.builder.gnu.cross.1976561490" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="TestOld"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Test"/>
-								</outputEntries>
-							</builder>
-							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.c.compiler.1931958874" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1825338699" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.910469557" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.226182380" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include"/>
-								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1947689179" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
-									<listOptionValue builtIn="false" value="NKH_TEST"/>
-								</option>
-								<option id="gnu.c.compiler.option.dialect.std.953456023" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.misc.other.932930887" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0" valueType="string"/>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.417238863" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.1107355548" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.1394183774" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1502989002" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.673589709" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fpermissive -Wno-unused-variable -isystem\\&quot;/usr/local/boost_1_53_0\\&quot; -isystem\\&quot;/usr/local/glm-0.9.4.6\\&quot;" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.976920985" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="NKH_TEST"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.1243729828" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include/"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include&quot;"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.warnings.allwarn.167076740" name="All warnings (-Wall)" superClass="gnu.cpp.compiler.option.warnings.allwarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.undef.1205436492" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.196305046" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1526606783" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1749408731" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.240441869" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.libs.689520344" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="bfd"/>
-									<listOptionValue builtIn="false" value="z"/>
-									<listOptionValue builtIn="false" value="sfml-graphics"/>
-									<listOptionValue builtIn="false" value="GL"/>
-									<listOptionValue builtIn="false" value="sfml-window"/>
-									<listOptionValue builtIn="false" value="sfml-system"/>
-								</option>
-								<option id="gnu.cpp.link.option.paths.1945148539" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.841304367" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.2048667869" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
-							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.cross.assembler.1002579449" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.1733221091" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1856285789" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry excluding="Debug|log|external|core/reflect|memory|client|reflect|test|app|examples|mgl|shader|Test|src|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry excluding="basic_draw.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|shader/gltranslator_mat.inl|glcontext.cpp|shader/glsltranslator_vec.inl|gldraw.inl|shader/glsltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321" moduleId="org.eclipse.cdt.core.settings" name="Example 1">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}_test" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="Basic Drawing of a Triangle." errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321" name="Example 1" parent="cdt.managedbuild.config.gnu.cross.exe.debug" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="Precompiled the header glm.hpp g++  -D__GXX_EXPERIMENTAL_CXX0X__ -DGLM_PRECISION_MEDIUMP_UINT -DGLM_PRECISION_MEDIUMP_INT -DGLM_PRECISION_MEDIUMP_FLOAT -DGLM_MESSAGES  -O0 -g3 -Wall -Wextra -c -fmessage-length=0 -std=c++0x -MMD -MP -MF&quot;external/external_glm.d&quot; -MT&quot;external/external_glm.d&quot; -o &quot;external/external_glm.hpp.gch&quot; &quot;../external/external_glm.hpp&quot;" prebuildStep="">
-					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.1161316886" name="Cross GCC" nonInternalBuilderId="cdt.managedbuild.builder.gnu.cross" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.665779867" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder buildPath="${workspace_loc:/mgl}/Test" id="cdt.managedbuild.builder.gnu.cross.1027312382" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="TestOld"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Test"/>
-								</outputEntries>
-							</builder>
-							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.c.compiler.832122980" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1701263824" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.1303799648" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.1073623316" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include"/>
-								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1051215064" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="GLM_MESSAGES"/>
-									<listOptionValue builtIn="false" value="NKH_TEST"/>
-								</option>
-								<option id="gnu.c.compiler.option.dialect.std.659452227" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.misc.other.1917754141" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0" valueType="string"/>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1825306883" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.237442053" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.733394717" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.1373359102" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1314296887" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.2049862524" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fpermissive -Wno-unused-variable -isystem\&quot;/usr/local/boost_1_53_0\&quot;" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.496930417" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="GLM_SWIZZLE"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_UINT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_INT"/>
-									<listOptionValue builtIn="false" value="GLM_PRECISION_MEDIUMP_FLOAT"/>
-									<listOptionValue builtIn="false" value="NKH_TEST"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.777337091" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include&quot;"/>
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.warnings.allwarn.126586766" name="All warnings (-Wall)" superClass="gnu.cpp.compiler.option.warnings.allwarn" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.undef.2051538271" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.839513794" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++1y" valueType="enumerated"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1775386480" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1771969243" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.83995011" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.libs.1304713488" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="GL"/>
-									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="pthread"/>
-									<listOptionValue builtIn="false" value="sfml-graphics"/>
-									<listOptionValue builtIn="false" value="sfml-window"/>
-									<listOptionValue builtIn="false" value="sfml-system"/>
-								</option>
-								<option id="gnu.cpp.link.option.paths.1265753417" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths"/>
-								<option id="gnu.cpp.link.option.flags.1684898841" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="" valueType="string"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2054023673" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.9386080" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
-							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.cross.assembler.654298305" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.1004862265" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_53_0"/>
-									<listOptionValue builtIn="false" value="/usr/local/glm-0.9.4.6"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.bfd_1.7.0/runner-include"/>
-									<listOptionValue builtIn="false" value="/home/nemikolh/.eclipse5/plugins/net.sf.webcat.eclipse.cxxtest.framework_1.7.0/include"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1105989168" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry excluding="Debug|client|app|examples|mgl|shader|Test|src|external|log|runAllTests.cpp|core/reflect|memory|reflect|test|core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="examples"/>
-						<entry excluding="glutil.inl|shader/gltranslator_vec.inl|shader/glsltranslator_pri.inl|shader/gltranslator_mat.inl|glcontext.cpp|shader/glsltranslator_vec.inl|gldraw.inl|shader/glsltranslator_mat.inl|glvector.inl|gltranslator_vec.inl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="mgl"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
-					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="SFGUI.cdt.managedbuild.target.gnu.cross.exe.767466767" name="Executable" projectType="cdt.managedbuild.target.gnu.cross.exe"/>
+		<project id="mgl-proj.cdt.managedbuild.target.gnu.exe.936091590" name="Executable" projectType="cdt.managedbuild.target.gnu.exe"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.660116061;cdt.managedbuild.config.gnu.exe.release.660116061.;cdt.managedbuild.tool.gnu.c.compiler.exe.release.891757361;cdt.managedbuild.tool.gnu.c.compiler.input.1967655150">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.660116061;cdt.managedbuild.config.gnu.exe.release.660116061.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.533387357;cdt.managedbuild.tool.gnu.cpp.compiler.input.694499551">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.244406973;cdt.managedbuild.config.gnu.exe.debug.244406973.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1965627005;cdt.managedbuild.tool.gnu.cpp.compiler.input.1796851927">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.244406973;cdt.managedbuild.config.gnu.exe.debug.244406973.;cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1346135498;cdt.managedbuild.tool.gnu.c.compiler.input.1775922665">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/SFGUI"/>
+			<resource resourceType="PROJECT" workspacePath="/mgl-proj"/>
 		</configuration>
-		<configuration configurationName="Test"/>
-		<configuration configurationName="Example 1"/>
-		<configuration configurationName="TestOld"/>
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/SFGUI"/>
+			<resource resourceType="PROJECT" workspacePath="/mgl-proj"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
 		<doc-comment-owner id="org.eclipse.cdt.ui.doxygen">
 			<path value=""/>
 		</doc-comment-owner>
-	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.1479234713;cdt.managedbuild.tool.gnu.cpp.compiler.input.449833819">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.1057421516;cdt.managedbuild.config.gnu.cross.exe.release.1057421516.;cdt.managedbuild.tool.gnu.cross.c.compiler.451540576;cdt.managedbuild.tool.gnu.c.compiler.input.868654426">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.427215985;cdt.managedbuild.tool.gnu.cpp.compiler.input.1526606783">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.;cdt.managedbuild.tool.gnu.cross.c.compiler.1931958874;cdt.managedbuild.tool.gnu.c.compiler.input.417238863">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616.;cdt.managedbuild.tool.gnu.cross.c.compiler.1936553264;cdt.managedbuild.tool.gnu.c.compiler.input.1630939210">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.971599616.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.679634579;cdt.managedbuild.tool.gnu.cpp.compiler.input.920672874">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.237442053;cdt.managedbuild.tool.gnu.cpp.compiler.input.1775386480">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.2063867573.1413483321.;cdt.managedbuild.tool.gnu.cross.c.compiler.832122980;cdt.managedbuild.tool.gnu.c.compiler.input.1825306883">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.1057421516;cdt.managedbuild.config.gnu.cross.exe.release.1057421516.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.540586098;cdt.managedbuild.tool.gnu.cpp.compiler.input.1990268599">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.689510787;cdt.managedbuild.config.gnu.cross.exe.debug.689510787.;cdt.managedbuild.tool.gnu.cross.c.compiler.2010187500;cdt.managedbuild.tool.gnu.c.compiler.input.1542285960">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>

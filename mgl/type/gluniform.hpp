@@ -17,9 +17,11 @@ struct gl_program;
 class gl_uniform {
 
 public:
-    gl_types::id id() const {
-        return m_id;
-    }
+    gl_uniform()
+        : m_id(-1)
+    {}
+
+    gl_types::id id() const { return m_id; }
 
 private:
     friend gl_program;

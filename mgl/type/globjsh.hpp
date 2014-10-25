@@ -65,6 +65,11 @@ struct gl_object_program
         glCheck(glLinkProgram(p_program_id));
     }
 
+    static inline GLint gl_uniform_location(GLuint p_program_id, const char * p_name)
+    {
+        return glCheck(glGetUniformLocation(p_program_id, p_name));
+    }
+
     /**
      * @brief Test the link status of the specified program.
      * @param p_program_id is the id of the program.

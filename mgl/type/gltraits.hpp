@@ -102,7 +102,8 @@ struct gl_buffer_type : public priv::priv_gl_buffer<T>
  */
 struct gl_types
 {
-    typedef GLuint id;
+    typedef GLuint uid;
+    typedef GLint  id;
     typedef GLenum en;
 };
 

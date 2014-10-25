@@ -102,7 +102,7 @@ struct gl_shader : public priv::base_id_ref_count
         // ------------------------- DECLARE ------------------------ //
 
         ensure_created();
-        gl_types::id id = this->id();
+        gl_types::uid id = this->id();
         gl_object_shader::gl_shader_source(id, 1, &p_src, nullptr);
         gl_object_shader::gl_compile(id);
 
@@ -156,12 +156,12 @@ private:
         }
     }
 
-    gl_types::id gen() override
+    gl_types::uid gen() override
     {
         return gl_object_shader::gl_gen(convert_to_en(m_shader_type));
     }
 
-    void gl_delete(gl_types::id p_id) override
+    void gl_delete(gl_types::uid p_id) override
     {
         gl_object_shader::gl_delete(1, &p_id);
     }

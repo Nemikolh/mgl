@@ -1,12 +1,12 @@
 /*
- * gluniform.hpp
+ * gluniformhelpers.hpp
  *
  *  Created on: 20 févr. 2014
  *      Author: nemikolh
  */
 
-#ifndef GLUNIFORM_HPP_
-#define GLUNIFORM_HPP_
+#ifndef GLUNIFORMHELPERS_HPP_
+#define GLUNIFORMHELPERS_HPP_
 
 // TODO: move this header out of here.
 //       create a meta function encapsulating glm::value_ptr
@@ -80,7 +80,7 @@ struct uniform_helper
     template<typename Uniform, typename Data>
     static inline
     typename std::enable_if<std::is_integral<typename Data::value_type>::value>::type
-    glm_vector(const Uniform& p_uniform, Data p_valueToBind)
+    glm_vector(Uniform p_uniform, Data p_valueToBind)
     {
         // TODO use metabind function to make the appropriate glUniform call.
         glcalli<tuple_size<Data>::value>::bindUniform(p_uniform.id(), p_valueToBind);
@@ -89,14 +89,14 @@ struct uniform_helper
     template<typename Uniform, typename Data>
     static inline
     typename std::enable_if<std::is_floating_point<typename Data::value_type>::value>::type
-    glm_vector(const Uniform& p_uniform, Data p_valueToBind)
+    glm_vector(Uniform p_uniform, Data p_valueToBind)
     {
         glcallf<tuple_size<Data>::value>::bindUniform(p_uniform.id(), p_valueToBind);
     }
 
     template<typename Uniform, typename Data>
     static inline void
-    glm_matrix(const Uniform& p_uniform, Data p_valueToBind)
+    glm_matrix(Uniform p_uniform, const Data& p_valueToBind)
     {
         glcallf<tuple_size<Data>::value>::bindUniformMatrix(p_uniform.id(), p_valueToBind);
     }
@@ -105,4 +105,4 @@ struct uniform_helper
 }  /* namespace priv */
 }  /* namespace mgl */
 
-#endif /* GLUNIFORM_HPP_ */
+#endif /* GLUNIFORMHELPERS_HPP_ */

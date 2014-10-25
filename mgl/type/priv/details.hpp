@@ -110,7 +110,7 @@ struct base_id_ref_count
      * @brief Returns the object's id.
      * @return Returns the object's id.
      */
-    gl_types::id id() const
+    gl_types::uid id() const
     {
         return m_id;
     }
@@ -130,8 +130,8 @@ protected:
         }
     }
 
-    virtual gl_types::id gen() = 0;
-    virtual void gl_delete(gl_types::id p_id) = 0;
+    virtual gl_types::uid gen() = 0;
+    virtual void gl_delete(gl_types::uid p_id) = 0;
 
 private:
     // ================================================================ //
@@ -155,7 +155,7 @@ private:
     // ================================================================ //
 
     /** The id of the openGL object. */
-    gl_types::id m_id;
+    gl_types::uid m_id;
     /** Refcount on this shader. */
     unsigned int* m_ref_count;
 };

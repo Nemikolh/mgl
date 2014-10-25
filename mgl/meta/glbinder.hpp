@@ -70,7 +70,7 @@ struct gl_attribute_binder
      * @param p_program_id is the id of the gl_program.
      * @param p_divisor is the divisor for the attribute.
      */
-    gl_attribute_binder(gl_types::id p_program_id, char p_divisor = 0)
+    gl_attribute_binder(gl_types::uid p_program_id, char p_divisor = 0)
         : m_divisor{p_divisor}
         , m_program_id{p_program_id}
     {}
@@ -85,7 +85,7 @@ private:
     /** The attribute divisor parameter. */
     char            m_divisor;
     /** The program id currently bound. */
-    gl_types::id    m_program_id;
+    gl_types::uid    m_program_id;
 };
 
 } /* namespacce mgl */

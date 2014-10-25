@@ -14,8 +14,9 @@
 #include "glvao.hpp"
 #include "glshader.hpp"
 #include "../glexceptions.hpp"
-#include "../meta/gluniform.hpp"
 #include "../meta/glmhelper.hpp"
+#include "../meta/gluniformhelpers.hpp"
+#include "gluniform.hpp"
 #include "priv/details.hpp"
 
 namespace mgl {
@@ -73,7 +74,7 @@ struct gl_program : public priv::base_id_ref_count
      */
     void link()
     {
-        gl_types::id id = this->id();
+        gl_types::uid id = this->id();
 #       ifndef MGL_NDEBUG
         assert(id);
 #       endif
@@ -121,6 +122,16 @@ struct gl_program : public priv::base_id_ref_count
     }
 
     /**
+     * @brief Create a uniform suitable to use with the set methods below.
+     * @param p_name is the name of the uniform.
+     * @return Return an object encapsulating the uniform location.
+     */
+    gl_uniform get_uniform(const char* p_name)
+    {
+        return gl_uniform(gl_object_program::gl_uniform_location(id(), p_name));
+    }
+
+    /**
      * @brief This method allows to create a vao based on this program.
      * @param p_buffers is the buffers that are gonna be part of this vao.
      * @return Returns the created vao.
@@ -145,9 +156,9 @@ struct gl_program : public priv::base_id_ref_count
      * @param p_uniform is the uniform element to set.
      * @param p_valueToBind is the value desired.
      */
-    template<typename Uniform, typename Data>
+    template<typename Data>
     typename std::enable_if<is_vector<Data>::value>::type
-    set(const Uniform& p_uniform, Data p_valueToBind)
+    set(gl_uniform p_uniform, Data p_valueToBind)
     {
         priv::uniform_helper::glm_vector(p_uniform, p_valueToBind);
     }
@@ -166,9 +177,9 @@ struct gl_program : public priv::base_id_ref_count
      * @param p_uniform is the uniform element to set.
      * @param p_valueToBind is the value desired.
      */
-    template<typename Uniform, typename Data>
+    template<typename Data>
     typename std::enable_if<is_matrix<Data>::value>::type
-    set(const Uniform& p_uniform, Data p_valueToBind)
+    set(gl_uniform p_uniform, const Data& p_valueToBind)
     {
         priv::uniform_helper::glm_matrix(p_uniform, std::move(p_valueToBind));
     }
@@ -187,11 +198,12 @@ struct gl_program : public priv::base_id_ref_count
      * @param p_uniform is the uniform element to set.
      * @param p_valueToBind is the value desired.
      */
-    template<typename Uniform, typename Data>
+    template<typename Data>
     typename std::enable_if<std::is_arithmetic<Data>::value>::type
-    set(const Uniform& p_uniform, Data p_valueToBind)
+    set(gl_uniform p_uniform, Data p_valueToBind)
     {
         // TODO
+        assert(false);
     }
 
 private:
@@ -200,12 +212,12 @@ private:
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    gl_types::id gen() override
+    gl_types::uid gen() override
     {
         return gl_object_program::gl_gen();
     }
 
-    void gl_delete(gl_types::id p_id)
+    void gl_delete(gl_types::uid p_id)
     {
         gl_object_program::gl_delete(1, &p_id);
     }

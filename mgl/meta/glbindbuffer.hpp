@@ -30,7 +30,7 @@ struct bind_buffers_helper
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    bind_buffers_helper(gl_types::id p_program_id)
+    bind_buffers_helper(gl_types::uid p_program_id)
         : m_program_id{p_program_id}
         , m_elements_type{0}
         , m_size{0}
@@ -105,7 +105,7 @@ struct bind_buffers_helper
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    gl_types::id m_program_id;
+    gl_types::uid m_program_id;
     gl_types::en m_elements_type;
     std::size_t  m_size;
     std::size_t  m_size_instanced;
@@ -135,7 +135,7 @@ struct gl_bind_buffers
     // =========================== CTOR/DTOR ========================== //
     // ================================================================ //
 
-    gl_bind_buffers(gl_types::id p_program_id)
+    gl_bind_buffers(gl_types::uid p_program_id)
         : m_program_id(p_program_id)
     {}
 
@@ -145,7 +145,7 @@ struct gl_bind_buffers
 
     template<typename... T>
     inline
-    std::tuple<gl_types::id, std::size_t, std::size_t> map(T&&... p_buffers)
+    std::tuple<gl_types::uid, std::size_t, std::size_t> map(T&&... p_buffers)
     {
         //pass(bindBuffer(p_program_id, std::forward<Arg>(p_args))...);
         priv::bind_buffers_helper helper(m_program_id);
@@ -163,7 +163,7 @@ private:
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    gl_types::id m_program_id;
+    gl_types::uid m_program_id;
 };
 
 }  /* namespace mgl */

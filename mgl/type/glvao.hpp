@@ -123,7 +123,7 @@ private:
      * @param p_vs is the list of gl_vector that we want to associate with this vao.
      */
     template<typename... Arg>
-    gl_vao(gl_types::id p_program_id, Arg&&... p_vs)
+    gl_vao(gl_types::uid p_program_id, Arg&&... p_vs)
         : m_id{0}
         , m_elements_type{0}
         , m_size{0}
@@ -143,7 +143,7 @@ private:
     // ================================================================ //
 
     template<typename... Arg>
-    void unpack(gl_types::id p_program_id, Arg&&... p_args)
+    void unpack(gl_types::uid p_program_id, Arg&&... p_args)
     {
         // Generate a new vao object and bind it :
         gl_object_vertexarrays::gl_gen(1, &m_id);
@@ -160,7 +160,7 @@ private:
     // ================================================================ //
 
     /** The vao id. */
-    gl_types::id m_id;
+    gl_types::uid m_id;
     /** The type of the integers. */
     gl_types::en m_elements_type;
     /** The size of the buffers. */

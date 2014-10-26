@@ -80,36 +80,38 @@ int main(int argc, char **argv)
     // ------------------------ rendering creation ----------------------- //
 
     mgl::gl_program prog;
-    mgl::gl_shader vert_sh;
-    mgl::gl_shader frag_sh;
-
-    // We load some automatic default generated shaders.
-    try
+    // Scope to force shader deletion.
     {
-        vert_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::VERTEX_SHADER);
-        frag_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::FRAGMENT_SHADER);
-    }
-    catch(const mgl::gl_exception & e)
-    {
-        std::cerr << "Exception caught: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
+        mgl::gl_shader vert_sh;
+        mgl::gl_shader frag_sh;
 
-    // We attach the shaders to the program.
-    prog.attach(vert_sh);
-    prog.attach(frag_sh);
+        // We load some automatic default generated shaders.
+        try
+        {
+            vert_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::VERTEX_SHADER);
+            frag_sh = mgl::extension::pass_through_shader<vertex>(mgl::shader_type::FRAGMENT_SHADER);
+        }
+        catch(const mgl::gl_exception & e)
+        {
+            std::cerr << "Exception caught: " << e.what() << std::endl;
+            return EXIT_FAILURE;
+        }
 
-    // We try to link
-    try
-    {
-        prog.link();
-    }
-    catch(const mgl::gl_exception & e)
-    {
-        std::cerr << "Exception caught: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
+        // We attach the shaders to the program.
+        prog.attach(vert_sh);
+        prog.attach(frag_sh);
 
+        // We try to link
+        try
+        {
+            prog.link();
+        }
+        catch(const mgl::gl_exception & e)
+        {
+            std::cerr << "Exception caught: " << e.what() << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
     // We create a Vertex array object that will bind automatically all the buffers.
     mgl::gl_vao vao;
     vao = prog.make_vao(data, indices);

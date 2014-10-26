@@ -158,7 +158,7 @@ struct gl_program : public priv::base_id_ref_count
      */
     template<typename Data>
     typename std::enable_if<is_vector<Data>::value>::type
-    set(gl_uniform p_uniform, Data p_valueToBind)
+    set(gl_uniform p_uniform, Data p_valueToBind) const
     {
         priv::uniform_helper::glm_vector(p_uniform, p_valueToBind);
     }
@@ -179,31 +179,35 @@ struct gl_program : public priv::base_id_ref_count
      */
     template<typename Data>
     typename std::enable_if<is_matrix<Data>::value>::type
-    set(gl_uniform p_uniform, const Data& p_valueToBind)
+    set(gl_uniform p_uniform, const Data& p_valueToBind) const
     {
         priv::uniform_helper::glm_matrix(p_uniform, std::move(p_valueToBind));
     }
 
     /**
      * @brief Set the passed value to the passed uniform.
-     *
-     * This is the equivalent to the call to glUniform{i|f} for arithmetic types.
-     * This is done through traits. So if you want to use it for your own vector type, you
-     * have two options. First you may add the following nested typedef :
-     *  @code
-     *      typedef \/\* your component type \*\/value_type;
-     *  @endcode
-     * This will compute the value as a simple division. The second solution is specializing
-     * the mgl::tuple_size meta function for your type.
+     * This is the equivalent to the call to glUniform1i for integer types.
      * @param p_uniform is the uniform element to set.
      * @param p_valueToBind is the value desired.
      */
     template<typename Data>
-    typename std::enable_if<std::is_arithmetic<Data>::value>::type
-    set(gl_uniform p_uniform, Data p_valueToBind)
+    typename std::enable_if<std::is_integral<Data>::value>::type
+    set(gl_uniform p_uniform, Data p_valueToBind) const
     {
-        // TODO
-        assert(false);
+        glUniform1i(p_uniform.id(), p_valueToBind);
+    }
+
+    /**
+     * @brief Set the passed value to the passed uniform.
+     * This is the equivalent to the call to glUniform1f for floating point types.
+     * @param p_uniform is the uniform element to set.
+     * @param p_valueToBind is the value desired.
+     */
+    template<typename Data>
+    typename std::enable_if<std::is_floating_point<Data>::value>::type
+    set(gl_uniform p_uniform, Data p_valueToBind) const
+    {
+        glUniform1f(p_uniform.id(), p_valueToBind);
     }
 
 private:

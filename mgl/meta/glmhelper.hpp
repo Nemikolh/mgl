@@ -12,6 +12,9 @@
 #   if GLM_VERSION == 94
 #       include <glm/core/_detail.hpp>
 #   elif GLM_VERSION == 95
+#       include <glm/vec3.hpp>
+#       include <glm/vec2.hpp>
+#       include <glm/vec4.hpp>
 #   else
 #       warning "GLM version not supported. You might end with weird behavior."
 #   endif
@@ -61,10 +64,38 @@ struct is_vector
 #if GLM_VERSION == 94
             glm::detail::is_vector<T>::_YES == 1;
 #elif GLM_VERSION == 95
-            !is_matrix<T>::value && T::length() <= 4;
+            false;
 #endif
 };
 
+#if GLM_VERSION >= 95
+#define SET_IS_VECTOR_TRUE(name)        \
+    template<>                          \
+    struct is_vector<glm::name>         \
+    {                                   \
+        typedef bool      value_type;   \
+        static constexpr bool value =   \
+                        true;           \
+    }
+
+SET_IS_VECTOR_TRUE(vec2);
+SET_IS_VECTOR_TRUE(vec3);
+SET_IS_VECTOR_TRUE(vec4);
+
+SET_IS_VECTOR_TRUE(uvec2);
+SET_IS_VECTOR_TRUE(uvec3);
+SET_IS_VECTOR_TRUE(uvec4);
+
+SET_IS_VECTOR_TRUE(ivec2);
+SET_IS_VECTOR_TRUE(ivec3);
+SET_IS_VECTOR_TRUE(ivec4);
+
+SET_IS_VECTOR_TRUE(bvec2);
+SET_IS_VECTOR_TRUE(bvec3);
+SET_IS_VECTOR_TRUE(bvec4);
+
+#undef SET_IS_VECTOR_TRUE
+#endif
 }
 
 #endif /* MGL_META_GLMHELPER_HPP_ */

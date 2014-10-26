@@ -126,7 +126,7 @@ struct gl_program : public priv::base_id_ref_count
      * @param p_name is the name of the uniform.
      * @return Return an object encapsulating the uniform location.
      */
-    gl_uniform get_uniform(const char* p_name)
+    gl_uniform get_uniform(const char* p_name) const
     {
         return gl_uniform(gl_object_program::gl_uniform_location(id(), p_name));
     }
@@ -137,7 +137,7 @@ struct gl_program : public priv::base_id_ref_count
      * @return Returns the created vao.
      */
     template<typename... T>
-    gl_vao make_vao(T&&... p_buffers)
+    gl_vao make_vao(T&&... p_buffers) const
     {
         return gl_vao(id(), std::forward<T>(p_buffers)...);
     }

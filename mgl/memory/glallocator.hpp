@@ -121,7 +121,7 @@ public:
      * @param p_ptr is a pointer to the back of the queue.
      * @param p_n is the size of the buffer deallocated.
      */
-    void deallocate(pointer p_ptr, size_type p_n)
+    void deallocate(pointer p_ptr, size_type /*p_n*/)
     {
         // We pop the old address.
         auto old_address = m_owner.pop_address();

@@ -23,7 +23,6 @@
 #warning "GLM is not included."
 #endif
 
-
 namespace mgl {
 
 /**
@@ -32,13 +31,16 @@ namespace mgl {
 template<typename T>
 class is_matrix
 {
-    template<typename U>
-    static typename U::col_type   deduceColType(U*);
-    static T                      deduceColType(...);
+    struct true_type    { char a[1]; };
+    struct false_type   { char a[2]; };
 
     template<typename U>
-    static typename U::row_type   deduceRowType(U*);
-    static T                      deduceRowType(...);
+    static true_type    deduceColType(U*, typename U::col_type* = 0);
+    static false_type   deduceColType(...);
+
+    template<typename U>
+    static true_type    deduceRowType(U*, typename U::row_type* = 0);
+    static false_type   deduceRowType(...);
 public:
     typedef is_matrix<T> type;
     typedef bool         value_type;
@@ -47,7 +49,8 @@ public:
 #if GLM_VERSION == 94
             glm::detail::is_matrix<T>::_YES == 1;
 #elif GLM_VERSION == 95
-    sizeof(decltype(deduceColType((T*)0))) == 1 && sizeof(decltype(deduceRowType((T*)0))) == 1;
+    sizeof(decltype(deduceColType((T*)0))) == sizeof(true_type) &&
+    sizeof(decltype(deduceRowType((T*)0))) == sizeof(true_type);
 #endif
 };
 

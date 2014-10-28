@@ -20,7 +20,7 @@ namespace mgl {
 
 struct gl_program;
 template<typename T, typename B>
-struct gl_vector;
+class gl_vector;
 
 /**
  * @ingroup attributes

@@ -29,8 +29,9 @@ namespace mgl {
  * @brief is_matrix is the std conformant meta function to know if a type is a matrix type or not.
  */
 template<typename T>
-class is_matrix
+struct is_matrix
 {
+private:
     struct true_type    { char a[1]; };
     struct false_type   { char a[2]; };
 

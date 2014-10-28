@@ -20,10 +20,8 @@ namespace mgl {
 namespace priv {
 
 template<class T, typename Buff>
-class gl_ptr_impl
+struct gl_ptr_impl
 {
-public:
-
     // ================================================================ //
     // ============================ TYPEDEF =========================== //
     // ================================================================ //
@@ -235,6 +233,7 @@ struct gl_ptr<void, Buff> : public priv::gl_ptr_impl<void, Buff>
     // ============================ FRIENDS =========================== //
     // ================================================================ //
 
+    template<typename, typename, typename> friend class gl_allocator;
     friend difference_type operator- <>(const gl_ptr<void, Buff>&, const gl_ptr<void, Buff>&);
     friend gl_ptr<void, Buff> operator+ <>(const gl_ptr<void, Buff>&, difference_type p_n);
     friend gl_ptr<void, Buff> operator+ <>(difference_type p_n, const gl_ptr<void, Buff>&);
@@ -335,6 +334,7 @@ struct gl_ptr : public priv::gl_ptr_impl<T, Buff>
     // ============================ FRIENDS =========================== //
     // ================================================================ //
 
+    template<typename, typename, typename> friend class gl_allocator;
     friend difference_type operator- <>(const gl_ptr<T, Buff>&, const gl_ptr<T, Buff>&);
     friend gl_ptr<T, Buff> operator+ <>(const gl_ptr<T, Buff>&, size_type p_n);
     friend gl_ptr<T, Buff> operator+ <>(const gl_ptr<T, Buff>&, difference_type p_n);

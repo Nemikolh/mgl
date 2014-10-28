@@ -131,7 +131,7 @@ public:
     }
 
     gl_exception_specific(std::string p_what)
-        : gl_exception_specific(p_what.c_str())
+        : gl_exception_specific("", p_what.c_str())
     {}
 
     const char* what () const noexcept override { return what_.c_str(); }

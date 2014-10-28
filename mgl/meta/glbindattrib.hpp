@@ -24,7 +24,7 @@ namespace priv {
         typedef typename value_at<Seq, N::value>::type     current_t;
         typedef struct_member_name<Seq, N::value>          name_t;
 
-        constexpr static inline void map(const AttributeBinder & sh)
+        static inline void map(const AttributeBinder & sh)
         {
             static_assert(tuple_size<current_t>::value < 5,"The tuple size must be either 1, 2, 3 or 4. GL_BGRA is not currently supported.");
             // ------------------------- DECLARE ------------------------ //
@@ -47,7 +47,7 @@ namespace priv {
     template<typename Seq, typename AttributeBinder>
     struct bind_Iter<Seq, AttributeBinder, int_<seq_size<Seq>::value>>
     {
-        constexpr static inline void map(...) {}
+        static inline void map(...) {}
     };
 
     /**
@@ -63,7 +63,7 @@ namespace priv {
     struct bind_attributes
     {
         typedef bind_attributes<Seq, AttributeBinder> type;
-        constexpr static inline void map(const AttributeBinder & sh)
+        static inline void map(const AttributeBinder & sh)
         {
             bind_first<Seq, AttributeBinder>::map(sh);
         }

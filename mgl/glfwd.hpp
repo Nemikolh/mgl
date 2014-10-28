@@ -17,7 +17,7 @@ template<typename T>
 struct gl_buffer_type;
 
 template<typename T, typename Container, typename Buff = gl_buffer_type<T>>
-struct gl_allocator;
+class gl_allocator;
 
 template<typename T, typename Buff = gl_buffer_type<T>>
 struct gl_ptr;

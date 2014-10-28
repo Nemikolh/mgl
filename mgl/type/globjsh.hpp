@@ -8,6 +8,8 @@
 #ifndef GLOBJSH_HPP_
 #define GLOBJSH_HPP_
 
+#include <string>
+
 namespace mgl {
 
 struct gl_object_program

@@ -12,7 +12,14 @@
 #include <iterator>
 #include <queue>
 #include "memory/glallocator.hpp"
-#include "glscope.hpp"
+
+namespace mgl {
+
+template<typename T>
+class gl_scope;
+
+}  /* namespace mgl */
+
 
 namespace mgl {
 

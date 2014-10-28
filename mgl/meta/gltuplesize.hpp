@@ -12,6 +12,11 @@
 #include "glutil.hpp"
 
 namespace mgl {
+
+/* Forward declaration */
+template<typename T>
+struct is_matrix;
+
 namespace priv {
 
 /**
@@ -45,6 +50,26 @@ public:
                     value = type::value;
 };
 
+template<typename T>
+class matrix_size_glm
+{
+    template<typename U>
+    static typename U::col_type  	deduce(U*);
+    static T                        deduce(...);
+public:
+
+    typedef
+        typename divides<
+                    int_<sizeof(T)>
+                ,   int_<sizeof(decltype(deduce((T*)0)))>
+            >::type type;
+    static constexpr typename type::value_type
+                    value = type::value;
+
+public:
+
+};
+
 }  /* namespace priv */
 
 
@@ -62,6 +87,18 @@ struct tuple_size
             , priv::tuple_size_glm<T>
         >::type         type;
     static constexpr typename type::value_type value = type::value;
+};
+
+
+template<typename T>
+struct matrix_size
+{
+	typedef
+		typename priv::eval_if< is_matrix<T>
+			, priv::matrix_size_glm<T>
+			, priv::int_<0>
+		>::type         type;
+	static constexpr typename type::value_type value = type::value;
 };
 
 

@@ -25,20 +25,12 @@ namespace priv {
 /* Implementation details. */
 template<unsigned int TupleSize>
 struct glcallf
-{
-    template<typename Data>
-    inline static void bindUniform(gl_types::id, Data p_value);
-    template<typename Data>
-    inline static void bindUniformMatrix(gl_types::id, Data p_value);
-};
+{};
 
 /* Implementation details. */
 template<unsigned int TupleSize>
 struct glcalli
-{
-    template<typename Data>
-    inline static void bindUniform(gl_types::id, Data p_value);
-};
+{};
 
 #define MGL_DEF_UNIFORM_CALL(tuple_size, element_type, matrix)  \
 template<> \
@@ -98,7 +90,7 @@ struct uniform_helper
     static inline void
     glm_matrix(Uniform p_uniform, const Data& p_valueToBind)
     {
-        glcallf<tuple_size<Data>::value>::bindUniformMatrix(p_uniform.id(), p_valueToBind);
+        glcallf<matrix_size<Data>::value>::bindUniformMatrix(p_uniform.id(), p_valueToBind);
     }
 };
 

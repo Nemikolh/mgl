@@ -97,7 +97,7 @@ public:
      * @param p_cptr is a conventional argument. Not used in the present code.
      * @return a new pointer that the owner will represent.
      */
-    pointer allocate(size_type p_n, const_pointer p_cptr = nullptr)
+    pointer allocate(size_type p_n, const_pointer /*p_cptr*/ = nullptr)
     {
         pointer _ret = nullptr;
 

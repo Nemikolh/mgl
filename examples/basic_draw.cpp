@@ -25,6 +25,8 @@
 #include "../mgl/glrequires.hpp"
 /* This header provides a wrapper around the calls to glDraw* */
 #include "../mgl/gldraw.hpp"
+/* Allow binding for a scope with utilities function to call lambdas. */
+#include "../mgl/glscope.hpp"
 /* With gldata.hpp, we can defines our attributes in a simple standard layout. */
 #include "../mgl/gldata.hpp"
 /* We use the extension library here, providing facilities to generate simple shaders. */

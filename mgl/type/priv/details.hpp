@@ -29,7 +29,7 @@ struct base_id_ref_count
         , m_ref_count(p_rhs.m_ref_count)
     {
 #       ifndef MGL_NDEBUG
-        assert(m_ref_count);
+        assert(m_ref_count == nullptr || *m_ref_count > 0);
 #       endif
         incr_ref_count();
     }

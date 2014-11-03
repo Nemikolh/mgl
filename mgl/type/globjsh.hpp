@@ -69,7 +69,9 @@ struct gl_object_program
 
     static inline GLint gl_uniform_location(GLuint p_program_id, const char * p_name)
     {
-        return glCheck(glGetUniformLocation(p_program_id, p_name));
+        GLint loc;
+        glCheck(loc = glGetUniformLocation(p_program_id, p_name));
+        return loc;
     }
 
     /**

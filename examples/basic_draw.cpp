@@ -27,6 +27,8 @@
 #include "../mgl/gldraw.hpp"
 /* With gldata.hpp, we can defines our attributes in a simple standard layout. */
 #include "../mgl/gldata.hpp"
+/* Allow to use mgl::bind_and_apply, to simply modify a vector. */
+#include "../mgl/glscope.hpp"
 /* We use the extension library here, providing facilities to generate simple shaders. */
 #include "../mgl/extension/default_shaders.hpp"
 

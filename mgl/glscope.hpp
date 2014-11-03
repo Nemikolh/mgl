@@ -9,6 +9,7 @@
 #define GLSCOPE_HPP_
 
 #include "type/gltraits.hpp"
+#include "type/glstate.hpp"
 
 namespace mgl {
 

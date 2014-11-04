@@ -62,7 +62,7 @@ public:
     /**
      * @brief Default constructor.
      */
-    explicit gl_allocator(Container& p_owner)
+    explicit gl_allocator(Container* p_owner)
         : m_owner(p_owner)
     {}
 
@@ -105,13 +105,13 @@ public:
             throw std::bad_alloc();
 
         // We put on the back of queue a new
-        m_owner.push_address();
-        gl_object_buffer<Buff>::gl_gen(1, &(m_owner.current_address().id));
+        m_owner->push_address();
+        gl_object_buffer<Buff>::gl_gen(1, &(m_owner->current_address().id));
 
-        gl_object_buffer<Buff>::gl_bind(m_owner.id());
+        gl_object_buffer<Buff>::gl_bind(m_owner->id());
         gl_object_buffer<Buff>::gl_buffer_data(p_n * sizeof(T), nullptr);
-        m_owner.map_pointer_range(0, p_n);
-        _ret.set_base_address(&(m_owner.current_address()));
+        m_owner->map_pointer_range(0, p_n);
+        _ret.set_base_address(&(m_owner->current_address()));
 
         return _ret;
     }
@@ -124,7 +124,7 @@ public:
     void deallocate(pointer p_ptr, size_type /*p_n*/)
     {
         // We pop the old address.
-        auto old_address = m_owner.pop_address();
+        auto old_address = m_owner->pop_address();
         assert(p_ptr.m_ptr != nullptr &&
                p_ptr.m_ptr->id == old_address.id &&
                p_ptr.m_ptr->ptr == old_address.ptr);
@@ -153,7 +153,7 @@ private:
     // ================================================================ //
 
     /** The owner of this instance of allocator. */
-    Container& m_owner;
+    Container* m_owner;
 };
 
 /*
@@ -166,9 +166,10 @@ private:
      * Returns true if and only if, the gl_allocators have been created by the same gl_vector.
      */
     template<typename T, typename C1, typename B1, typename U, typename C2, typename B2>
-    inline bool operator==(const gl_allocator<T, C1, B1>& p_a, const gl_allocator<U, C2, B2>& p_b)
+    inline bool operator==(const gl_allocator<T, C1, B1>&, const gl_allocator<U, C2, B2>&)
     {
-        return (&p_a.m_owner == &p_b.m_owner);
+        // TODO: Check usage too ?
+        return B1::target == B2::target;
     }
 
     /**

@@ -115,7 +115,7 @@ public:
 #ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
-        , m_vector(allocator_type(*this))
+        , m_vector(allocator_type(this))
     {}
 
     /**
@@ -149,7 +149,7 @@ public:
 #ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
-        , m_vector(p_n, p_value,  allocator_type(*this))
+        , m_vector(p_n, p_value,  allocator_type(this))
     {
         unmap_pointer();
     }
@@ -161,7 +161,7 @@ public:
 #ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
-        , m_vector(p_first, p_last, allocator_type(*this))
+        , m_vector(p_first, p_last, allocator_type(this))
     {
         unmap_pointer();
     }
@@ -172,7 +172,7 @@ public:
 #ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
-        , m_vector(map_vector(p_rhs), allocator_type(*this))
+        , m_vector(map_vector(p_rhs), allocator_type(this))
     {
         unmap_pointer();
         p_rhs.unmap();
@@ -185,7 +185,7 @@ public:
 #ifndef MGL_NDEBUG
         , m_map_ranged_called(std::move(m_map_ranged_called))
 #endif
-        , m_vector(std::move(p_rhs.m_vector), allocator_type(*this))
+        , m_vector(std::move(p_rhs.m_vector), allocator_type(this))
     {}
 
     gl_vector(std::initializer_list<value_type> p_l)
@@ -194,7 +194,7 @@ public:
 #ifndef MGL_NDEBUG
         , m_map_ranged_called(false)
 #endif
-        , m_vector(p_l, allocator_type(*this))
+        , m_vector(p_l, allocator_type(this))
     {
         unmap_pointer();
     }

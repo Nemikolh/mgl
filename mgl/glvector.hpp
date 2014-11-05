@@ -205,7 +205,9 @@ public:
         // the destructors on the elements and deallocate with the allocator
         // which do the unbind plus the deletion of the buffer.
         clear();
-        gl_object_buffer<Buff>::gl_delete(1, id_ptr());
+        if(!m_gpu_buff_stack.empty()) {
+			gl_object_buffer<Buff>::gl_delete(1, id_ptr());
+        }
     }
 
     // ================================================================ //
@@ -650,7 +652,7 @@ private:
         assert(m_mapped > 0);
 #endif
         --m_mapped;
-        if(m_mapped == 0)
+        if(!m_gpu_buff_stack.empty() && m_mapped == 0)
         {
             bind();
             unmap_pointer();

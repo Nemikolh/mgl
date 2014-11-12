@@ -49,10 +49,6 @@ struct bind_buffers_helper
         p_buffer.bind();
         gl_attribute_binder binder(m_program_id);
         gl_bind_attributes<T>::map(binder);
-#ifndef MGL_NDEBUG
-        assert(m_size == 0 || m_size == p_buffer.size());
-#endif
-        m_size = p_buffer.size();
     }
 
     // Called only if the type I is integral and not a gl attribute.
@@ -63,6 +59,10 @@ struct bind_buffers_helper
         // Bind the element buffer.
         p_buffer.bind();
         m_elements_type = gl_enum_from_type<I>::value;
+#ifndef MGL_NDEBUG
+        assert(m_size == 0);
+#endif
+        m_size = p_buffer.size();
         // TODO : assert to check that the type of the buffer is ELEMENT_ARRAY
         // TODO : check that this function is called only once in NDEBUG mode.
     }
@@ -74,10 +74,6 @@ struct bind_buffers_helper
         p_wrapper.bind();
         gl_attribute_binder binder(m_program_id);
         binder(p_wrapper.attribute_name(), tuple_size<T>::value, 0, sizeof(T), tuple_component_type<T>::value);
-#ifndef MGL_NDEBUG
-        assert(m_size == 0 || m_size == p_wrapper.buffer().size());
-#endif
-        m_size = p_wrapper.buffer().size();
     }
 
     // Called when the buffer is an instanced buffer.

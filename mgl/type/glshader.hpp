@@ -9,6 +9,7 @@
 #define GL_TYPE_SHADER_HPP_
 
 #include <cassert>
+#include "globjsh.hpp"
 #include "gltraits.hpp"
 #include "../glexceptions.hpp"
 #include "priv/details.hpp"

@@ -8,8 +8,6 @@
 #ifndef GLOBJ_HPP_
 #define GLOBJ_HPP_
 
-#include "globjsh.hpp"
-
 namespace mgl {
 
 // -----------------------------------------------------------------------------------------------------------------------------------//
@@ -33,7 +31,7 @@ struct gl_object_buffer
         glCheck(glGenBuffers(p_n, p_buffers));
     }
 
-    static inline void gl_bind(GLint p_id)
+    static inline void gl_bind(GLuint p_id)
     {
         glCheck(glBindBuffer(Buff::target, p_id));
     }
@@ -133,6 +131,33 @@ struct gl_object_vertexarrays
     static inline void gl_bind(GLuint p_vao)
     {
         glCheck(glBindVertexArray(p_vao));
+    }
+};
+
+/**
+ * @brief Sampler objects are available starting OpenGL 3.3
+ */
+struct gl_object_sampler
+{
+    static inline void gl_gen(GLsizei p_n, GLuint* p_samplers)
+    {
+        glCheck(glGenSamplers(p_n, p_samplers));
+    }
+
+    static inline void gl_delete(GLsizei p_n, const GLuint* p_samplers)
+    {
+        glCheck(glDeleteSamplers(p_n, p_samplers));
+    }
+
+    static inline void gl_bind(GLuint p_texture_unit, GLuint p_sampler_id)
+    {
+        glCheck(glBindSampler(p_texture_unit, p_sampler_id));
+    }
+
+    // Requires OpenGL 4.4
+    static inline void gl_bind_all(GLuint p_first_texture_unit, GLsizei p_count, const GLuint* p_samplers)
+    {
+        glCheck(glBindSamplers(p_first_texture_unit, p_count, p_samplers));
     }
 };
 

@@ -10,7 +10,6 @@
 
 #include <utility>
 #include <type_traits>
-#include <array>
 #include "glvao.hpp"
 #include "glshader.hpp"
 #include "../glexceptions.hpp"

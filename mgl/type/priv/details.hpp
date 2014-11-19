@@ -13,6 +13,7 @@
 namespace mgl {
 namespace priv {
 
+template<typename T>
 struct base_id_ref_count
 {
     // ================================================================ //
@@ -74,10 +75,6 @@ struct base_id_ref_count
         return *this;
     }
 
-    virtual ~base_id_ref_count()
-    {
-    }
-
     // ================================================================ //
     // ============================ METHODS =========================== //
     // ================================================================ //
@@ -97,7 +94,7 @@ struct base_id_ref_count
     {
         if(m_id && (*m_ref_count) == 1)
         {
-            this->gl_delete(m_id);
+            static_cast<T*>(this)->gl_delete(m_id);
             delete m_ref_count;
             m_ref_count = nullptr;
         }
@@ -124,14 +121,15 @@ protected:
     {
         if(!m_id)
         {
-            m_id = this->gen();
+            m_id = static_cast<T*>(this)->gen();
             m_ref_count = new unsigned int;
             *m_ref_count = 1;
         }
     }
 
-    virtual gl_types::uid gen() = 0;
-    virtual void gl_delete(gl_types::uid p_id) = 0;
+    ~base_id_ref_count()
+    {
+    }
 
 private:
     // ================================================================ //

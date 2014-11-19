@@ -14,6 +14,10 @@
 
 #include <GL/glew.h>
 
+#ifndef MGL_NDEBUG
+#include <cassert>
+#endif
+
 namespace mgl {
 
 /*

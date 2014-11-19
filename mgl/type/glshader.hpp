@@ -138,7 +138,7 @@ private:
     // ============================ METHODS =========================== //
     // ================================================================ //
 
-    GLenum convert_to_en(shader_type p_tag) const
+    inline GLenum convert_to_en(shader_type p_tag) const
     {
         switch (p_tag) {
             case shader_type::TESS_CONTROL_SHADER:

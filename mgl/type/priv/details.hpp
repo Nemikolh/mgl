@@ -13,7 +13,7 @@
 namespace mgl {
 namespace priv {
 
-template<typename T>
+template<typename Subclass>
 struct base_id_ref_count
 {
     // ================================================================ //
@@ -94,7 +94,7 @@ struct base_id_ref_count
     {
         if(m_id && (*m_ref_count) == 1)
         {
-            static_cast<T*>(this)->gl_delete(m_id);
+            static_cast<Subclass*>(this)->gl_delete(m_id);
             delete m_ref_count;
             m_ref_count = nullptr;
         }
@@ -112,6 +112,12 @@ struct base_id_ref_count
         return m_id;
     }
 
+    Subclass& clone()
+    {
+        decr_ref_count();
+        return *(static_cast<Subclass*>(this));
+    }
+
 protected:
     // ================================================================ //
     // ============================ METHODS =========================== //
@@ -121,7 +127,7 @@ protected:
     {
         if(!m_id)
         {
-            m_id = static_cast<T*>(this)->gen();
+            m_id = static_cast<Subclass*>(this)->gen();
             m_ref_count = new unsigned int;
             *m_ref_count = 1;
         }
@@ -129,6 +135,7 @@ protected:
 
     ~base_id_ref_count()
     {
+        release();
     }
 
 private:

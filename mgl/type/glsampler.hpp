@@ -142,6 +142,10 @@ struct gl_sampler : public priv::base_id_ref_count<gl_sampler>
 
 private:
 
+    // ================================================================ //
+    // ============================ METHODS =========================== //
+    // ================================================================ //
+
     gl_types::uid gen()
     {
         gl_types::uid id;
@@ -160,7 +164,7 @@ namespace mutable_gl {
 struct sampler
 {
     sampler(const gl_sampler& p_sampler)
-        : m_id(p_sampler.clone())
+        : m_ref(p_sampler.clone())
     {}
 
     sampler(gl_sampler& p_sampler)
@@ -179,7 +183,7 @@ struct sampler
     sampler& set_mag_filter(filtering p_filter)
     {
         glCheck(glSamplerParameteri(m_id, GL_TEXTURE_MAG_FILTER, convert_to_en(p_filter)));
-        return this;
+        return *this;
     }
 
     /**
@@ -191,7 +195,7 @@ struct sampler
     sampler& set_min_filter(filtering p_filter)
     {
         glCheck(glSamplerParameteri(m_id, GL_TEXTURE_MIN_FILTER, convert_to_en(p_filter)));
-        return this;
+        return *this;
     }
 
     /**
@@ -209,7 +213,7 @@ struct sampler
         assert(p_value >= 1.0f && p_value <= largest);
 #       endif
         glCheck(glSamplerParameterf(m_id, GL_TEXTURE_MAX_ANISOTROPY_EXT, p_value));
-        return this;
+        return *this;
     }
 
     /**
@@ -222,14 +226,14 @@ struct sampler
         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_value);
         glCheck(glSamplerParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
         glCheck(glSamplerParameterf(m_id, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_value));
-        return this;
+        return *this;
     }
 
     template<wrap_mode Mode>
     sampler& set_wrap_s()
     {
         glCheck(glSamplerParameteri(m_id, GL_TEXTURE_WRAP_S, convert_to_en(Mode)));
-        return this;
+        return *this;
     }
 
 
@@ -279,7 +283,7 @@ private:
     // ============================= FIELDS =========================== //
     // ================================================================ //
 
-    const&
+    gl_sampler& m_ref;
 };
 
 } /* namespace mutable_gl */

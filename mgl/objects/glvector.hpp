@@ -1,5 +1,5 @@
 /*
- * gldraw.hpp
+ * glvector.hpp
  * author: nemikolh
  */
 
@@ -7,7 +7,7 @@
 #include <_setup.hpp>
 
 #if MGL_GL_VERSION > 32
-#include <_core/gldraw.hpp>
+#include <_core/type/glvector.hpp>
 #elif defined(MGL_GL_ES)
 #error "mgl_es version does not define this type. "
 #else

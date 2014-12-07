@@ -18,10 +18,11 @@
 # default search dirs
 set(_MGL_HEADER_SEARCH_DIRS
     "/usr/include"
-    "/usr/local/include")
+    "/usr/local/include"
+    "/opt")
     
 # check environment variable
-set(_MGL_ENV_ROOT_DIR "$ENV{GLM_ROOT_DIR}")
+set(_MGL_ENV_ROOT_DIR "$ENV{MGL_ROOT_DIR}")
 
 if(NOT MGL_ROOT_DIR AND _MGL_ENV_ROOT_DIR)
     set(MGL_ROOT_DIR "${_MGL_ENV_ROOT_DIR}")
@@ -35,10 +36,20 @@ endif()
 # locate header
 find_path(MGL_INCLUDE_DIR "mgl/_setup.hpp" PATHS ${_MGL_HEADER_SEARCH_DIRS})
 
+# locate library
+find_library(MGL_LIBRARY_DEBUG
+    NAMES mgl-debug
+    PATH_SUFFIXES lib
+    PATHS 
+        "/usr/"
+        "/usr/local"
+        "/opt")
+
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(MGL DEFAULT_MSG MGL_INCLUDE_DIR)
+find_package_handle_standard_args(mgl DEFAULT_MSG MGL_INCLUDE_DIR)
 
 if(MGL_FOUND)
+    set(MGL_LIBRARIES "${MGL_LIBRARY_DEBUG}")
     set(MGL_INCLUDE_DIRS "${MGL_INCLUDE_DIR}")
-    message(STATUS "MGL_INCLUDE_DIR = ${MGL_INCLUDE_DIR}")
+    message(STATUS "MGL_INCLUDE_DIRS = ${MGL_INCLUDE_DIR}")
 endif()

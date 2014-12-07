@@ -8,10 +8,6 @@
 #ifndef GLTRAITS_HPP_
 #define GLTRAITS_HPP_
 
-#ifndef MGL_REQUIREMENT
-#error "You need to include a definition of OpenGL constants"
-#endif
-
 #include <cstdint>
 #include <type_traits>
 #include "glenum.hpp"

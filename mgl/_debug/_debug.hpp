@@ -1,18 +1,12 @@
 /*
- * glrequires.hpp
+ * _debug.hpp
  *
  *  Created on: 22 juin 2013
  *      Author: nemikolh
  */
 
-#ifndef GLREQUIRES_HPP_
-#define GLREQUIRES_HPP_
-
-#ifndef MGL_REQUIREMENT
-#define MGL_REQUIREMENT
-#endif
-
-#include <GL/glew.h>
+#ifndef MGL_DEBUG_HPP_
+#define MGL_DEBUG_HPP_
 
 #ifndef MGL_NDEBUG
 #include <cassert>
@@ -59,4 +53,4 @@ void glTryError();
 
 } /* namespace mgl */
 
-#endif /* GLREQUIRES_HPP_ */
+#endif /* MGL_DEBUG_HPP_ */

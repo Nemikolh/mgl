@@ -8,8 +8,6 @@
 #ifndef MGL_TYPE_GLTEXTURETYPE_HPP_
 #define MGL_TYPE_GLTEXTURETYPE_HPP_
 
-#include "../glrequires.hpp"
-
 namespace mgl {
 
 namespace priv {

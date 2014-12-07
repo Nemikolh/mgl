@@ -8,7 +8,6 @@
 #ifndef MGL_TYPE_GLSAMPLER_HPP_
 #define MGL_TYPE_GLSAMPLER_HPP_
 
-#include "../glrequires.hpp"
 #include "priv/details.hpp"
 
 namespace mgl {

@@ -1,16 +1,16 @@
 /*
- * glrequires.cpp
+ * _debug.cpp
  *
  *  Created on: 22 juin 2013
  *      Author: nemikolh
  */
 
 
-#include "glrequires.hpp"
-#include "glexceptions.hpp"
-
 #include <iostream>
 #include <string>
+#include "_setup.hpp"
+#include "_debug.hpp"
+#include "../common/glexceptions.hpp"
 
 namespace mgl {
 

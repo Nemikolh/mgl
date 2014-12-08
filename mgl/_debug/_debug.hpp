@@ -14,10 +14,6 @@
 
 namespace mgl {
 
-/*
- * Dirty Macro to perform check only on debug mode.
- * This code comes from the SFML GLCheck.hpp file.
- */
 #ifndef MGL_NDEBUG
 
     // In debug mode, perform a test on every OpenGL call
@@ -34,6 +30,7 @@ namespace mgl {
 // ========================= PRIV NAMESPACE ======================= //
 // ================================================================ //
 
+#ifndef MGL_NDEBUG
 namespace priv {
 
 /**
@@ -49,7 +46,7 @@ bool glCheckError(const char* file, unsigned int line);
 void glTryError();
 
 } /* namespace priv */
-
+#endif
 
 } /* namespace mgl */
 

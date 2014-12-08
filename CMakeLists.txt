@@ -27,6 +27,12 @@ if(MGL_DEBUG_VERSION)
     endif()
 endif()
 
+# Option to build the example
+option(MGL_BUILD_EXAMPLES "Build the examples." OFF)
+
+if(MGL_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 # Install files in appropriate path
 install(DIRECTORY mgl DESTINATION include)

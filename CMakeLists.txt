@@ -8,9 +8,6 @@ set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-include(GNUInstallDirs)
-
 # Set flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(MGL_DEBUG_FILES mgl/_debug/_debug.cpp)
@@ -32,5 +29,5 @@ endif()
 
 
 # Install files in appropriate path
-install(mgl-debug LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
-install(DIRECTORY mgl DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+install(DIRECTORY mgl DESTINATION include)
+install(TARGETS mgl-debug ARCHIVE DESTINATION lib)

@@ -6,9 +6,9 @@
  */
 
 #include "meta/glbindattrib.hpp"
-#include "type/glvao.hpp"
-#include "type/glprogram.hpp"
-#include "type/glvector.hpp"
+#include "objects/glvao.hpp"
+#include "objects/glprogram.hpp"
+#include "objects/glvector.hpp"
 
 namespace mgl {
 

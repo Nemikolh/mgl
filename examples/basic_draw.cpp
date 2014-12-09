@@ -21,18 +21,15 @@
 #include <glm/vec3.hpp>
 #include <glm/mat3x3.hpp>
 
-// TODO: Remove this include as it won't be part of the library.
-#include "../mgl/glrequires.hpp"
 /* This header provides a wrapper around the calls to glDraw* */
-#include "../mgl/gldraw.hpp"
-/* Allow binding for a scope with utilities function to call lambdas. */
-#include "../mgl/glscope.hpp"
+#include <mgl/gldraw.hpp>
 /* With gldata.hpp, we can defines our attributes in a simple standard layout. */
-#include "../mgl/gldata.hpp"
+#include <mgl/gldata.hpp>
+/* Allow binding for a scope with utilities function to call lambdas. */
 /* Allow to use mgl::bind_and_apply, to simply modify a vector. */
-#include "../mgl/glscope.hpp"
+#include <mgl/common/glscope.hpp>
 /* We use the extension library here, providing facilities to generate simple shaders. */
-#include "../mgl/extension/default_shaders.hpp"
+#include <mgl/ext/default_shaders.hpp>
 
 
 MGL_DEFINE_GL_ATTRIBUTES(

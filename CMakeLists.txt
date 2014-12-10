@@ -18,20 +18,28 @@ option(MGL_DEBUG_USE_GLEW "MGL compile debug version using GLEW." ON)
 option(MGL_DEBUG_USE_ES "MGL compile debug version using ES." OFF)
 
 if(MGL_DEBUG_VERSION)
+    message(STATUS "Build option: MGL_DEBUG_VERSION -- ON")
     include_directories(mgl)
     add_library(mgl-debug ${MGL_DEBUG_FILES})
     if(MGL_DEBUG_USE_ES)
+        message(STATUS "Build option: MGL_DEBUG_USE_ES -- ON")
         set_target_properties( mgl-debug PROPERTIES COMPILE_FLAGS "-DMGL_USE_ES2" )
     elseif(MGL_DEBUG_USE_GLEW)
+        message(STATUS "Build option: MGL_DEBUG_USE_GLEW -- ON")
         set_target_properties( mgl-debug PROPERTIES COMPILE_FLAGS "-DMGL_USE_GLEW" )
     endif()
+else()
+    message(STATUS "Build option: MGL_DEBUG_VERSION -- OFF")
 endif()
 
 # Option to build the example
 option(MGL_BUILD_EXAMPLES "Build the examples." OFF)
 
 if(MGL_BUILD_EXAMPLES)
+    message(STATUS "Build option: MGL_BUILD_EXAMPLES -- ON")
     add_subdirectory(examples)
+else()
+    message(STATUS "Build option: MGL_BUILD_EXAMPLES -- OFF")
 endif()
 
 # Install files in appropriate path

@@ -11,7 +11,7 @@
 #include <cassert>
 #include "globjsh.hpp"
 #include "gltraits.hpp"
-#include "../glexceptions.hpp"
+#include <mgl/common/glexceptions.hpp>
 #include "priv/details.hpp"
 
 /**

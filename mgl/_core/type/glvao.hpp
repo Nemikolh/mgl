@@ -13,8 +13,8 @@
 #include <tuple>
 #include <cassert>
 #include "gltraits.hpp"
-#include "../glexceptions.hpp"
-#include "../meta/glbindbuffer.hpp"
+#include <mgl/common/glexceptions.hpp>
+#include <mgl/_core/meta/glbindbuffer.hpp>
 
 namespace mgl {
 

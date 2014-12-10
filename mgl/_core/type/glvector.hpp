@@ -11,7 +11,7 @@
 #include <vector>
 #include <iterator>
 #include <queue>
-#include "memory/glallocator.hpp"
+#include "../memory/glallocator.hpp"
 
 namespace mgl {
 

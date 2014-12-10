@@ -12,7 +12,7 @@
 #include <type_traits>
 #include "glvao.hpp"
 #include "glshader.hpp"
-#include "../glexceptions.hpp"
+#include <mgl/common/glexceptions.hpp>
 #include "../meta/glmhelper.hpp"
 #include "../meta/gluniformhelpers.hpp"
 #include "gluniform.hpp"
